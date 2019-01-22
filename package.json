@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --verbose",
+    "start": "nodemon server.js",
+    "test:watch": "jest --watch --verbose",
+    "lint": "eslint .",
+    "pretest": "npm run lint"
   },
   "repository": {
     "type": "git",
