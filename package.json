@@ -1,0 +1,20 @@
+{
+  "name": "mongo-mongoose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "mongoosePlayground.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tylercorbett/mongo-mongoose.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tylercorbett/mongo-mongoose/issues"
+  },
+  "homepage": "https://github.com/tylercorbett/mongo-mongoose#readme"
+}
