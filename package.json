@@ -4,6 +4,7 @@
   "description": "",
   "main": "mongoosePlayground.js",
   "dependencies": {
+    "dotenv": "^6.2.0",
     "eslint": "^5.12.1",
     "mongoose": "^5.4.6"
   },
