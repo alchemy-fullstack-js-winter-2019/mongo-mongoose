@@ -15,17 +15,28 @@ const tweetSchema = new mongoose.Schema({
 
 const Tweet = mongoose.model('Tweet', tweetSchema);
 
-Tweet
-  .create({ handle: 'paige', text: 'my first tweet' })
-  .then(createdTweet => console.log(createdTweet));
+// Tweet
+//   .create({ handle: 'paige', text: 'my first tweet' })
+//   .then(createdTweet => console.log(createdTweet));
+
+// Tweet
+//   .find()
+//   .then(tweets => console.log(tweets));
+
+// Tweet
+//   .create({ handle: 'paige', text: 'my second tweet' })
+//   .then(createdTweet => {
+//     return Tweet.findById(createdTweet._id);
+//   })
+//   .then(foundTweet => console.log(foundTweet));
+
+// Tweet
+//   .create({ handle: 'paige', text: 'my yoyo tweet' })
+//   .then(createdTweet => {
+//     return Tweet.findByIdAndUpdate(createdTweet._id, { text: 'my yogurt tweet' });
+//   })
+//   .then(updatedTweet => console.log(updatedTweet));
 
 Tweet
-  .find()
-  .then(tweets => console.log(tweets));
-
-Tweet
-  .create({ handle: 'paige', text: 'my second tweet' })
-  .then(createdTweet => {
-    return Tweet.findById(createdTweet._id);
-  })
-  .then(foundTweet => console.log(foundTweet));
+  .findByIdAndDelete('5c479d0226b0befecc1b51e6')
+  .then(deleted => console.log(deleted));

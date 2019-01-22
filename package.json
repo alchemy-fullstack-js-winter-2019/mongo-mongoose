@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/paigeegorry/mongo-mongoose#readme",
   "dependencies": {
+    "dotenv": "^6.2.0",
     "mongoose": "^5.4.6",
     "superagent": "^4.1.0"
   },
