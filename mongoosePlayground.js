@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+// const connect = require('./lib/utils/connect');
 
 mongoose.connect('mongodb://127.0.0.1:27017/tweets', { useNewUrlParser: true });
 
@@ -30,13 +31,13 @@ const Tweet = mongoose.model('Tweet', tweetSchema);
 //   })
 //   .then(foundTweet => console.log(foundTweet));
 
-// Tweet
-//   .create({ handle: 'paige', text: 'my yoyo tweet' })
-//   .then(createdTweet => {
-//     return Tweet.findByIdAndUpdate(createdTweet._id, { text: 'my yogurt tweet' }, { new: true });
-//   })
-//   .then(updatedTweet => console.log(updatedTweet));
-
 Tweet
-  .findByIdAndDelete('5c479d0226b0befecc1b51e6')
-  .then(deleted => console.log(deleted));
+  .create({ handle: 'paige', text: 'my yoyo tweet' })
+  .then(createdTweet => {
+    return Tweet.findByIdAndUpdate(createdTweet._id, { text: 'my yogurt tweet' }, { new: true });
+  })
+  .then(updatedTweet => console.log(updatedTweet));
+
+// Tweet
+//   .findByIdAndDelete('5c479d0226b0befecc1b51e6')
+//   .then(deleted => console.log(deleted));
