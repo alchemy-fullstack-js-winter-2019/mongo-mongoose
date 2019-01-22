@@ -19,25 +19,28 @@ const Tweet = mongoose.model('Tweet', tweetSchema);
 
 Tweet
     .create({ handle: 'katerj', text: 'my first tweet' })
-    .then(createdTweet => console.log(createdTweet))
+    .then(createdTweet => console.log('create:', createdTweet))
     .catch(err => console.error(err));
 
 Tweet
     .find()
-    .then(tweets => console.log(tweets));
+    .then(tweets => console.log('all tweets:', tweets));
 
 Tweet
     .create({ handle: 'kate', text: 'my first tweet' })
     .then(createdTweet => {
-        return Tweet.findById(createdTweet._id);
+        return Tweet.findOne(createdTweet._id);
     })
-    .then(foundTweet => console.log(foundTweet));
+    .then(foundTweet => console.log('find one:', foundTweet));
 
 Tweet
-    .create({ handle: 'kate', text: 'my first tweet' })
+    .create({ handle: 'ryan', text: 'my first tweet' })
     .then(createdTweet => {
-        return Tweet.findByIdAndUpdate(createdTweet._id, { text: 'hi there' });
+        return Tweet.findOneAndUpdate(createdTweet._id, { text: 'hi there' }, { new: true });
     })
-    .then(updatedTweet => console.log(updatedTweet));
+    .then(updatedTweet => console.log('update:', updatedTweet));
 
+Tweet
+    .findOneAndDelete({ _id: '5c47a2755919687b20546698' })
+    .then(deleted => console.log('delete:', deleted));
 
