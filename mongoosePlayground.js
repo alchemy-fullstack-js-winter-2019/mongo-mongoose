@@ -17,13 +17,15 @@ const tweetSchema = new mongoose.Schema({
 // create a Tweet model
 const Tweet = mongoose.model('Tweet', tweetSchema);
 // Create a new tweet
+/*
 Tweet
   .create({ handle: 'caripizza', text: 'dis ma first tweet' })
   .then(createdTweet => console.log(createdTweet));
-
+*/
 
 // Query a model ~ use singular version!
 // * Query with find
+/*
 Tweet 
   .find()
   .then(tweets => console.log(tweets));
@@ -34,9 +36,11 @@ Tweet
     return Tweet.findById(createdTweet._id);
   })
   .then(foundTweet => console.log(foundTweet));
+*/
 
 // Update a model
 // * Update a tweet
+/*
 // Tweet
 //   .create({ handle: 'ryan', text: 'my first tweet' })
 //   .then(createdTweet => {
@@ -51,3 +55,10 @@ Tweet
   .then(updatedTweet => console.log(updatedTweet));
 // ^ whats the difference?
 // * above update method doesn't print updated tweet text to console; bottom method DOES
+*/
+
+// Delete a tweet
+Tweet
+  // .findByIdAndDelete(FOUND_ID)
+  .findByIdAndDelete('5c479ebed03ca164d0cac21a')
+  .then(deleted => console.log(deleted));
