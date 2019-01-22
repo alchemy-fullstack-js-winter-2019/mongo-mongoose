@@ -1,0 +1,25 @@
+{
+  "name": "mongo-mongoose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "mongoosePlayground.js",
+  "dependencies": {
+    "eslint": "^5.12.1",
+    "mongoose": "^5.4.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caripizza/mongo-mongoose.git"
+  },
+  "keywords": [],
+  "author": "Cari Palazzolo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caripizza/mongo-mongoose/issues"
+  },
+  "homepage": "https://github.com/caripizza/mongo-mongoose#readme"
+}
