@@ -23,4 +23,16 @@ mongoose.connect('mongodb://127.0.0.1:27017/tweets', {
       console.log(createdTweet)
     })
     .catch(err => console.error(err));
+  Tweet
+    .find({ handle: 'abel' })
+    .then(tweets => console.log(tweets));
+  
+  Tweet
+    .create({ handle: 'abel', text: 'my first tweet' })
+    .then(createdTweet => {
+      return Tweet.findById(createdTweet._id)
+    })
+    .then(foundTweet => console.log(foundTweet));
+
+    
 
