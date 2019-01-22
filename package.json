@@ -1,0 +1,34 @@
+{
+  "name": "mongo-mongoose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "mongoosePlayground.js",
+  "dependencies": {
+    "mongoose": "^5.4.6"
+  },
+  "devDependencies": {
+    "eslint": "^5.12.1",
+    "jest": "^23.6.0",
+    "nodemon": "^1.18.9",
+    "supertest": "^3.4.2"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "jest": "jest",
+    "test": "npm run jest",
+    "test:watch": "npm run jest -- --watch",
+    "start": "node index.js",
+    "start:watch": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Katedam/mongo-mongoose.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Katedam/mongo-mongoose/issues"
+  },
+  "homepage": "https://github.com/Katedam/mongo-mongoose#readme"
+}
