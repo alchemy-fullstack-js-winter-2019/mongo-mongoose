@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/ajquintero/mongo-mongoose#readme",
   "dependencies": {
+    "dotenv": "^6.2.0",
     "mongoose": "^5.4.6"
   }
 }
