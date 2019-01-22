@@ -19,4 +19,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/tweets', {
 
   Tweet
     .create({ handle: 'abel', text: 'my first tweet' })
-    .then(createdTweet => console.log(createdTweet));
+    .then(createdTweet => {
+      console.log(createdTweet)
+    })
+    .catch(err => console.error(err));
+
