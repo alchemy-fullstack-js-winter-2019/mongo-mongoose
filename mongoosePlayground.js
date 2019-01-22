@@ -33,7 +33,7 @@ const Tweet = mongoose.model('Tweet', tweetSchema);
 // Tweet
 //   .create({ handle: 'paige', text: 'my yoyo tweet' })
 //   .then(createdTweet => {
-//     return Tweet.findByIdAndUpdate(createdTweet._id, { text: 'my yogurt tweet' });
+//     return Tweet.findByIdAndUpdate(createdTweet._id, { text: 'my yogurt tweet' }, { new: true });
 //   })
 //   .then(updatedTweet => console.log(updatedTweet));
 
