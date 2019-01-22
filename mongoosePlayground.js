@@ -34,5 +34,10 @@ mongoose.connect('mongodb://127.0.0.1:27017/tweets', {
     })
     .then(foundTweet => console.log(foundTweet));
 
-    
+  Tweet
+    .create({ handle: 'abel', text: 'my first tweet' })
+    .then(createdTweet => {
+      return Tweet.findByIdAndUpdate(createdTweet._id, {text: 'hi there' })
+    })
+    .then(updatedTweet => console.log(updatedTweet));
 
