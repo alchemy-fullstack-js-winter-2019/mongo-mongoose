@@ -34,3 +34,20 @@ Tweet
     return Tweet.findById(createdTweet._id);
   })
   .then(foundTweet => console.log(foundTweet));
+
+// Update a model
+// * Update a tweet
+// Tweet
+//   .create({ handle: 'ryan', text: 'my first tweet' })
+//   .then(createdTweet => {
+//     return Tweet.findByIdAndUpdate(createdTweet._id, { text: 'hi there' });
+//   })
+//   .then(updatedTweet => console.log(updatedTweet));
+Tweet
+  .create({ handle: 'ryan', text: 'my first tweet' })
+  .then(createdTweet => {
+    return Tweet.findByIdAndUpdate(createdTweet._id, { text: 'hi there' },  { new: true });
+  })
+  .then(updatedTweet => console.log(updatedTweet));
+// ^ whats the difference?
+// * above update method doesn't print updated tweet text to console; bottom method DOES
