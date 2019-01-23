@@ -25,5 +25,14 @@ describe('tweets app', () => {
         });
       });
     });
-
+    it('finds a list of tweets', () => {
+      return Promise.all(['fannyserverpackets', 'another handle'].map(createTweet))
+        .then(createdTweets => {
+          return request(app)
+            .get('/tweets')
+        })
+        .then(res => {
+          expect(res.body).toHaveLength(2);
+        });
+    });
   });
