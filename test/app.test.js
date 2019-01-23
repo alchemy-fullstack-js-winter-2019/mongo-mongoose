@@ -16,24 +16,12 @@ const createTweet = (handle, text = 'hi I a tweet') => {
 
 describe('tweets app', () => {
   beforeEach(done => {
-    // createTweet();
     return mongoose.connection.dropDatabase(() => {
       done();
     });
   });
 
-  it('can get a list of tweets from db', () => {
-    const tweetsToCreate = ['hey', 'hi', 'hello', 'hola'];
-    return Promise.all(tweetsToCreate.map(createTweet))
-      .then(() => {
-        return request(app)
-          .get('/tweets');
-      })
-      .then(({ body }) => {
-        expect(body).toHaveLength(4);
-      });
-  });
-
+  // POST ------------------------------------------
   it('can create a new tweet', () => {
     return request(app)
       .post('/tweets')
@@ -48,6 +36,19 @@ describe('tweets app', () => {
           _id: expect.any(String),
           __v: 0
         });
+      });
+  });
+
+  // GET ------------------------------------------
+  it('can get a list of tweets from db', () => {
+    const tweetsToCreate = ['hey', 'hi', 'hello', 'hola'];
+    return Promise.all(tweetsToCreate.map(createTweet))
+      .then(() => {
+        return request(app)
+          .get('/tweets');
+      })
+      .then(({ body }) => {
+        expect(body).toHaveLength(4);
       });
   });
 
@@ -69,8 +70,6 @@ describe('tweets app', () => {
       });
   });
 
-  // PUT method replaces entire object (overwrites)
-  // PATCH method replaces single entity in object
   // PATCH ------------------------------------------
   it('can retrieve a tweet by :id and return the updated tweet', () => {
     const newTweet = {
