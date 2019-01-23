@@ -54,27 +54,32 @@ describe('Tweets app', () => {
         });
       });
   })
-  it('will find by id and update'), () => {
+  it('will find by id and update', () => {
+    const updatedTweet = {
+      handle: 'Tweet24',
+      text: 'Sunny'
+    };
     return createTweet('TweetTypo')
-    .then((createdTweet) => {
-      return request(app)
-        .put(`/tweets/${createdTweet._id}`)
-        .send({
-          handle: 'Tweet24',
-          text: 'Sunny'
-        })
+      .then(createdTweet => {
+        const id = createdTweet._id;
+        return request(app)
+          .patch(`/tweets/${id}`)
+          .send(updatedTweet)
+      })
         .then(res => {
-          expect(res.body).toEqual({
-            handle: 'Tweet24',
-            text: 'Sunny',
-            _id: expect.any(String),
-            __v: 0
-          });
+          expect(res.body.handle).toEqual('Tweet24');
+        });
+  });
+  it('will delete tweet by id and return delete count', () => {
+    return createTweet('Tweet')
+    .then(tweet => {
+      return request(app)
+        .delete(`/tweets/${tweet._id}`)
+        .then(res => {
+          expect(res.body).toEqual({ deleted: 1 });
         });
     });
-  }
-
-
+  });
 
 });
 
