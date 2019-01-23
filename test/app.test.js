@@ -28,15 +28,14 @@ describe('tweets app', () => {
                 expect(res.body).toEqual({ handle: 'marcy', text: 'first tweet', _id: expect.any(String), __v: 0 });
             });
     });
-    it('gets all the tweets', () => {
-        const namesToCreate = ['marcy1', 'marcy2', 'marcy3', 'marcy4'];
-        return  Promise.all(namesToCreate.map(createTweet))
-            .then(() => {
+    it('finds a list of tweets', () => {
+        return Promise.all(['ryan', 'another handle'].map(createTweet))
+            .then(createTweet => {
                 return request(app)
                     .get('/tweets');
             })
-            .then(({ body }) => {
-                expect(body).toHaveLength(4);
+            .then(res => {
+                expect(res.body).toHaveLength(2);
             });
     });
     it('deletes a tweet', () => {
@@ -55,9 +54,7 @@ describe('tweets app', () => {
             .then(personWhoWasCreated => {
                 const id = personWhoWasCreated._id;
                 const updatedObject = ({ handle: 'marcy2',
-                    text: 'cats are better',
-                    _id: expect.any(String),
-                    __v: 0
+                    text: 'cats are better'
                 });
                 return request(app) 
                     .patch(`/tweets/${id}`)
