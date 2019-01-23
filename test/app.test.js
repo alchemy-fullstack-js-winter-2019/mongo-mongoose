@@ -4,9 +4,14 @@ const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../lib/app');
 const Tweet = require('../lib/models/Tweet');
+const User = require('../lib/models/User');
 
 const createTweet = (handle, text = 'oink tweet moo') => {
   return Tweet.create({ handle, text });
+};
+
+const createUser = (handle, name = 'paige', email = 'bob@ross.com') => {
+  return User.create({ handle, name, email });
 };
 
 describe('tweets app', () => {
@@ -103,6 +108,18 @@ describe('tweets app', () => {
           name: 'paigegorry', 
           email: 'me@me.com' 
         });
+      });
+  });
+
+  it('gets a list of users', () => {
+    const usersToCreate = ['paige1', 'paige2', 'paige3'];
+    return Promise.all(usersToCreate.map(createUser))
+      .then(() => {
+        return request(app)
+          .get('/users');
+      })
+      .then(res => {
+        expect(res.body).toHaveLength(3);
       });
   });
 });
