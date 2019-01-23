@@ -21,10 +21,6 @@ describe('tweets app', () => {
     });
   });
 
-  afterAll(done => {
-    mongoose.connection.close(done);
-  });
-
   it('can create a tweet', () => {
     return request(app)
       .post('/tweets')
@@ -43,14 +39,14 @@ describe('tweets app', () => {
   });
 
   it('gets a list of all tweets', () => {
-    const tweetsToCreate = ['Hola', 'Hola2', 'Hola3', 'Hola4', 'Hola5'];
+    const tweetsToCreate = ['Hola', 'Hola2'];
     return Promise.all(tweetsToCreate.map(createTweets))
       .then(() => {
         return request(app)
           .get('/tweets');
       })
       .then(({ body }) => {
-        expect(body).toHaveLength(5);
+        expect(body).toHaveLength(2);
       });
   });
 
