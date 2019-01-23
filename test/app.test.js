@@ -122,4 +122,21 @@ describe('tweets app', () => {
         expect(res.body).toHaveLength(3);
       });
   });
+
+  it('can get a user by its id', () => {
+    return createUser('b4nana')
+      .then(res => {
+        return request(app)
+          .get(`/users/${res._id}`)
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: 'b4nana',
+              name: 'paige',
+              email: 'bob@ross.com',
+              __v: 0,
+              _id: expect.any(String)
+            });
+          });
+      });
+  });
 });
