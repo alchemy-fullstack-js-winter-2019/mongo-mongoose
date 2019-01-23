@@ -8,7 +8,7 @@ const createTweet = (handle) => {
   return request(app)
     .post('/tweets')
     .send({
-      handle: handle,
+      handle,
       text: 'my first tweet'
     })
     .then(res => res.body);
@@ -47,7 +47,7 @@ describe('tweets app', () => {
       });
   });
   it('finds a tweet by id', () => {
-    createTweet('tyler')
+    return createTweet('tyler')
       .then(createdTweet => {
         const _id = createdTweet._id;
         return request(app)
@@ -56,6 +56,29 @@ describe('tweets app', () => {
             expect(res.body).toEqual({
               handle: 'tyler',
               text: 'my first tweet',
+              _id,
+              __v: 0
+            });
+          });
+      });
+  });
+  it('updates an existing tweet by id', () => {
+    return createTweet('tyler')
+      .then(createdTweet => {
+        console.log('createdTweet', createdTweet);
+        const _id = createdTweet._id;
+        return request(app)
+          .put(`/tweets/${_id}`)
+          .send({
+            handle: 'tyler',
+            text: 'This tweet is updated',
+            _id,
+            __v: 0
+          })
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: 'tyler',
+              text: 'This tweet is updated',
               _id,
               __v: 0
             });
