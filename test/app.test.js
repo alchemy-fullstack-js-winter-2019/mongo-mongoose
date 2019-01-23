@@ -140,7 +140,7 @@ describe('tweets app', () => {
       });
   });
 
-  it.skip('can get a user by id and update', () => {
+  it('can get a user by id and update', () => {
     let newUser = { handle: 'yogurt' };
     return createUser('yoyo')
       .then(res => {
@@ -158,7 +158,7 @@ describe('tweets app', () => {
         });
       });
   });
-  it.only('can find by id and delete', () => {
+  it('can find by id and delete', () => {
     return createUser('benedrylcumberbottom')
       .then(res => {
         return request(app)
