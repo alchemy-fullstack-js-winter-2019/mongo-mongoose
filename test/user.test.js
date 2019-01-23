@@ -8,8 +8,9 @@ const User = require('../lib/models/User');
 
 describe('users app', () => {
   const createUser = ((handle, name, email) => {
-    return User.create({ handle, name, email });
-  });
+    return User.create({ handle, name, email })
+      .then(user => ({ ...user, _id: user._id.toString() }));
+  };
 
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
@@ -36,9 +37,16 @@ describe('users app', () => {
       });
   });
 
-  // it('finds a list of users', () => {
-
-  // });
+  it('finds a list of users', () => {
+    return Promise.all(['juliaq', 'julia', 'juliaq@stanford.edu'].map(createUser)
+      .then(createdUsers => {
+        return request(app)
+          .get('/users')
+      })
+      .then(res => {
+        expect(res.body).toHaveLength(2);
+      });
+  });
 
   // it('finds a user by id', () => {
 
@@ -56,3 +64,6 @@ describe('users app', () => {
     mongoose.connection.close(done);
   });
 });
+
+
+

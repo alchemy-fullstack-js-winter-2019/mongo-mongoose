@@ -11,7 +11,7 @@ const User = require('../lib/models/User');
 
 describe('tweets app', () => {
 
-  const createUser = (handle, name, email) => {
+  const createUser = (handle : user._id, text) => {
     return User.create({ handle, name, email })
       .then(user => ({ ...user, _id: user._id.toString() }));
   };
@@ -30,15 +30,19 @@ describe('tweets app', () => {
   // start tests
 
   it('creates a new tweet', () => {
-    return request(app)
-      .post('/tweets')
-      .send({
-        handle: 'abel',
-        text: 'my first tweet'
+    return createUser('abelq16', 'abel', 'abel.j.quintero@gmail.com')
+      
+      .then(user => {
+        return request(app)
+          .post('/tweets')
+          .send({
+            handle: user._id,
+            text: 'my first tweet'
+          });
       })
       .then(res => {
         expect(res.body).toEqual({
-          handle: 'abel',
+          handle: expect.any(String),
           text: 'my first tweet',
           _id: expect.any(String),
           __v: 0
@@ -57,15 +61,17 @@ describe('tweets app', () => {
       });
   });
 
-  it('can find a tweet by id', () => {
+  it.only('can find a tweet by id', () => {
     return createTweet('abel')
       .then(createdTweet => {
-        return request(app)
-          .get(`/tweets/${createdTweet._id}`);
-      })
-      .then(res => {
+       Promise.resolve(createdTweet._id),
+       request(app)
+        .get(`/tweets/${createdTweet._id}`)
+      });
+    })
+      .then(([_id, res]) => {
         expect(res.body).toEqual({
-          handle: 'abel',
+          handle: expect.any(Object),
           text: 'my first tweet',
           _id: expect.any(String),
           __v: 0
