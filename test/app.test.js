@@ -13,6 +13,16 @@ const createTweet = (handle, text = 'hi I a tweet') => {
     })
     .then(res => res.body);
 };
+const createUser = (handle, name, email) => {
+  return request(app)
+    .post('/users')
+    .send({
+      handle,
+      name,
+      email
+    })
+    .then(res => res.body);
+};
 
 describe('tweets app', () => {
   beforeEach(done => {
@@ -33,6 +43,24 @@ describe('tweets app', () => {
         expect(res.body).toEqual({
           handle: 'cari',
           text: 'hiya tweety',
+          _id: expect.any(String),
+          __v: 0
+        });
+      });
+  });
+  it('can create a new user', () => {
+    return request(app)
+      .post('/users')
+      .send({
+        handle: 'newcooluser',
+        name: 'Cool Person McGee',
+        email: 'cool@cool.com'
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: 'newcooluser',
+          name: 'Cool Person McGee',
+          email: 'cool@cool.com',
           _id: expect.any(String),
           __v: 0
         });
