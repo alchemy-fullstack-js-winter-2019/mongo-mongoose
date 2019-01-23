@@ -87,11 +87,10 @@ describe('tweets app', () => {
       .then(createdTweets => {
         const id = createdTweets._id;
         return request(app)
-          .delete(`/tweets/${id}`);
-      })
-      .then(res => {
-        expect(res.body).toEqual({ 'deleted': 1 });
+          .delete(`/tweets/${id}`)
+          .then(res => {
+            expect(res.body).toEqual({ 'deleted': 1 });
+          });
       });
   });
-
 });
