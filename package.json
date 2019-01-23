@@ -4,7 +4,11 @@
   "description": "",
   "main": "mongoosePlayground.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "jest",
+    "test:watch": "npm run test -- --watch",
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
