@@ -15,7 +15,10 @@ describe('tweets app', () => {
     done();
     });
   });
-
+  afterAll((done) => {
+    mongoose.connection.close(done);
+});
+  
   it('creates a new tweet', () => {
     return request(app)
     .post('/tweets')
@@ -40,7 +43,10 @@ describe('tweets app', () => {
           expect(res.body).toHaveLength(2);
         });
     });
-    afterAll(() => {
-      mongoose.disconnect();
-  });
+    it('gets a tweet by id', () => {
+      return createTweet('renderfarmhouseales')
+      .then(createdTweet => {
+
+      })
+    })
   });
