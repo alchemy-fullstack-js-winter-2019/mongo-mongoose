@@ -19,6 +19,8 @@ describe('them tweets', () => {
       });
   });
 
+  afterAll(() => mongoose.disconnect());
+
   it('posts a tweet', () => {
     return request(app)
       .post('/tweets')
@@ -90,6 +92,4 @@ describe('them tweets', () => {
       .delete(`/tweets/${tweet._id}`)
       .then(res => expect(res.body).toEqual({ deleted: 1 }));
   });
-
-  afterAll(() => mongoose.disconnect());
 });
