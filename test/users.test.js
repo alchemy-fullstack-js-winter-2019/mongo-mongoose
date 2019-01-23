@@ -43,4 +43,10 @@ describe('them users', () => {
       .get('/users')
       .then(res => expect(res.body).toEqual([user]));
   });
+
+  it('gets user by id', () => {
+    return request(app)
+      .get(`/users/${user._id}`)
+      .then(res => expect(res.body).toEqual(user));
+  });
 });
