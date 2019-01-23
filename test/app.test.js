@@ -5,11 +5,25 @@ const request = require('supertest');
 const app = require('../lib/app');
 
 const createTweets = (handle, text = 'Hello') => {
+  return createUsers(handle)
+    .then(createUsers => {
+      return request(app)
+        .post('/tweets')
+        .send({
+          handle: createUsers._id,
+          text
+        })
+        .then(res => res.body);
+    });
+};
+
+const createUsers = (handle, name = 'Aaron', email = 'AMDennis1987@gmail.com') => {
   return request(app)
-    .post('/tweets')
+    .post('/users')
     .send({
       handle,
-      text
+      name,
+      email
     })
     .then(res => res.body);
 };
@@ -22,19 +36,23 @@ describe('tweets app', () => {
   });
 
   it('can create a tweet', () => {
-    return request(app)
-      .post('/tweets')
-      .send({
-        handle: 'Aaron',
-        text: 'Hello World'
-      })
-      .then(res => {
-        expect(res.body).toEqual({
-          handle: 'Aaron',
-          text: 'Hello World',
-          _id: expect.any(String),
-          __v: 0
-        });
+    return createUsers('test user')
+      .then(createdUser => {
+        return request(app)
+          .post('/tweets')
+          .send({
+            handle: createdUser._id,
+            text: 'Hello World'
+          })
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: createdUser._id,
+              text: 'Hello World',
+              _id: expect.any(String),
+              __v: 0
+            });
+          });
+
       });
   });
 
@@ -61,7 +79,7 @@ describe('tweets app', () => {
       })
       .then(([_id, res]) => {
         expect(res.body).toEqual({
-          handle: 'Aaron',
+          handle: expect.any(Object),
           text: 'Hello',
           _id,
           __v: 0
