@@ -74,4 +74,20 @@ describe('tweets app', () => {
   //       });
   //     });
   // });
+
+  it('can delete a tweet', () => {
+    return createTweet('m3m3lord')
+      .then(res => {
+        return request(app)
+          .delete(`/tweets/${res._id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({ 
+          handle: 'm3m3lord',
+          text: 'oink tweet moo',
+          __v: 0,
+          _id: expect.any(String)
+        });
+      });
+  });
 });
