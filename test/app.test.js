@@ -85,10 +85,17 @@ describe('tweets app', () => {
     return createTweet('tyler')
       .then(createdTweet => {
         const _id = createdTweet._id;
+        console.log('_id', _id);
         return request(app)
-          .delete(`tweets/${_id}`)
+          .delete(`/tweets/${_id}`)
           .then(res => {
-            expect(res.body).toEqual({ deleted: 1 });
+            console.log('res.body', res.body);
+            expect(res.body).toEqual({
+              _id,
+              handle: 'tyler',
+              text: 'my first tweet',
+              __v: 0
+            });
           });
       });
   });
