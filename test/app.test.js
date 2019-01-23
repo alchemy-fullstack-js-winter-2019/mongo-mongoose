@@ -38,9 +38,9 @@ describe('tweets app', () => {
     });
   });
   afterAll(done => {
-    createTweet('dumb', 'dumber');
-    createUser('basktz', 'Frank Fronk', 'i@i.io');
-    mongoose.disconnect();
+    createTweet('seedDataHandleA', 'seedDataTextA');
+    createUser('seedDataHandleB', 'seedDataNameB', 'seedDataEmailB');
+    // mongoose.disconnect();
     done();
   });
 
@@ -58,13 +58,12 @@ describe('tweets app', () => {
           })
           .then(res => {
             expect(res.body).toEqual({
-              handle: createdUser._id,
+              handle: expect.any(String),
               text: 'hiya tweety',
               _id: expect.any(String),
               __v: 0
             });
           });
-
       });
   });
   it('can create a new user', () => {
@@ -125,7 +124,7 @@ describe('tweets app', () => {
   });
 
   // GET by id
-  it('can get a tweet by id', () => {
+  it.only('can get a tweet by id', () => {
     return createTweet('hayyyyyy')
       .then(createdTweet => {
         const _id = createdTweet._id;
@@ -134,15 +133,10 @@ describe('tweets app', () => {
           .then(res => {
             expect(res.body).toEqual({
               handle: {
-                __v: 0,
-                _id: expect.any(String),
-                email: 'defaultEmail',
-                handle: 'hayyyyyy',
-                name: 'defaultName'
+                handle: 'hayyyyyy'
               },
               text: 'hi I a tweet',
-              _id,
-              __v: 0
+              _id
             });
           });
       });
