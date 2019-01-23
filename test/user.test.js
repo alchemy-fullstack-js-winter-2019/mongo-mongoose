@@ -10,7 +10,7 @@ describe('users app', () => {
   const createUser = ((handle, name, email) => {
     return User.create({ handle, name, email })
       .then(user => ({ ...user, _id: user._id.toString() }));
-  };
+  });
 
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
@@ -45,7 +45,7 @@ describe('users app', () => {
       })
       .then(res => {
         expect(res.body).toHaveLength(2);
-      });
+      })
   });
 
   // it('finds a user by id', () => {

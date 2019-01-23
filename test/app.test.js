@@ -11,13 +11,17 @@ const User = require('../lib/models/User');
 
 describe('tweets app', () => {
 
-  const createUser = (handle : user._id, text) => {
+  const createUser = (handle, name, email) => {
     return User.create({ handle, name, email })
       .then(user => ({ ...user, _id: user._id.toString() }));
   };
 
   const createTweet = ((handle, text = 'my first tweet') => {
-    return Tweet.create({ handle, text });
+    return createUser(handle, 'abel', 'abel.j.quintero@gmail.com')
+      .then(user => {
+        return Tweet.create({ handle: user._id, text })
+          .then(tweet => ({ ...tweet, _id: tweet._id.toString() }));
+      });
   });
 
   beforeEach(done => {
@@ -64,20 +68,20 @@ describe('tweets app', () => {
   it.only('can find a tweet by id', () => {
     return createTweet('abel')
       .then(createdTweet => {
-       Promise.resolve(createdTweet._id),
-       request(app)
-        .get(`/tweets/${createdTweet._id}`)
+        Promise.resolve(createdTweet._id),
+        request(app)
+          .get(`/tweets/${createdTweet._id}`);
       });
-    })
-      .then(([_id, res]) => {
-        expect(res.body).toEqual({
-          handle: expect.any(Object),
-          text: 'my first tweet',
-          _id: expect.any(String),
-          __v: 0
-        });
+  })
+    .then(([_id, res]) => {
+      expect(res.body).toEqual({
+        handle: expect.any(Object),
+        text: 'my first tweet',
+        _id: expect.any(String),
+        __v: 0
       });
-  });
+    });
+
 
   it('errors when a bad id is sent', () => {
     return request(app)
