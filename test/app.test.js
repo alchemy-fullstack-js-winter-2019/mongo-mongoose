@@ -10,8 +10,6 @@ const createUser = (handle, name, email) => {
   return User.create({ handle, name, email })
     .then(user => ({ ...user, _id: user._id.toString() }));
 };
-
-
 const createTweet = (handle, text = 'a tweet') => {
   return createUser(handle, 'ryan', 'ryan@email.com')
     .then(user => {
@@ -71,7 +69,7 @@ describe('tweets app', () => {
           });
       });
   });
-  it.only('updates an existing tweet by id', () => {
+  it('updates an existing tweet by id', () => {
     return createTweet('tyler')
       .then(createdTweet => {
         const _id = createdTweet._id;
@@ -99,8 +97,8 @@ describe('tweets app', () => {
           .then(res => {
             expect(res.body).toEqual({
               _id,
-              handle: 'tyler',
-              text: 'my first tweet',
+              handle: expect.any(Object),
+              text: 'a tweet',
               __v: 0
             });
           });
