@@ -1,0 +1,60 @@
+  //this goes into tweets.js
+  // .get('/:id', (req, res, next) => {
+  //   const id = req.params.id;
+  //   Tweet 
+  //     .find()
+  //     .then(foundTweet)=> {
+
+  //     }
+  // })
+
+
+
+//takes even and db uri and console logs connection event on db uri we can insert this into our connection as 
+function log(even, dbUri){
+  return function(){
+    console.log(`connection${event} on ${redact(dbUri)}`)
+  }
+}
+//////look at connect.js for final code
+// module.exports = (dbUri = rpocess.env.MONGODB_URI) => {
+//   mongoose.connect(dbUri, { useNewUrlParser: true })
+ 
+//   mongoose.connection.on('open', () => {
+//     console.log(dbUri);
+//   });
+
+//   mongoose.connection.on('error', ()=> {
+//     console.lerror(`Connection`)
+//   })
+// };
+
+
+/////FOR TESTING
+  it('finds tweet by id', ()=> {
+    retrun createTweet('second tweet')
+      .then(secondTweet => {
+        const _id = secondTweet._id
+        return request(app)
+        .get(`/tweets/${id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: 'second tweet',
+          text: 'anotehr tweet',
+          _id,
+          __v: 0
+          
+        });
+      });
+  });
+  it('finds a list of tweets',()=> {
+    return Promise.all(['mike', 'jordan', 'jacobo'].map(createdTweet)=> {
+      then(createdTweets)
+    })
+    return request(app)
+      .get('/tweets')
+      .then(res => {
+
+      })
+  })
