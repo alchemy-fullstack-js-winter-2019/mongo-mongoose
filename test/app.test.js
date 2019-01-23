@@ -67,6 +67,24 @@ describe('tweets app', () => {
         expect(res.status).toEqual(404);
       });
   });
+
+  it('gets tweet by id and return an updated tweet', () => {
+    const updatedTweet = {
+      handle: 'carmen1',
+      text: 'God is good all the time!'
+    };
+    return createTweet('helloworld')
+      .then(tweetCreated => {
+        const _id = tweetCreated._id;
+        return request(app)
+          .put(`/tweets/${_id}`)
+          .send(updatedTweet);
+      })
+      .then(res => {
+        expect(res.body.handle).toEqual('carmen1');
+      });
+  });
+
 });
 
 
