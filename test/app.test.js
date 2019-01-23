@@ -4,7 +4,7 @@ const app = require('../lib/app');
 const request = require('supertest');
 const mongoose = require('mongoose');
 
-const createUser = (handle, name, email) => {
+const createUser = (handle) => {
   return request(app)
     .post('/users')
     .send({
@@ -32,7 +32,6 @@ const createTweet = (handle, text = 'default text') => {
 };
 
 describe('tweets app', () => {
-  
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
       done();
