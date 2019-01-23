@@ -5,6 +5,16 @@ const mongoose = require('mongoose');
 const request = require('supertest');
 const Tweet = require('../lib/models/Tweet');
 
+const createTweet = (handle) => {
+  return request(app)
+    .post('/tweets')
+    .send({
+      handle,
+      text: 'my first tweet'
+    })
+    .then(res => res.body);
+};
+
 describe('tweets app', () => {
   const createTweet = (handle, text = 'a tweet') => {
     return Tweet.create({ handle, text });
@@ -72,8 +82,24 @@ describe('tweets app', () => {
   });
 
   it('updates a tweet by id', () => {
-    return request(app)
-      .
+    return createTweet('connor')
+      .then(createdTweet => {
+        const _id = createdTweet._id;
+        return request(app)
+          .patch(`/tweets/${_id}`)
+          .send({
+            text: 'updated tweet'
+          })
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: 'connor',
+              text: 'updated tweet',
+              _id,
+              __v: 0
+            })
+          })
+      })
+      
       
   });
 });
