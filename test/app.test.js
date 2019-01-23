@@ -66,8 +66,16 @@ describe('tweets app', () => {
       });
   });
 
-  it('can find by id and update', () => {
+  it('errors when a bad id is sent', () => {
+    return request(app)
+    .get('/tweets/badId')
+    .then(res => {
+      expect(res.status).toEqual(404)
+    });
+  });
 
+  it('can find by id and update', () => {
+    
   });
 
   it('can find by id and delete', () => {
