@@ -158,7 +158,8 @@ Tweet
 ## Create Tweets/User relationship
 
 Tweets should be associated with a User. In a SQL style database we use a join, with mongoose
-we can use a `populate` to accomplish the same goal.
+we can use a `popul
+ate` to accomplish the same goal.
 [https://mongoosejs.com/docs/populate.html](https://mongoosejs.com/docs/populate.html)
 
 * Update the `tweetSchema`
