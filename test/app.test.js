@@ -26,7 +26,7 @@ describe('tweets app', () => {
       done();
     });
   });
-  it('can get a list of tweets from our db', () => {
+  it.only('can get a list of tweets from our db', () => {
     const tweetsToCreate = ['yoyo', 'jelly123', 'jessie456'];
     return Promise.all(tweetsToCreate.map(createTweet))
       .then(() => {
@@ -55,13 +55,12 @@ describe('tweets app', () => {
       });
   });
 
-  it.only('can get a tweet by its id', () => {
+  it('can get a tweet by its id', () => {
     return createTweet('shezza')
       .then(res => {
         return request(app)
           .get(`/tweets/${res._id}`)
           .then(res => {
-            console.log(res.body);
             expect(res.body).toEqual({
               handle: expect.any(Object),
               text: 'oink tweet moo',
@@ -76,14 +75,12 @@ describe('tweets app', () => {
     let newTweet = { text: 'ele-FANT-eh' };
     return createTweet('ele4ant3')
       .then(res => {
-        console.log('res', res);
         return request(app)
           .patch(`/tweets/${res._id}`)
           .send(newTweet)
           .then(res => {
-            console.log('.then', res.body);
             expect(res.body).toEqual({ 
-              handle: 'ele4ant3', 
+              handle: expect.any(Object), 
               text: 'ele-FANT-eh', 
               _id: expect.any(String),
               __v: 0
@@ -185,7 +182,7 @@ describe('tweets app', () => {
         });
       });
   });
-  afterAll(() => {
-    mongoose.disconnect();
+  afterAll((done) => {
+    mongoose.disconnect(done);
   }); 
 });
