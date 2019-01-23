@@ -74,7 +74,7 @@ describe('Tweets app', () => {
         });
       });
   });
-  it.only('will find by id and update', () => {
+  it('will find by id and update', () => {
     const updatedTweet = {
       // handle: expect.any(Object),
       text: 'a tweet'
@@ -194,5 +194,8 @@ describe('User app', () => {
             expect(res.body).toEqual({ deleted: 1 });
           });
       });
+  });
+  afterAll(() => {
+    return mongoose.disconnect();
   });
 });
