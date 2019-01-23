@@ -68,7 +68,7 @@ describe('tweets app', () => {
       });
   });
 
-  it.only('finds by id', () => {
+  it('finds by id', () => {
     return createTweet('TT')
       .then(createdTweet => {
         const _id = createdTweet._id;
@@ -98,16 +98,10 @@ describe('tweets app', () => {
               .get(`/tweets/${id}`)
               .then(res => {
                 expect(res.body).toEqual({
-                  handle: {
-                    handle: 'TeeTee',
-                    email: 'teonna@heintz.com',
-                    name: 'teonna',
-                    __v: 0,
-                    _id: expect.any(String)
-                  },
+                  handle: { handle: 'TeeTee' },
                   text: 'update text',
                   _id: expect.any(String),
-                  __v: 0
+              
                 });
               });
           });
