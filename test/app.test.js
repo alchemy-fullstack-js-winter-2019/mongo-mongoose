@@ -3,6 +3,8 @@ require('../lib/utils/connect')();
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../lib/app');
+const Tweet = require('../lib/models/Tweet');
+const User = require('../lib/models/User');
 
 const createTweet = (handle, text = 'hi I a tweet') => {
   return request(app)
@@ -29,6 +31,11 @@ describe('tweets app', () => {
     return mongoose.connection.dropDatabase(() => {
       done();
     });
+  });
+  afterAll(done => {
+    createTweet('dumb', 'dumber');
+    createUser('basktz', 'Frank Fronk', 'i@i.io');
+    done();
   });
 
   // POST ------------------------------------------
@@ -181,6 +188,25 @@ describe('tweets app', () => {
           .delete(`/tweets/${_id}`)
           .then(res => {
             expect(res.body).toEqual({ deleted: 1 });
+            return Tweet.findById(_id)
+              .then(res => {
+                expect(res).toBeNull();
+              });
+          });
+      });
+  });
+  it('can retrieve a user by :id, delete, and return the delete count', () => {
+    return createUser('music2myEARS', 'YoYo Ma', 'v@v.com')
+      .then(createdUser => {
+        const _id = createdUser._id;
+        return request(app)
+          .delete(`/users/${_id}`)
+          .then(res => {
+            expect(res.body).toEqual({ deleted: 1 });
+            return User.findById(_id)
+              .then(res => {
+                expect(res).toBeNull();
+              });
           });
       });
   });
