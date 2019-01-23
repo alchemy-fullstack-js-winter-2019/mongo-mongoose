@@ -35,6 +35,22 @@ describe('Tweets app', () => {
       expect(res.body).toHaveLength(2);
     });
   });
+  it('finds a tweet by id', () => {
+    return createTweet('tweet 1', 'It is sunny')
+      .then((createdTweet) => {
+        const id = createdTweet._id;
+        return request(app)
+          .get(`/tweets/${id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: 'tweet 1',
+          text: 'It is sunny',
+          _id: expect.any(String),
+          __v: 0
+        });
+      });
+  })
 
 
   //   return request(app)
