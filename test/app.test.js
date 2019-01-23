@@ -14,6 +14,7 @@ const createTweet = handle => {
     .then(res => res.body);
 };
 
+
 describe('tweets app', () => {
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
@@ -38,7 +39,7 @@ describe('tweets app', () => {
   it('gets a list of tweets', () => {
     const handles = ['TA1', 'TA2', 'TA3'];
     return Promise.all(handles.map(createTweet))
-      .then(() => {
+      .then(createdUser => {
         return request(app)
           .get('/tweets')
           .then(res => {
@@ -106,6 +107,56 @@ describe('tweets app', () => {
         });
       });
   });
-
 });
 
+
+describe('users', () => {
+
+  const createUser = handle => {
+    return request(app)
+      .post('/tweets')
+      .send({
+        handle: handle,
+        name: 'teonna',
+        email: 'teonna@heintz.com'
+      })
+      .then(res => res.body);
+  };
+  
+  beforeEach(done => {
+    return mongoose.connection.dropDatabase(() => {
+      done();
+    });
+  });
+
+  it('creates a user', () => {
+    return request(app)
+      .post('/users')
+      .send({ 
+        handle: 'TA',
+        name: 'Teonna',
+        email: 'teonna@heintz.com'
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: 'TA',
+          name: 'Teonna',
+          email: 'teonna@heintz.com',
+          _id: expect.any(String),
+          __v: 0
+        });
+      });
+  });
+  it('finds a list of tweets', () => {
+    return Promise.all(['TT', 'TA'].map(createUser))
+      .then(createdUser => {
+        return request(app)
+          .get('/tweets');
+      })
+      .then(res => {
+        expect(res.body).toHaveLength(2);
+      });
+  });
+  
+
+});
