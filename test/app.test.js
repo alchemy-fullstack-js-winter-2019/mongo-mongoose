@@ -39,12 +39,31 @@ describe('tweets app', () => {
     });
   });
 
-  it('can find a tweet', () => {
-
+  it('finds a list of tweets', () => {
+    return Promise.all(['abel', 'another handle'])
+      .then(createdTweets => {
+        return request(app)
+          .get('/tweets')
+      })
+      .then(res => {
+        expect(res.body).toHaveLength(2);
+      });
   });
 
   it('can find a tweet by id', () => {
-
+    return createTweet('abel')
+      .then(createdTweet => {
+        return request(app)
+          .get(`/tweets/${createdTweet._id}`)
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: 'abel',
+          text: 'my first tweet',
+          _id: expect.any(String),
+          __v: 0
+        });
+      });
   });
 
   it('can find by id and update', () => {
