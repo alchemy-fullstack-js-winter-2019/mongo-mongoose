@@ -30,8 +30,7 @@ describe('tweets app', () => {
     });
     it('finds a list of tweets', () => {
         return Promise.all(['ryan', 'another handle'].map(createTweet))
-        /* eslint-disable-next-line*/
-            .then(createTweet => {
+            .then(() => {
                 return request(app)
                     .get('/tweets');
             })
