@@ -95,6 +95,16 @@ describe('tweets app', () => {
           });
       });
   });
+  it('deletes a tweet by id', () => {
+    return createTweet('deleted')
+      .then(createdTweet => {
+        return request(app)
+          .delete(`/tweets/${createdTweet._id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({ deleted: 1 });
+      });
+  });
 
 });
 
