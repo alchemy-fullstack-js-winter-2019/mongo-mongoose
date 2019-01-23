@@ -67,12 +67,9 @@ describe('tweets app', () => {
       .then(createdTweet => {
         const _id = createdTweet._id;
         return request(app)
-          .put(`/tweets/${_id}`)
+          .patch(`/tweets/${_id}`)
           .send({
-            handle: 'tyler',
-            text: 'This tweet is updated',
-            _id,
-            __v: 0
+            text: 'This tweet is updated'
           })
           .then(res => {
             expect(res.body).toEqual({
