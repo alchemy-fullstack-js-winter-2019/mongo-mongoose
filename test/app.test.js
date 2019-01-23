@@ -170,4 +170,15 @@ describe('users app', () => {
         expect(res.body.name).toEqual('ivan');
       });
   });
+
+  it('can find by id and delete', () => {
+    return createUser('ivan')
+      .then(createdUser => {
+        return request(app)
+          .delete(`/users/${createdUser._id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({ deleted: 1 });
+      });
+  });
 });
