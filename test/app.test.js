@@ -160,4 +160,15 @@ describe('User app', () => {
         expect(res.body.handle).toEqual('Don233');
       });
   });
+
+  it('will delete a user', () => {
+    return createUser('User')
+      .then(user => {
+        return request(app)
+          .delete(`/users/${user._id}`)
+          .then(res => {
+            expect(res.body).toEqual({ deleted: 1 });
+          });
+      });
+  });
 });
