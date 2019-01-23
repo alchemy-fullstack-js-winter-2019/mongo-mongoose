@@ -53,14 +53,14 @@ describe('tweets app', () => {
       });
   });
 
-  it.only('finds all the tweets', () => {
+  it('finds all the tweets', () => {
     return Promise.all(['mike', 'mike2'].map(createTweet))
       .then(() => {
         return request(app)
           .get('/tweets');
       })
       .then(res => {
-        console.log('Fluffy mice & kittens', res.body);
+        // console.log('Fluffy mice & kittens', res.body);
         expect(res.body).toHaveLength(2);
       });
   });

@@ -37,7 +37,7 @@ describe.skip('users app', () => {
 
   it('finds all the users', () => {
     return Promise.all(['fannyserverpackets', 'another handle'].map(createUser))
-      .then(createdUsers => {
+      .then(() => {
         return request(app)
           .get('/users');
       })
