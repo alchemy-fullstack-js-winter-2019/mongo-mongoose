@@ -102,6 +102,12 @@ describe('tweets app', () => {
 });
 
 describe('users app', () => {
+
+  const createUser = (handle, name = 'carmen', email = 'carmen@email.com') => {
+    const userCreated = User.create({ handle, name, email });
+    console.log('User created', userCreated);
+    return userCreated;
+  };
   
   it('creates a user', () => {
     return request(app)
@@ -116,6 +122,18 @@ describe('users app', () => {
           __v: 0 
         });
       }); 
+  });
+
+  it('finds a list of users', () => {
+    return Promise.all(
+      ['user1', 'user2', 'user3'].map(createUser))
+      .then(() => {
+        return request(app)
+          .get('/users');
+      })
+      .then(res => {
+        expect(res.body).toHaveLength(3);
+      });
   });
 
 });
