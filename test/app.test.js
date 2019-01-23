@@ -41,5 +41,29 @@ describe('tweets app', () => {
         expect(res.body).toHaveLength(2);
       });
     });
-    
+    it('find a tweet by id', () => {
+      return createTweet('dee')
+      .then(createdTweet => {
+        const _id = createdTweet._id;
+        return request(app)
+          .get(`/tweets/${createdTweet._id}`)
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: 'dee',
+              text: 'a tweet',
+              _id,
+              __v: 0
+        });
+      });
+    });
+
+  it('errors when a bad id is sent', () => {
+    return request(app)
+    .get('/tweets/5c480950b8ca94636cb64a75')
+    .then(res => {
+      expect(res.status).toEqual(404);
+    })
   })
+})
+});
+
