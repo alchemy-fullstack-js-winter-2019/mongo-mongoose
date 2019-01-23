@@ -34,6 +34,7 @@ describe('tweets app', () => {
         });
       });
   });
+  
   it('gets a list of tweets', () => {
     const handles = ['TA1', 'TA2', 'TA3'];
     return Promise.all(handles.map(createTweet))
@@ -62,19 +63,13 @@ describe('tweets app', () => {
         });
       });
   });
-  // it('errors when a bad id is sent', () => {
-  //   return request(app)
-  //     .get('/tweets/badId')
-  //     .then(res => {
-  //       expect(res.status).toEqual(404);
-  //     });
-  // });
+ 
   it('updates a tweet', () => {
     return createTweet('TeeTee')
       .then(createdTweet => {
         const id = createdTweet._id;
         return request(app)
-          .put(`/tweets/${id}`)
+          .patch(`/tweets/${id}`)
           .send({
             handle: 'TeeTee',
             text: 'updated tweet',
@@ -95,6 +90,7 @@ describe('tweets app', () => {
           });
       });
   });
+
   it('deletes a tweet by id', () => {
     return createTweet('deleted')
       .then(createdTweet => {
@@ -102,7 +98,12 @@ describe('tweets app', () => {
           .delete(`/tweets/${createdTweet._id}`);
       })
       .then(res => {
-        expect(res.body).toEqual({ deleted: 1 });
+        expect(res.body).toEqual({ 
+          handle: 'deleted',
+          text: 'my tweeter tweets',
+          _id: expect.any(String),
+          __v: 0
+        });
       });
   });
 
