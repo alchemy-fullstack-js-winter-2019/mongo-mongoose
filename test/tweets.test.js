@@ -22,8 +22,8 @@ describe('test DB methods/routes', () => {
             done();
         });
     });
-    afterAll(() => {
-        mongoose.disconnect();
+    afterAll((done) => {
+        mongoose.connection.close(done);
     });
 
     it('can post the DB', () => {
