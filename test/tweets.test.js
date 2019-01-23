@@ -76,8 +76,7 @@ describe('test DB methods/routes', () => {
                 expect(res.body).toEqual({
                     handle: expect.any(Object),
                     text: 'some tweet',
-                    _id,
-                    __v: 0
+                    _id
                 });
             });
     });
@@ -86,10 +85,9 @@ describe('test DB methods/routes', () => {
     it('can update a document by ID', () => {
         return createTweet('XBT')
             .then(createdTweet => {
-                console.log(createdTweet);
                 return request(app)
                     .patch(`/tweets/${createdTweet._id}`)
-                    .send({ text: 'NEOMOON'});
+                    .send({ text: 'NEOMOON' });
             })
             .then(res => {
                 expect(res.text).toContain('NEOMOON');
