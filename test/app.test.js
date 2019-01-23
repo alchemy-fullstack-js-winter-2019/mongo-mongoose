@@ -31,12 +31,17 @@ describe('tweets app', () => {
         expect(body).toHaveLength(3);
       });
   });
-  // it('can post a tweet', () => {
-  //   return request(app)
-  //     .post('/tweets')
-  //     .send({ handle: 'yogurt', text: 'greek or nah?' })
-  //     .then(res => {
-  //       expect(res.body).toEqual({ _v: expect.any(Number), _id: expect.any(String), handle: 'yogurt', text: 'greek or nah?' });
-  //     });
-  // });
+  it('can post a tweet', () => {
+    return request(app)
+      .post('/tweets')
+      .send({ handle: 'yogurt', text: 'greek or nah?' })
+      .then(res => {
+        expect(res.body).toEqual({ 
+          __v: 0, 
+          _id: expect.any(String), 
+          handle: 'yogurt', 
+          text: 'greek or nah?' 
+        });
+      });
+  });
 });
