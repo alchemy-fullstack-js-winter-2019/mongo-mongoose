@@ -5,6 +5,7 @@ require('../lib/utils/connect')();
 const mongoose = require('mongoose');
 const app = require('../lib/app');
 const request = require('supertest');
+const Tweet = require('../lib/models/Tweet');
 
 const makeTweet = (text) => {
   return request(app)
@@ -18,6 +19,9 @@ const makeTweet = (text) => {
 
 
 describe('tweets app', () => {
+  const createTweet = (handle = 'ladybeard', text = 'I heart Squirrels') => {
+    return Tweet.create({ handle, text })
+  };
 
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
@@ -68,7 +72,7 @@ describe('tweets app', () => {
             .send({ text: 'HOOOJ' })
         ]);
       })
-      .then(([_id, res]) => {
+      .then(([_id]) => {
         return request(app)
           .get(`/tweets/${_id}`)
           .then((res => {
@@ -78,15 +82,24 @@ describe('tweets app', () => {
   });
 
   it('returns a list of tweets', () => {
-    return Promise.all(['I heart Squirrels', 'Sardine Saturday is my fave!'].map(tweet => {
-      makeTweet(tweet);
-    }))
-      .then(() => {
+    return Promise.all(['I heart Squirrels', 'Sardine Saturday is my fave!'].map(createTweet))
+      .then(createdTweets => {
         return request(app)
-          .get('/tweets');
+          .get('/tweets')
+      })
+      .then(res => {
+        expect(res.body).toHaveLength(2);
+      });
+  });
+
+  it('deletes a tweet by id', () => {
+    return makeTweet('oops')
+      .then(oopsTweet => {
+        return request(app)
+          .delete(`/tweets/${oopsTweet._id}`);
       })
       .then(({ body }) => {
-        expect(body).toHaveLength(2);
+        expect(body).toEqual({ deleted: 1 });
       });
   });
 
