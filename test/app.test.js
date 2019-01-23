@@ -8,12 +8,10 @@ const Tweet = require('../lib/models/Tweet');
 
 
 describe('tweets app', () => {
-  // const createTweet = (handle, text = 'new tweet') => {
-  //   return request(app)
-  //     .post('/tweets')
-  //     .send({ handle, text })
-  //     .then(res => res.body);
-  // }; 
+  const createTweet = ((handle, text = 'hi there') => {
+    return Tweet.create({ handle, text });
+  });
+
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
       done();
@@ -41,16 +39,16 @@ describe('tweets app', () => {
       });
   });
 
-  // it('finds a list of tweets', () => {
-  //   return Promise.all(['abel', 'another handle'])
-  //     .then(createdTweets => {
-  //       return request(app)
-  //         .get('/tweets');
-  //     })
-  //     .then(res => {
-  //       expect(res.body).toHaveLength(2);
-  //     });
-  // });
+  it('finds a list of tweets', () => {
+    return Promise.all(['abel', 'another handle'].map(createTweet))
+      .then(createdTweets => {
+        return request(app)
+          .get('/tweets');
+      })
+      .then(res => {
+        expect(res.body).toHaveLength(2);
+      });
+  });
 
   // it('can find a tweet by id', () => {
   //   return createTweet('abel')
