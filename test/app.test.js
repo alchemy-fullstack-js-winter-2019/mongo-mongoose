@@ -39,7 +39,7 @@ describe('tweets app', () => {
   it('gets a list of tweets', () => {
     const handles = ['TA1', 'TA2', 'TA3'];
     return Promise.all(handles.map(createTweet))
-      .then(createdUser => {
+      .then(() => {
         return request(app)
           .get('/tweets')
           .then(res => {
@@ -149,7 +149,7 @@ describe('users', () => {
   });
   it('finds a list of tweets', () => {
     return Promise.all(['TT', 'TA'].map(createUser))
-      .then(createdUser => {
+      .then(() => {
         return request(app)
           .get('/tweets');
       })
