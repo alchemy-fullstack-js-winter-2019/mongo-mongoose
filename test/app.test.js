@@ -66,5 +66,18 @@ describe('tweets app', () => {
         });
       });
   });
+
+  it('can find a tweet by id and update', () => {
+    return createTweet('tweety')
+      .then(createdTweet => {
+        const id = createdTweet._id;
+        return request(app)
+          .put(`/tweets/${id}`)
+          .send({ ...createdTweet, text: 'tweet!' });
+      })
+      .then(res => {  
+        expect(res.body.text).toEqual('tweet!');
+      });
+  });
 });
 
