@@ -8,7 +8,7 @@ const Tweet = require('../lib/models/Tweet');
 
 
 describe('tweets app', () => {
-  const createTweet = ((handle, text = 'hi there') => {
+  const createTweet = ((handle, text = 'my first tweet') => {
     return Tweet.create({ handle, text });
   });
 
@@ -50,21 +50,21 @@ describe('tweets app', () => {
       });
   });
 
-  // it('can find a tweet by id', () => {
-  //   return createTweet('abel')
-  //     .then(createdTweet => {
-  //       return request(app)
-  //         .get(`/tweets/${createdTweet._id}`);
-  //     })
-  //     .then(res => {
-  //       expect(res.body).toEqual({
-  //         handle: 'abel',
-  //         text: 'my first tweet',
-  //         _id: expect.any(String),
-  //         __v: 0
-  //       });
-  //     });
-  // });
+  it('can find a tweet by id', () => {
+    return createTweet('abel')
+      .then(createdTweet => {
+        return request(app)
+          .get(`/tweets/${createdTweet._id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: 'abel',
+          text: 'my first tweet',
+          _id: expect.any(String),
+          __v: 0
+        });
+      });
+  });
 
   // it('errors when a bad id is sent', () => {
   //   return request(app)
