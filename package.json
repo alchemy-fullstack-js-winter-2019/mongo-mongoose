@@ -17,7 +17,7 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "jest": "jest",
+    "jest": "jest --verbose --runInBand",
     "test": "npm run jest",
     "test:watch": "npm run jest -- --watch",
     "start": "node server.js",

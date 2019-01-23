@@ -53,4 +53,48 @@ describe('user test', () => {
       });
   });
 
+  it('returns a list of users', () => {
+    const listOfUsers = [('katerj', 'kate', 'kate@gmail.com'), ('kitty', 'kingsley', 'meow@cats.com')];
+    return Promise.all(listOfUsers.map(createUser))
+      .then(() => {
+        return request(app)
+          .get('/users');
+      })
+      .then(res => {
+        expect(res.body).toHaveLength(2);
+      });
+  });
+
+  it('updates a user by id', () => {
+    return createUser()
+      .then(createdUser => {
+        return request(app)
+          .patch(`/users/${createdUser._id}`)
+          .send({
+            name: 'Kaiya',
+            email: 'breakerofleashes@schneperd.com'
+          })
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: 'ladybeard',
+              name: 'Kaiya',
+              email: 'breakerofleashes@schneperd.com',
+              _id: expect.any(String),
+              __v: 0
+            });
+          });
+      });
+  });
+
+  it('deletes a user', () => {
+    return createUser()
+      .then(createdUser => {
+        return request(app)
+          .delete(`/users/${createdUser._id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({ deleted: 1 });
+      });
+  });
+
 });

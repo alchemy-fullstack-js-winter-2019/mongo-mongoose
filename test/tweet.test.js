@@ -2,25 +2,28 @@
 
 require('dotenv').config();
 require('../lib/utils/connect')();
+
 const mongoose = require('mongoose');
 const app = require('../lib/app');
 const request = require('supertest');
 const Tweet = require('../lib/models/Tweet');
-
-const makeTweet = (text) => {
-  return request(app)
-    .post('/tweets')
-    .send({
-      handle: 'ladybeard',
-      text: text
-    })
-    .then(res => res.body);
-};
+const User = require('../lib/models/User');
 
 
 describe('tweets app', () => {
-  const createTweet = (handle = 'ladybeard', text = 'I heart Squirrels') => {
-    return Tweet.create({ handle, text });
+  const createTweet = (handle, text = 'I heart Squirrels') => {
+    return createUser(handle)
+      .then(user => {
+        return Tweet.create({ handle: user._id, text })
+          .then(tweet => ({ ...tweet, _id: tweet._id.toString() }));
+      });
+  };
+
+  const createUser = (handle = 'ladybeard', name = 'kaiya', email = 'schnepherd@gmail.com') => {
+    return User.create({ handle, name, email })
+      .then(user => {
+        return { ...user, _id: user._id.toString() };
+      });
   };
 
   beforeEach(done => {
@@ -30,31 +33,34 @@ describe('tweets app', () => {
   });
 
   it('creates a new tweet', () => {
-    return request(app)
-      .post('/tweets')
-      .send({
-        handle: 'ladybeard',
-        text: 'I\'m writing a book on PHIL-osophy'
-      })
-      .then(res => {
-        expect(res.body).toEqual({
-          handle: 'ladybeard',
-          text: 'I\'m writing a book on PHIL-osophy',
-          _id: expect.any(String),
-          __v: 0
-        });
+    return createUser()
+      .then(createdUser => {
+        return request(app)
+          .post('/tweets')
+          .send({
+            handle: createdUser._id,
+            text: 'I\'m writing a book on PHIL-osophy'
+          })
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: expect.any(String),
+              text: 'I\'m writing a book on PHIL-osophy',
+              _id: expect.any(String),
+              __v: 0
+            });
+          });
       });
   });
 
-  it('finds tweet by id', () => {
-    return makeTweet('Hello, you know')
+  it.only('finds tweet by id', () => {
+    return createTweet('kaiya')
       .then(createdTweet => {
         return request(app)
           .get(`/tweets/${createdTweet._id}`)
           .then(res => {
             expect(res.body).toEqual({
-              handle: 'ladybeard',
-              text: 'Hello, you know',
+              handle: expect.any(Object),
+              text: 'I heart Squirrels',
               _id: expect.any(String),
               __v: 0
             });
@@ -63,7 +69,7 @@ describe('tweets app', () => {
   });
 
   it('finds by id and update', () => {
-    return makeTweet('Soooo')
+    return createTweet()
       .then(createdTweet => {
         return Promise.all([
           Promise.resolve(createdTweet._id),
@@ -93,14 +99,14 @@ describe('tweets app', () => {
   });
 
   it('deletes a tweet by id', () => {
-    return makeTweet('oops')
+    return createTweet()
       .then(oopsTweet => {
         return request(app)
           .delete(`/tweets/${oopsTweet._id}`);
       })
-      .then((res => {
-        expect(res.body).toEqual({ deleted: res.body._id });
-      }));
+      .then(res => {
+        expect(res.body).toEqual({ deleted: 1 });
+      });
   });
 
 });
