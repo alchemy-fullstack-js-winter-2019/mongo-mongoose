@@ -17,8 +17,8 @@ const createUser = (handle, name, email) => {
     .then(res => res.body);
 };
 const createTweet = (handle, text = 'hi I a tweet') => {
-  const name = 'hihi';
-  const email = 'emmmmail';
+  const name = 'defaultName';
+  const email = 'defaultEmail';
   return createUser(handle, name, email)
     .then(createdUser => {
       return request(app)
@@ -87,7 +87,7 @@ describe('tweets app', () => {
   });
 
   // GET ------------------------------------------
-  it('can get a list of tweets from db', () => {
+  it.only('can get a list of tweets from db', () => {
     const tweetsToCreate = ['hey', 'hi', 'hello', 'hola'];
     return Promise.all(tweetsToCreate.map(createTweet))
       .then(() => {
@@ -119,7 +119,13 @@ describe('tweets app', () => {
           .get(`/tweets/${_id}`)
           .then(res => {
             expect(res.body).toEqual({
-              handle: expect.any(Object),
+              handle: {
+                __v: 0,
+                _id: expect.any(String),
+                email: 'defaultEmail',
+                handle: 'hayyyyyy',
+                name: 'defaultName'
+              },
               text: 'hi I a tweet',
               _id,
               __v: 0
@@ -148,11 +154,11 @@ describe('tweets app', () => {
   });
 
   // PATCH ------------------------------------------
-  it('can retrieve a tweet by :id and update it', () => {
+  it.only('can retrieve a tweet by :id and update it', () => {
     const newTweet = {
       text: 'alalalalalalalala'
     };
-    return createTweet('flanel', 'blahblah')
+    return createTweet('flanel', 'blahblah', 'e@e.com')
       .then(createdTweet => {
         const _id = createdTweet._id;
         return request(app)
@@ -162,7 +168,13 @@ describe('tweets app', () => {
       .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),
-          handle: 'flanel',
+          handle: {
+            __v: 0,
+            _id: expect.any(String),
+            email: 'defaultEmail',
+            handle: 'flanel',
+            name: 'defaultName'
+          },
           text: 'alalalalalalalala',
           __v: 0
         });
