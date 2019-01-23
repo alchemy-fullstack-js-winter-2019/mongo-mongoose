@@ -62,10 +62,10 @@ describe('tweets app', () => {
       .then(createdTweet => {
         const id = createdTweet._id;
         return request(app)
-        .put(`/tweets/${id}`)
+        .patch(`/tweets/${id}`)
         .send({
           handle: 'tweeter',
-          text: 'hey tweet'
+          text: 'hey tweet tweet'
         })
         .then(() => {
           return request(app)
@@ -73,7 +73,7 @@ describe('tweets app', () => {
             .then(res => {
             expect(res.body).toEqual({
             handle: 'tweeter',
-            text: 'hey tweet',
+            text: 'hey tweet tweet',
             _id: expect.any(String),
             __v: 0
           });
@@ -81,5 +81,21 @@ describe('tweets app', () => {
       });
     });
     });
-  })
+    it('deletes a tweet', () => {
+      return createTweet('dee')
+      .then(createdTweet => {
+        const id = createdTweet._id;
+        return request(app)
+        .delete(`/tweets/${id}`)
+        .then(res => {
+          expect(res.body).toEqual({
+            handle: 'dee',
+            text: 'a tweet',
+            _id: expect.any(String),
+            __v: 0
+          });
+        });
+      });
+    });
+  });
 
