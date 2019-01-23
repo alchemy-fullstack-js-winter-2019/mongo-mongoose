@@ -72,12 +72,22 @@ describe('tweets app', () => {
       .then(createdTweet => {
         const id = createdTweet._id;
         return request(app)
-          .put(`/tweets/${id}`)
+          .patch(`/tweets/${id}`)
           .send({ ...createdTweet, text: 'tweet!' });
       })
       .then(res => {  
         expect(res.body.text).toEqual('tweet!');
       });
   });
-});
 
+  it('can find by id and delete', () => {
+    return createTweet('tweet!')
+      .then(createdTweet => {
+        return request(app)
+          .delete(`/tweets/${createdTweet._id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({ deleted: 1 });
+      });
+  });
+});
