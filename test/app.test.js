@@ -140,7 +140,7 @@ describe('tweets app', () => {
       });
   });
 
-  it.only('can get a user by id and update', () => {
+  it.skip('can get a user by id and update', () => {
     let newUser = { handle: 'yogurt' };
     return createUser('yoyo')
       .then(res => {
@@ -151,6 +151,21 @@ describe('tweets app', () => {
       .then(res => {
         expect(res.body).toEqual({
           handle: 'yogurt',
+          name: 'paige',
+          email: 'bob@ross.com',
+          __v: 0,
+          _id: expect.any(String)
+        });
+      });
+  });
+  it.only('can find by id and delete', () => {
+    return createUser('benedrylcumberbottom')
+      .then(res => {
+        return request(app)
+          .delete(`/users/${res._id}`);
+      }) .then(res => {
+        expect(res.body).toEqual({
+          handle: 'benedrylcumberbottom',
           name: 'paige',
           email: 'bob@ross.com',
           __v: 0,
