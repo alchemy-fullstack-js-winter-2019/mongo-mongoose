@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+
 /* eslint-disable eol-last */
 require('dotenv').config();
 require('./lib/utils/connect')();
@@ -6,5 +6,6 @@ require('./lib/utils/connect')();
 const app = require('./lib/app');
 
 app.listen(7890, () => {
+  // eslint-disable-next-line no-console
   console.log('running');
 });
