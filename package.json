@@ -28,6 +28,7 @@
     "express": "^4.16.4",
     "mkdirp": "^0.5.1",
     "mongoose": "^5.4.6",
+    "morgan": "^1.9.1",
     "nodemon": "^1.18.9",
     "rimraf": "^2.6.3",
     "supertest": "^3.4.2"
