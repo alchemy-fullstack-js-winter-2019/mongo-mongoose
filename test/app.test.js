@@ -57,23 +57,23 @@ describe('tweets app', () => {
       });
   });
 
-  // it('can update a tweet', () => {
-  //   let newTweet = { text: 'ele-FANT-eh' };
-  //   return createTweet('ele4ant3')
-  //     .then(res => {
-  //       return request(app)
-  //         .patch(`/tweet/${res._id}`)
-  //         .send(newTweet);
-  //     })
-  //     .then(res => {
-  //       expect(res.body).toEqual({ 
-  //         handle: 'ele4ant3', 
-  //         text: 'ele-FANT-eh', 
-  //         _id: expect.any(String),
-  //         __v: 0
-  //       });
-  //     });
-  // });
+  it.skip('can update a tweet', () => {
+    let newTweet = { text: 'ele-FANT-eh' };
+    return createTweet('ele4ant3')
+      .then(res => {
+        return request(app)
+          .patch(`/tweet/${res._id}`)
+          .send(newTweet);
+      })
+      .then(res => {
+        expect(res.body).toEqual({ 
+          handle: 'ele4ant3', 
+          text: 'ele-FANT-eh', 
+          _id: expect.any(String),
+          __v: 0
+        });
+      });
+  });
 
   it('can delete a tweet', () => {
     return createTweet('m3m3lord')
@@ -87,6 +87,21 @@ describe('tweets app', () => {
           text: 'oink tweet moo',
           __v: 0,
           _id: expect.any(String)
+        });
+      });
+  });
+
+  it('creates a user', () => {
+    return request(app)
+      .post('/users')
+      .send({ handle: 'paige', name: 'paigegorry', email: 'me@me.com' })
+      .then(res => {
+        expect(res.body).toEqual({
+          __v: 0,
+          _id: expect.any(String), 
+          handle: 'paige', 
+          name: 'paigegorry', 
+          email: 'me@me.com' 
         });
       });
   });
