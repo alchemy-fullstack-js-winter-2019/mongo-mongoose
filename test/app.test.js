@@ -83,8 +83,7 @@ describe('tweets app', () => {
             expect(res.body).toEqual({
               handle: expect.any(Object),
               text: 'some text',
-              _id: expect.any(String),
-              __v: 0
+              _id: expect.any(String)
             });
           });
       });
@@ -102,8 +101,7 @@ describe('tweets app', () => {
         expect(res.body).toEqual({
           handle: expect.any(Object),
           text: 'new text',
-          _id: expect.any(String),
-          __v: 0
+          _id: expect.any(String)
         });
       });
   });
