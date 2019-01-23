@@ -26,4 +26,5 @@ Tweet.create({ handle: 'marcy', text: 'my first tweet' })
     .then(createdTweet => {
         return Tweet.findByIdAndUpdate(createdTweet._id, { text: 'my second tweet' }, { new: true });
     })
+    // eslint-disable-next-line no-console
     .then(updatedTweet => console.log(updatedTweet));
