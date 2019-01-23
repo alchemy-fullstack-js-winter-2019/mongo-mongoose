@@ -114,7 +114,7 @@ describe('users', () => {
 
   const createUser = handle => {
     return request(app)
-      .post('/tweets')
+      .post('/users')
       .send({
         handle: handle,
         name: 'teonna',
@@ -147,16 +147,74 @@ describe('users', () => {
         });
       });
   });
-  it('finds a list of tweets', () => {
+  it('finds a list of users', () => {
     return Promise.all(['TT', 'TA'].map(createUser))
       .then(() => {
         return request(app)
-          .get('/tweets');
+          .get('/users');
       })
       .then(res => {
         expect(res.body).toHaveLength(2);
       });
   });
-  
+  it('finds by id', () => {
+    return createUser('TMZ')
+      .then(createdUser => {
+        const id = createdUser._id;
+        return request(app)
+          .get(`/users/${id}`)
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: 'TMZ',
+              name: 'teonna',
+              email: 'teonna@heintz.com',
+              _id: expect.any(String),
+              __v: 0
+            });
+          });
+      });
+  });
+
+  it('updates a user by id', () => {
+    return createUser('T_on_A')
+      .then(createdUser => {
+        return request(app)
+          .patch(`/users/${createdUser._id}`)
+          .send({
+            handle: 'T_on_A',
+            name: 'tatiana',
+            email: 'teonna@heintz.com'
+          })
+          .then(() => {
+            return request(app)
+              .get(`/users/${createdUser._id}`)
+              .then(res => {
+                expect(res.body).toEqual({
+                  handle: 'T_on_A',
+                  name: 'tatiana',
+                  email: 'teonna@heintz.com',
+                  _id: expect.any(String),
+                  __v:0
+                });
+              });
+          });
+      });
+  });
+  it('deletes a user by id', () => {
+    return createUser('deleted')
+      .then(createdUser => {
+        return request(app)
+          .delete(`/users/${createdUser._id}`)
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: 'deleted',
+          name: 'teonna',
+          email: 'teonna@heintz.com',
+          _id: expect.any(String),
+          __v: 0
+        });
+      });
+  });
 
 });
