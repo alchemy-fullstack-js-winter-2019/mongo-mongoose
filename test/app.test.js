@@ -86,7 +86,7 @@ describe('tweets app', () => {
   });
 
   // GET ------------------------------------------
-  it('can get a list of tweets from db', () => {
+  it.only('can get a list of tweets from db', () => {
     const tweetsToCreate = ['hey', 'hi', 'hello', 'hola'];
     return Promise.all(tweetsToCreate.map(createTweet))
       .then(() => {
@@ -124,7 +124,7 @@ describe('tweets app', () => {
   });
 
   // GET by id
-  it.only('can get a tweet by id', () => {
+  it('can get a tweet by id', () => {
     return createTweet('hayyyyyy')
       .then(createdTweet => {
         const _id = createdTweet._id;
