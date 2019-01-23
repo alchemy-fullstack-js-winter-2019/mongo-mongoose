@@ -45,9 +45,9 @@ describe('tweets app', () => {
           })
           .then(res => {
             expect(res.body).toEqual({
+              _id: res.body._id,
               handle: expect.any(String),
               text: 'hello tweets',
-              _id: expect.any(String),
               __v: 0
             });
           });
