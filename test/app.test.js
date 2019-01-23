@@ -1,23 +1,23 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
+
 require('dotenv').config();
 require('../lib/utils/connect')();
 const app = require('../lib/app');
-const mkdirp = require('mkdirp');
-const rimraf = require('rimraf');
 const request = require('supertest');
+const mongoose = require('mongoose');
+const Tweet = require('../lib/models/Tweet');
 
 
 describe('tweets app', () => {
+  // const createTweet = (handle, text = 'new tweet') => {
+  //   return request(app)
+  //     .post('/tweets')
+  //     .send({ handle, text })
+  //     .then(res => res.body);
+  // }; 
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
-      mkdirp('./data/tweets', done);
       done();
     });
-  });
-  afterEach(done => {
-    rimraf('./data/tweets/*', done);
-    done();
   });
 });
 
@@ -31,12 +31,12 @@ it('creates a new tweet', () => {
       text: 'my first tweet'
     })
     .then(res => {
-      expect(res.status).toEqual(200);
+      console.log('res here', res.body);
       expect(res.body).toEqual({
         handle: 'abel',
         text: 'my first tweet',
         _id: expect.any(String),
-        __v: expect.any(Number)
+        __v: 0
       });
     });
 });
@@ -77,9 +77,15 @@ it('errors when a bad id is sent', () => {
 });
 
 it('can find by id and update', () => {
-
+  return request(app)
+    .get('/tweets');
 });
 
 it('can find by id and delete', () => {
 
+});
+
+
+afterAll((done) => {
+  mongoose.connection.close(done);
 });
