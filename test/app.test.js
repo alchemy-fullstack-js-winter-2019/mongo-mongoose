@@ -70,12 +70,12 @@ describe('tweets app', () => {
     return request(app)
     .get('/tweets/badId')
     .then(res => {
-      expect(res.status).toEqual(404)
+      expect(res.status).toEqual(500)
     });
   });
 
   it('can find by id and update', () => {
-    
+
   });
 
   it('can find by id and delete', () => {
