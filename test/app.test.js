@@ -102,7 +102,7 @@ describe('tweets app', () => {
 });
 
 describe('users app', () => {
-  const createUser = (handle, name, email = 'a new user') => {
+  const createUser = (handle, name = 'meme', email = 'meme@gmail.com') => {
     return User.create({ handle, name, email });
   };
   beforeEach(done => {
@@ -139,4 +139,23 @@ describe('users app', () => {
         expect(res.body).toHaveLength(3);
       });
   });
+  it('gets a user by id', () => {
+    return createUser('user100')
+      .then(createdUser => {
+        const id = createdUser._id;
+        return request(app)
+          .get(`/users/${id}`);
+      })
+      .then(res => {
+        console.log('here', res.body);
+        expect(res.body).toEqual({
+          handle: 'user100',
+          name: 'meme',
+          email: 'meme@gmail.com',
+          _id: expect.any(String),
+          __v: 0
+        });
+      });
+  });
 });
+
