@@ -16,9 +16,6 @@ const createTweet = (handle) => {
 };
 
 describe('tweets app', () => {
-  const createTweet = (handle, text = 'a tweet') => {
-    return Tweet.create({ handle, text });
-  };
   
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
@@ -99,7 +96,6 @@ describe('tweets app', () => {
             })
           })
       })
-      
       
   });
 });
