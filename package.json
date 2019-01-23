@@ -22,7 +22,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watch --verbose",
+    "test:watch": "jest --watch --verbose --runInBand",
     "lint": "eslint .",
     "pretest": "npm run lint",
     "start": "nodemon server.js"
