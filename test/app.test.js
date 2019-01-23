@@ -3,7 +3,7 @@ require('../lib/utils/connect')();
 const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../lib/app');
-
+const Tweet = require('../lib/models/Tweet');
 
 const createTweet = (handle) => {
   return request(app)
@@ -15,12 +15,21 @@ const createTweet = (handle) => {
     .then(res => res.body);
 };
 
-
 describe('tweets app', () => {
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
       done();
     });
+  });
+  it('returns a list of tweets', () => {
+    return Promise.all(['ryan', 'tyler', 'jack'].map(createTweet))
+      .then(createdTweets => {
+        return request(app)
+          .get('/tweets');
+      })
+      .then(res => {
+        expect(res.body.length).toEqual(3);
+      });
   });
   it('posts a tweet', () => {
     return request(app)
@@ -48,7 +57,8 @@ describe('tweets app', () => {
             expect(res.body).toEqual({
               handle: 'tyler',
               text: 'my first tweet',
-              _id: _id
+              _id,
+              __v: 0
             });
           });
       });
