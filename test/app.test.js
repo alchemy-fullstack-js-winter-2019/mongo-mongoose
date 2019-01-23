@@ -3,7 +3,6 @@ require('../lib/utils/connect')();
 const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../lib/app');
-const Tweet = require('../lib/models/Tweet');
 
 const createTweet = (handle) => {
   return request(app)
@@ -23,7 +22,7 @@ describe('tweets app', () => {
   });
   it('returns a list of tweets', () => {
     return Promise.all(['ryan', 'tyler', 'jack'].map(createTweet))
-      .then(createdTweets => {
+      .then(() => {
         return request(app)
           .get('/tweets');
       })
