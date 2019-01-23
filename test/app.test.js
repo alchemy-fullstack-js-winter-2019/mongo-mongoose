@@ -102,14 +102,15 @@ describe('tweets app', () => {
         const _id = createdTweet._id;
         return request(app)
           .delete(`/tweets/${_id}`)
-          .send({
-            deleted: 1
-          })
           .then(res => {
             expect(res.body).toEqual({
-              deleted: 1
+              handle: 'Cool Dude',
+              text: 'my first tweet',
+              _id,
+              __v: 0
             });
           });
       });
   });
+  
 });
