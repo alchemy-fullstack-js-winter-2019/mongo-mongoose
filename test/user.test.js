@@ -71,9 +71,16 @@ describe('users app', () => {
       .get('/users');
   });
 
-  // it('finds a user by id and deletes', () => {
-
-  // });
+  it('finds a user by id and deletes', () => {
+    return createUser('user to be deleted')
+      .then(newUser => {
+        return request(app)
+        .delete(`/users/${newUser._id}`)
+        .then(res => {
+          expect(res.body).toEqual({ deleted: 1 });
+        });
+      });
+  });
 
   afterAll((done) => {
     mongoose.connection.close(done);
