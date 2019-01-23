@@ -91,3 +91,83 @@ describe('tweets app', () => {
       });
   });
 });
+
+
+describe('users app', () => {
+
+  const createUser = (handle = 'ballislife', name = 'ivan', email = 'ivan@espn.com') => {
+    return request(app)
+      .post('/users')
+      .send({ handle, name, email })
+      .then(res => res.body);
+  };
+
+  beforeEach(done => {
+    return mongoose.connection.dropDatabase(() => {
+      done();
+    });
+  });
+
+  it('can create a new user', () => {
+    return request(app)
+      .post('/users')
+      .send({
+        handle: 'ballislife',
+        name: 'ivan',
+        email: 'ivan@espn.com'
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: 'ballislife',
+          name: 'ivan',
+          email: 'ivan@espn.com',
+          _id: expect.any(String),
+          __v: 0
+        });
+      });
+  });
+
+  it('gets a list of users', () => {
+    return Promise.all(['user', 'user2', 'user3'].map(createUser))
+      .then(() => {
+        return request(app)
+          .get('/users');
+      })
+      .then(res => {
+        expect(res.body).toHaveLength(3);
+      });
+  });
+
+  it('gets a user by id', () => {
+    return createUser('ballislife')
+      .then(createdUser => {
+        return Promise.all([
+          Promise.resolve(createdUser._id),
+          request(app)
+            .get(`/users/${createdUser._id}`)
+        ]);
+      })
+      .then(([_id, res]) => {
+        expect(res.body).toEqual({
+          email: 'ivan@espn.com',
+          name: 'ivan',
+          handle: 'ballislife',
+          _id,
+          __v: 0
+        });
+      });
+  });
+
+  it('can find a tweet by id and update', () => {
+    return createUser('ivann')
+      .then(createdUser => {
+        const id = createdUser._id;
+        return request(app)
+          .patch(`/users/${id}`)
+          .send({ ...createdUser, text: 'ivan' });
+      })
+      .then(res => {  
+        expect(res.body.name).toEqual('ivan');
+      });
+  });
+});
