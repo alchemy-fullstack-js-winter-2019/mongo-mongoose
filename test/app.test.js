@@ -129,12 +129,11 @@ describe('tweets app', () => {
   });
 
   // PATCH ------------------------------------------
-  it('can retrieve a tweet by :id and return the updated tweet', () => {
+  it('can retrieve a tweet by :id and update it', () => {
     const newTweet = {
-      handle: 'pizzatown',
-      text: 'boo I a tweet'
+      handle: 'pizzatown'
     };
-    return createTweet('flanel')
+    return createTweet('flanel', 'blahblah')
       .then(createdTweet => {
         const _id = createdTweet._id;
         return request(app)
@@ -142,7 +141,34 @@ describe('tweets app', () => {
           .send(newTweet);
       })
       .then(res => {
-        expect(res.body.handle).toEqual('pizzatown');
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          handle: 'pizzatown',
+          text: 'blahblah',
+          __v: 0
+        });
+      });
+  });
+  it('can retrieve a user by :id and update it', () => {
+    const newUser = {
+      handle: 'duranDuran49' };
+    return createUser(
+      'Baby Pie', 'Angel Face', 'angel@heaven.com'
+    )
+      .then(createdUser => {
+        const _id = createdUser._id;
+        return request(app)
+          .patch(`/users/${_id}`)
+          .send(newUser);
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          handle: 'duranDuran49',
+          name: 'Angel Face',
+          email: 'angel@heaven.com',
+          __v: 0
+        });
       });
   });
 
