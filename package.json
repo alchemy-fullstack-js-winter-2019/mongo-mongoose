@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/connorfrendt/mongo-mongoose#readme",
   "dependencies": {
-    "dotenv": "^6.2.0"
+    "dotenv": "^6.2.0",
+    "eslint": "^5.12.1"
   }
 }
