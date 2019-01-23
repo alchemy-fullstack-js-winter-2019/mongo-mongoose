@@ -4,6 +4,7 @@ const request = require('supertest');
 const app = require('../lib/app');
 const mongoose = require('mongoose');
 const Tweet = require('../lib/models/Tweet');
+const User = require('../lib/models/User');
 
 describe('Tweets app', () => {
   const createTweet = (handle, text = 'tweet') => {
@@ -80,6 +81,83 @@ describe('Tweets app', () => {
           });
       });
   });
-
 });
 
+describe('User app', () => {
+  const createUser = (handle, name, email = 'a user') => {
+    return User.create({
+      handle, 
+      name,
+      email 
+    });
+  };
+  beforeEach(done => {
+    return mongoose.connection.dropDatabase(() => {
+      done();
+    });
+  });
+  it('create a user', () => {
+    return request(app) //when a person looks up site this will bring up app
+      .post('/users')
+      .send({
+        handle: 'PDX34',
+        name: 'John',
+        email: 'pdx34J@gmail.com'
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: 'PDX34',
+          name: 'John',
+          email: 'pdx34J@gmail.com',
+          _id: expect.any(String),
+          __v: 0 
+        });
+      });
+  });
+  it('gets users', () => {
+    return Promise.all(['bumblee', 'flower'].map(createUser))
+      .then(() => {
+        return request(app)
+          .get('/users');
+      })
+      .then(res => {
+        expect(res.body).toHaveLength(2);
+      });
+  });
+
+  it('find auser by id', () => {
+    return createUser('user234', 'Don', 'don234@yahoo.com')
+      .then((createdUser) => {
+        const id = createdUser._id;
+        return request(app)
+          .get(`/users/${id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: 'user234',
+          name: 'Don',
+          email: 'don234@yahoo.com',
+          _id: expect.any(String),
+          __v: 0
+        });
+      });
+  });
+
+  it('find user by id and update', () => {
+    const updatedUser = {
+      handle: 'Don233',
+      name: 'Don',
+      email: 'don233@yahoo.com'
+    };
+    return createUser('Usertypo')
+      .then(createdUser => {
+        const id = createdUser._id;
+        return request(app)
+          .patch(`/users/${id}`)
+          .send(updatedUser);
+      })
+      .then(res => {
+        expect(res.body.handle).toEqual('Don233');
+      });
+  });
+});
