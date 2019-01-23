@@ -98,20 +98,36 @@ describe('tweets app', () => {
         expect(body).toHaveLength(4);
       });
   });
-  it('can get a list of users from db', () => {
-    const usersToCreate = ['Jim', 'Pam', 'Michael', 'Stanley'];
-    return Promise.all(usersToCreate.map(createUser))
+  it.only('can get a list of users from db', () => {
+    // const usersToCreate = ['Jim', 'Pam', 'Michael', 'Stanley'];
+    // return Promise.all(usersToCreate.map(createUser))
+    return request(app)
+      .post('/users')
+      .send({
+        handle: 'handleA',
+        name: 'nameA',
+        email: 'emailA'
+      })
+      .then(() => {
+        return request(app)
+          .post('/users')
+          .send({
+            handle: 'handleB',
+            name: 'nameB',
+            email: 'emailB'
+          });
+      })
       .then(() => {
         return request(app)
           .get('/users');
       })
       .then(({ body }) => {
-        expect(body).toHaveLength(4);
+        expect(body).toHaveLength(2);
       });
   });
 
   // GET by id
-  it.only('can get a tweet by id', () => {
+  it('can get a tweet by id', () => {
     return createTweet('hayyyyyy')
       .then(createdTweet => {
         const _id = createdTweet._id;
@@ -154,7 +170,7 @@ describe('tweets app', () => {
   });
 
   // PATCH ------------------------------------------
-  it.only('can retrieve a tweet by :id and update it', () => {
+  it('can retrieve a tweet by :id and update it', () => {
     const newTweet = {
       text: 'alalalalalalalala'
     };
