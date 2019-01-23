@@ -62,5 +62,11 @@ describe('them tweets', () => {
       }));
   });
 
+  it('errors when bad id is sent', () => {
+    return request(app)
+      .get('/tweets/5')
+      .then(res => expect(res.status).toEqual(500));
+  });
+
   afterAll(() => mongoose.disconnect());
 });
