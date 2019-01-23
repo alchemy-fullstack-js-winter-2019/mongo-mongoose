@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const mongoose = require('mongoose');
 const Tweet = mongoose.model('Tweet', tweetSchema);
 
@@ -28,6 +29,6 @@ Tweet
 Tweet
   .create({ handle: 'ryan', text: 'my first tweet' })
   .then(createdTweet => {
-      return Tweet.findByIdAndUpdate(createdTweet._id, { text: 'hi there' })
+    return Tweet.findByIdAndUpdate(createdTweet._id, { text: 'hi there' });
   }, { new: true })
-.then(updatedTweet => console.log(updatedTweet));
+  .then(updatedTweet => console.log(updatedTweet));
