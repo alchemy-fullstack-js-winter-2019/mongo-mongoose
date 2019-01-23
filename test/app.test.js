@@ -80,10 +80,9 @@ describe('tweets app', () => {
           })
           .then(res => {
             expect(res.body).toEqual({
+              _id,
               handle: expect.any(Object),
               text: 'This tweet is updated',
-              _id,
-              __v: 0
             });
           });
       });
@@ -99,7 +98,6 @@ describe('tweets app', () => {
               _id,
               handle: expect.any(Object),
               text: 'a tweet',
-              __v: 0
             });
           });
       });
