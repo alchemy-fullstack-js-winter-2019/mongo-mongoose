@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://127.0.0.1:27017/tweets', {
@@ -29,6 +30,6 @@ Tweet
 Tweet
   .create({ handle: 'ryan', text: 'my first tweet' })
   .then(createdTweet => {
-    return Tweet.findByIdAndUpdate(createdTweet._id, { text: 'hi there' })
+    return Tweet.findByIdAndUpdate(createdTweet._id, { text: 'hi there' });
   }, { new: true })
   .then(updatedTweet => console.log(updatedTweet));
