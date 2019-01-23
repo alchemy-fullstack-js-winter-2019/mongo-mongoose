@@ -61,12 +61,32 @@ describe('tweets app', () => {
   it('finds by id and update', () => {
     return makeTweet('Soooo')
       .then(createdTweet => {
-        return request(app)
-          .patch(`/tweets/${createdTweet._id}`)
-          .send({ text: 'HOOOJ' });
+        return Promise.all([
+          Promise.resolve(createdTweet._id),
+          request(app)
+            .patch(`/tweets/${createdTweet._id}`)
+            .send({ text: 'HOOOJ' })
+        ]);
       })
-      .then(res => {
-        expect(res.body.text).toEqual('HOOOJ');
+      .then(([_id, res]) => {
+        return request(app)
+          .get(`/tweets/${_id}`)
+          .then((res => {
+            expect(res.body.text).toEqual('HOOOJ');
+          }));
+      });
+  });
+
+  it('returns a list of tweets', () => {
+    return Promise.all(['I heart Squirrels', 'Sardine Saturday is my fave!'].map(tweet => {
+      makeTweet(tweet);
+    }))
+      .then(() => {
+        return request(app)
+          .get('/tweets');
+      })
+      .then(({ body }) => {
+        expect(body).toHaveLength(2);
       });
   });
 
