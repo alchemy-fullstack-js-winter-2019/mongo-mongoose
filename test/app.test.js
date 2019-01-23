@@ -108,6 +108,25 @@ describe('tweets app', () => {
           });
       });
   });
+  it('can get a user by id', () => {
+    return createUser(
+      '2cool4skool', 'Michael MacDonald', 'smoothjams@hotmail.com'
+    )
+      .then(createdUser => {
+        const _id = createdUser._id;
+        return request(app)
+          .get(`/users/${_id}`)
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: '2cool4skool',
+              name: 'Michael MacDonald',
+              email: 'smoothjams@hotmail.com',
+              _id,
+              __v: 0
+            });
+          });
+      });
+  });
 
   // PATCH ------------------------------------------
   it('can retrieve a tweet by :id and return the updated tweet', () => {
