@@ -9,7 +9,8 @@ const createUser = (name) => {
         .post('/users')
         .send({
             name: name,
-            description: 'dogs are the best'
+            description: 'dogs are the best',
+            email: 'email@email.com'
         })
         .then(res => res.body);
 };
