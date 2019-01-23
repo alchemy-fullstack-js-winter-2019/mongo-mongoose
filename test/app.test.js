@@ -32,4 +32,21 @@ describe('tweets app', () => {
         expect(body).toHaveLength(4);
       });
   });
+
+  it('can create a new tweet', () => {
+    return request(app)
+      .post('/tweets')
+      .send({
+        handle: 'cari',
+        text: 'hiya tweety'
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: 'cari',
+          text: 'hiya tweety',
+          _id: expect.any(String),
+          __v: 0
+        });
+      });
+  });
 });
