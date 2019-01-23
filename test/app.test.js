@@ -3,15 +3,10 @@ require('../lib/utils/connect')();
 const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../lib/app');
+const Tweet = require('../lib/models/Tweet');
 
-const createTweet = (handle) => {
-  return request(app)
-    .post('/tweets')
-    .send({
-      handle,
-      text: 'oink tweet moo'
-    })
-    .then(res => res.body);
+const createTweet = (handle, text = 'oink tweet moo') => {
+  return Tweet.create({ handle, text });
 };
 
 describe('tweets app', () => {
@@ -27,8 +22,8 @@ describe('tweets app', () => {
         return request(app)
           .get('/tweets');
       })
-      .then(({ body }) => {
-        expect(body).toHaveLength(3);
+      .then(res => {
+        expect(res.body).toHaveLength(3);
       });
   });
 
@@ -61,4 +56,22 @@ describe('tweets app', () => {
           });
       });
   });
+
+  // it('can update a tweet', () => {
+  //   let newTweet = { text: 'ele-FANT-eh' };
+  //   return createTweet('ele4ant3')
+  //     .then(res => {
+  //       return request(app)
+  //         .patch(`/tweet/${res._id}`)
+  //         .send(newTweet);
+  //     })
+  //     .then(res => {
+  //       expect(res.body).toEqual({ 
+  //         handle: 'ele4ant3', 
+  //         text: 'ele-FANT-eh', 
+  //         _id: expect.any(String),
+  //         __v: 0
+  //       });
+  //     });
+  // });
 });
