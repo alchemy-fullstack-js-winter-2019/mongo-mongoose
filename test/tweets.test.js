@@ -4,7 +4,7 @@ const app = require('../lib/app');
 const mongoose = require('mongoose');
 const Tweet = require('../lib/models/Tweet');
 
-// let tweet = null;
+let tweet = null;
 describe('them tweets', () => {
   const createTweet = (handle, text = 'I is a twit') => Tweet.create({ handle, text });
 
@@ -12,9 +12,9 @@ describe('them tweets', () => {
 
   beforeEach(done => {
     createTweet('shabz')
-      .then(() => {
-        // const { _id, __v, handle, text } = res;
-        // tweet = { _id, __v, handle, text };
+      .then(res => {
+        const { _id, __v, handle, text } = res;
+        tweet = { _id, __v, handle, text };
         done();
       });
   });
@@ -49,6 +49,17 @@ describe('them tweets', () => {
           }
         ]);
       });
+  });
+
+  it('gets a tweet by id', () => {
+    return request(app)
+      .get(`/tweets/${tweet._id}`)
+      .then(res => expect(res.body).toEqual({
+        handle: 'shabz',
+        text: 'I is a twit',
+        _id: expect.any(String),
+        __v: 0
+      }));
   });
 
   afterAll(() => mongoose.disconnect());
