@@ -5,10 +5,10 @@ const mongoose = require('mongoose');
 const request = require('supertest');
 const User = require('../lib/models/User');
 
-describe('users app', () => {
-  const createUser = (handle = 'xtester', name= 'kevin', email='barrywhite@dionwarwick.com') => {
-    return User.create({ handle, name, email })
-  }
+describe.skip('users app', () => {
+  const createUser = (handle = 'xtester', name = 'kevin', email = 'barrywhite@dionwarwick.com') => {
+    return User.create({ handle, name, email });
+  };
 
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
@@ -39,7 +39,7 @@ describe('users app', () => {
     return Promise.all(['fannyserverpackets', 'another handle'].map(createUser))
       .then(createdUsers => {
         return request(app)
-          .get('/users')
+          .get('/users');
       })
       .then(res => {
         expect(res.body).toHaveLength(2);
@@ -52,14 +52,14 @@ describe('users app', () => {
           Promise.resolve(createdUser._id),
           request(app)
             .get(`/users/${createdUser._id}`)
-        ])
+        ]);
       })
       .then(([_id, res]) => {
         // console.log('Are you receiving',res.body);
         expect(res.body).toEqual({
           handle: 'xtester',
-           name: 'kevin', 
-           email: 'barrywhite@dionwarwick.com',
+          name: 'kevin',
+          email: 'barrywhite@dionwarwick.com',
           _id: expect.any(String),
           __v: 0
         });
@@ -70,7 +70,7 @@ describe('users app', () => {
       .then(createdUser => {
         return request(app)
           .patch(`/users/${createdUser.id}`)
-          .send({ handle: 'lancemongoose' })
+          .send({ handle: 'lancemongoose' });
       })
       .then(res => {
         expect(res.body).toEqual({
@@ -87,11 +87,11 @@ describe('users app', () => {
       .then(createdUser => {
         expect(createdUser.handle).toEqual('mike');
         return request(app)
-          .delete(`/users/${createdUser.id}`)
+          .delete(`/users/${createdUser.id}`);
       })
       .then(res => {
         expect(res.body).toEqual({ deleted: 1 });
-      })
+      });
 
-  })
+  });
 });
