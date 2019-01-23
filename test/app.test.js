@@ -1,8 +1,8 @@
 require('dotenv').config();
-require('./lib/utils/connect')();
+require('../lib/utils/connect')();
 const app = require('../lib/app');
 const mongoose = require('mongoose');
-const request = 
+const request = require('supertest');
 
 describe('tweets app', () => {
   beforeEach(done => {
