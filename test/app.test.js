@@ -4,7 +4,7 @@ const app = require('../lib/app');
 const request = require('supertest');
 const mongoose = require('mongoose');
 
-const createUser = handle => {
+const createUser = (handle, name, email) => {
   return request(app)
     .post('/users')
     .send({
@@ -15,14 +15,17 @@ const createUser = handle => {
     .then(res => res.body);
 };
 
-const createTweet = handle => {
-  return createUser(handle)
+
+const createTweet = (handle, text = 'default text') => {
+  const name = 'default name';
+  const email = 'default email';
+  return createUser(handle, name, email)
     .then(createdUser => {
       return request(app)
         .post('/tweets')
         .send({
           handle: createdUser._id,
-          text: 'my tweeter tweets'
+          text
         })
         .then(res => res.body);
     });
@@ -43,7 +46,6 @@ describe('tweets app', () => {
           .post('/tweets')
           .send({ handle: createdUser._id, text: 'my first tweet' })
           .then(res => {
-            
             expect(res.body).toEqual({ 
               handle: createdUser._id,
               text: 'my first tweet',
@@ -70,17 +72,23 @@ describe('tweets app', () => {
   it('finds by id', () => {
     return createTweet('TT')
       .then(createdTweet => {
-        const id = createdTweet._id;
+        const _id = createdTweet._id;
         return request(app)
-          .get(`/tweets/${id}`);
-      })
-      .then(res => {
-        expect(res.body).toEqual({
-          handle: 'TT',
-          text: 'my tweeter tweets',
-          _id: expect.any(String),
-          __v: 0
-        });
+          .get(`/tweets/${_id}`)
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: {
+                handle: 'TT',
+                email: 'teonna@heintz.com',
+                name: 'teonna',
+                __v: 0,
+                _id: expect.any(String)
+              },
+              text: 'default text',
+              _id,
+              __v: 0
+            });
+          });
       });
   });
  
@@ -91,19 +99,22 @@ describe('tweets app', () => {
         return request(app)
           .patch(`/tweets/${id}`)
           .send({
-            handle: 'TeeTee',
-            text: 'updated tweet',
-            _id: id,
-            __v: 0
+            text: 'update text',
           })
           .then(() => {
             return request(app)
               .get(`/tweets/${id}`)
               .then(res => {
                 expect(res.body).toEqual({
-                  handle: 'TeeTee',
-                  text: 'updated tweet',
-                  _id: id,
+                  handle: {
+                    handle: 'TeeTee',
+                    email: 'teonna@heintz.com',
+                    name: 'teonna',
+                    __v: 0,
+                    _id: expect.any(String)
+                  },
+                  text: 'update text',
+                  _id: expect.any(String),
                   __v: 0
                 });
               });
@@ -119,8 +130,14 @@ describe('tweets app', () => {
       })
       .then(res => {
         expect(res.body).toEqual({ 
-          handle: 'deleted',
-          text: 'my tweeter tweets',
+          handle: {
+            handle: 'deleted',
+            email: 'teonna@heintz.com',
+            name: 'teonna',
+            __v: 0,
+            _id: expect.any(String) 
+          },
+          text: 'default text',
           _id: expect.any(String),
           __v: 0
         });
