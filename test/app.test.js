@@ -7,7 +7,8 @@ const Tweet = require('../lib/models/Tweet');
 const User = require('../lib/models/User');
 
 const createUser = (handle, name = 'paige', email = 'bob@ross.com') => {
-  return User.create({ handle, name, email });
+  return User.create({ handle, name, email })
+    .then(createdUser => ({ ...createdUser, _id: createdUser._id.toString () }));
 };
 
 const createTweet = (handle, text = 'oink tweet moo') => {
@@ -28,6 +29,7 @@ describe('tweets app', () => {
       done();
     });
   });
+
   it('can get a list of tweets from our db', () => {
     const tweetsToCreate = ['yoyo', 'jelly123', 'jessie456'];
     return Promise.all(tweetsToCreate.map(createTweet))
@@ -45,12 +47,15 @@ describe('tweets app', () => {
       .then(createdUser => {
         return request(app)
           .post('/tweets')
-          .send({ handle: createdUser._id, text: 'greek or nah?' })
+          .send({ 
+            handle: createdUser._id, 
+            text: 'greek or nah?' 
+          })
           .then(res => {
             expect(res.body).toEqual({ 
               __v: 0, 
               _id: expect.any(String), 
-              handle: createdUser._id.toString(), 
+              handle: expect.any(String), 
               text: 'greek or nah?' 
             });
           });
@@ -117,7 +122,7 @@ describe('tweets app', () => {
       });
   });
 
-  it.only('gets a list of users', () => {
+  it('gets a list of users', () => {
     const usersToCreate = ['paige1', 'paige2', 'paige3'];
     return Promise.all(usersToCreate.map(createUser))
       .then(() => {
@@ -165,6 +170,7 @@ describe('tweets app', () => {
         });
       });
   });
+
   it('can find by id and delete', () => {
     return createUser('benedrylcumberbottom')
       .then(res => {
@@ -180,6 +186,7 @@ describe('tweets app', () => {
         });
       });
   });
+
   afterAll((done) => {
     mongoose.disconnect(done);
   }); 
