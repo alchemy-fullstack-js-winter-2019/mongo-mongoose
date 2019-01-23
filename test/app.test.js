@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 
 describe('tweets app', () => {
 
-  const createTweet = (handle, text = 'a tweet') => {
+  const createTweet = (handle, text = 'tweet!') => {
     return request(app)
       .post('/tweets')
       .send({ handle, text })
@@ -45,6 +45,25 @@ describe('tweets app', () => {
       })
       .then(res => {
         expect(res.body).toHaveLength(3);
+      });
+  });
+
+  it('gets a tweet by id', () => {
+    return createTweet('ivan')
+      .then(createdTweet => {
+        return Promise.all([
+          Promise.resolve(createdTweet._id), 
+          request(app)
+            .get(`/tweets/${createdTweet._id}`)
+        ]);
+      })
+      .then(([_id, res]) => {
+        expect(res.body).toEqual({
+          text: 'tweet!',
+          handle: 'ivan',
+          _id,
+          __v: 0
+        });
       });
   });
 });
