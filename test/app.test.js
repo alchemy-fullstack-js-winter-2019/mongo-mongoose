@@ -136,4 +136,25 @@ describe('users app', () => {
       });
   });
 
+  it('gets a user by id', () => {
+    return createUser('fruitlady')
+      .then(createdUser => {
+        return Promise.all([
+          Promise.resolve(createdUser._id),
+          request(app)
+            .get(`/tweets/${createdUser._id}`)
+        ]);
+      })
+      // eslint-disable-next-line no-unused-vars
+      .then(([_id, res]) => {
+        expect(res.body).toEqual({
+          handle: 'fruitlady',
+          name: 'carmen',
+          email: 'carmen@email.com',
+          _id: expect.any(String),
+          __v: 0
+        });
+      });
+  });
+
 });
