@@ -46,7 +46,7 @@ describe('tweets app', () => {
           })
           .then(res => {
             expect(res.body).toEqual({
-              handle: createdUser._id,
+              handle: expect.any(String),
               text: 'Hello World',
               _id: expect.any(String),
               __v: 0
@@ -81,8 +81,7 @@ describe('tweets app', () => {
         expect(res.body).toEqual({
           handle: expect.any(Object),
           text: 'Hello',
-          _id,
-          __v: 0
+          _id
         });
       });
   });
