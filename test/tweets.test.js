@@ -14,7 +14,7 @@ describe('them tweets', () => {
     createTweet('shabz')
       .then(res => {
         const { _id, __v, handle, text } = res;
-        tweet = { _id, __v, handle, text };
+        tweet = { _id: _id.toString(), __v, handle, text };
         done();
       });
   });
@@ -66,6 +66,23 @@ describe('them tweets', () => {
     return request(app)
       .get('/tweets/5')
       .then(res => expect(res.status).toEqual(500));
+  });
+
+  it.only('updates through patch', () => {
+    return request(app)
+      .patch(`/tweets/${tweet._id}`)
+      .send({
+        handle: tweet.handle,
+        text: 'I meant tweet'
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: tweet._id,
+          handle: 'shabz',
+          text: 'I meant tweet',
+          __v: 0
+        });
+      });
   });
 
   afterAll(() => mongoose.disconnect());
