@@ -37,7 +37,7 @@ describe('tweets app', () => {
     return Promise.all(['ryan', 'another handle'].map(createTweet))
       .then(createdTweets => {
         return request(app)
-          .get('/tweets')
+          .get('/tweets');
       })
       .then(res => {
         expect(res.body).toHaveLength(2);
@@ -69,5 +69,11 @@ describe('tweets app', () => {
       .then(res => {
         expect(res.status);
       });
+  });
+
+  it('updates a tweet by id', () => {
+    return request(app)
+      .
+      
   });
 });
