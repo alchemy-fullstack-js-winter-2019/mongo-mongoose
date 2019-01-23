@@ -19,7 +19,22 @@ describe('them tweets', () => {
       });
   });
 
-  afterAll(() => mongoose.disconnect());
+  it('posts a tweet', () => {
+    return request(app)
+      .post('/tweets')
+      .send({
+        handle: 'shabz2',
+        text: 'I am also a twit'
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: 'shabz2',
+          text: 'I am also a twit',
+          __v: 0,
+          _id: expect.any(String)
+        });
+      });
+  });
 
   it('gets tweets', () => {
     return request(app)
@@ -35,4 +50,6 @@ describe('them tweets', () => {
         ]);
       });
   });
+
+  afterAll(() => mongoose.disconnect());
 });
