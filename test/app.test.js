@@ -5,15 +5,28 @@ const request = require('supertest');
 
 const mongoose = require('mongoose');
 const createTweet = (handle) => {
+    return createUser(handle)
+        .then(createUser => {
+            return request(app)
+                .post('/tweets')
+                .send({
+                    handle: createUser._id,
+                    text: 'dogs are the best'
+                })
+                .then(res => res.body);
+
+        });
+}; 
+
+const createUser = (name) => {
     return request(app)
-        .post('/tweets')
+        .post('/users')
         .send({
-            handle: handle,
-            text: 'dogs are the best'
+            name: name,
+            description: 'dogs are the best'
         })
         .then(res => res.body);
 };
-
 describe('tweets app', () => {
     beforeEach(done => {
         return mongoose.connection.dropDatabase(() => {
@@ -21,11 +34,14 @@ describe('tweets app', () => {
         });
     });
     it('sends a tweet', () => {
-        return request(app)
-            .post('/tweets')
-            .send({ handle: 'marcy', text: 'first tweet' })
-            .then(res => {
-                expect(res.body).toEqual({ handle: 'marcy', text: 'first tweet', _id: expect.any(String), __v: 0 });
+        return createUser('test user')
+            .then(createdUser => {
+                return request(app)
+                    .post('/tweets')
+                    .send({ handle: createdUser._id, text: 'first tweet' })
+                    .then(res => {
+                        expect(res.body).toEqual({ handle: 'test user', text: 'first tweet', _id: expect.any(Object), __v: 0 });
+                    });
             });
     });
     it('finds a list of tweets', () => {
