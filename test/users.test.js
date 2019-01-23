@@ -1,4 +1,4 @@
-require('../lib/utils/connect')();
+require('../lib/utils/connect')('mongodb://127.0.0.1:27017/users');
 const request = require('supertest');
 const app = require('../lib/app');
 const mongoose = require('mongoose');
@@ -13,9 +13,8 @@ describe('them users', () => {
   beforeEach(done => {
     createUser('shabz')
       .then(res => {
-        const { _id, __v, handle, text } = res;
-        user = { _id: _id.toString(), __v, handle, text };
-        console.log('user', user);
+        const { _id, __v, handle, name, email } = res;
+        user = { _id: _id.toString(), __v, handle, name, email };
         done();
       });
   });
@@ -37,5 +36,11 @@ describe('them users', () => {
         _id: expect.any(String),
         __v: 0
       }));
+  });
+
+  it('gets list of all users', () => {
+    return request(app)
+      .get('/users')
+      .then(res => expect(res.body).toEqual([user]));
   });
 });
