@@ -79,9 +79,17 @@ describe('tweets app', () => {
       .get('/tweets');
   });
 
-  // it('can find by id and delete', () => {
+  it('can find by id and delete', () => {
+    return createTweet('tweet to be deleted')
+      .then(newTweet => {
+        return request(app)
+          .delete(`/tweets/${newTweet._id}`)
+          .then(res => {
+            expect(res.body).toEqual({ deleted: 1 });
+          });
+      });
 
-  // });
+  });
 
 
   afterAll((done) => {
