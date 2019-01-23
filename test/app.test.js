@@ -49,7 +49,7 @@ describe('tweets app', () => {
       });
   });
 
-  it('find a list of tweets', () => {
+  it('finds a list of tweets', () => {
     return Promise.all(['ryan', 'another handle'].map(createTweet))
       .then(() => {
         return request(app)
@@ -100,7 +100,7 @@ describe('tweets app', () => {
       });
   });
 
-  it.only('updates a tweet by id', () => {
+  it('updates a tweet by id', () => {
     return createTweet('connor')
       .then(createdTweet => {
         const _id = createdTweet._id;
@@ -130,7 +130,12 @@ describe('tweets app', () => {
         ]);
       })
       .then(([_id, res]) => {
-        expect(res.body).toEqual({ deleted: 1 });
+        expect(res.body).toEqual({
+          handle: expect.any(String),
+          text: 'a tweet',
+          _id,
+          __v: 0
+        });
         return request(app)
           .get(`/tweets/${_id}`);
       })
