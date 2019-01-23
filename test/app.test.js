@@ -79,6 +79,17 @@ describe('tweets app', () => {
         expect(body).toHaveLength(4);
       });
   });
+  it('can get a list of users from db', () => {
+    const usersToCreate = ['Jim', 'Pam', 'Michael', 'Stanley'];
+    return Promise.all(usersToCreate.map(createUser))
+      .then(() => {
+        return request(app)
+          .get('/users');
+      })
+      .then(({ body }) => {
+        expect(body).toHaveLength(4);
+      });
+  });
 
   // GET by id
   it('can get a tweet by id', () => {
