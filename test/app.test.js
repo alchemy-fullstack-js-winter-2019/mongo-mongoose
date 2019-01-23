@@ -139,7 +139,7 @@ describe('tweets app', () => {
   // PATCH ------------------------------------------
   it('can retrieve a tweet by :id and update it', () => {
     const newTweet = {
-      handle: 'pizzatown'
+      text: 'alalalalalalalala'
     };
     return createTweet('flanel', 'blahblah')
       .then(createdTweet => {
@@ -151,15 +151,14 @@ describe('tweets app', () => {
       .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),
-          handle: 'pizzatown',
-          text: 'blahblah',
+          handle: 'flanel',
+          text: 'alalalalalalalala',
           __v: 0
         });
       });
   });
-  it('can retrieve a user by :id and update it', () => {
-    const newUser = {
-      handle: 'duranDuran49' };
+  it('can retrieve a user by :id and update only name and email', () => { 
+    const newUser = { name: 'booboo head', email: 'b@b.biz' };
     return createUser(
       'Baby Pie', 'Angel Face', 'angel@heaven.com'
     )
@@ -172,9 +171,9 @@ describe('tweets app', () => {
       .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),
-          handle: 'duranDuran49',
-          name: 'Angel Face',
-          email: 'angel@heaven.com',
+          handle: 'Baby Pie',
+          name: 'booboo head',
+          email: 'b@b.biz',
           __v: 0
         });
       });
