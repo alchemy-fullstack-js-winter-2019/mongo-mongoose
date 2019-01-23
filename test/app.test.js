@@ -6,17 +6,21 @@ const app = require('../lib/app');
 const Tweet = require('../lib/models/Tweet');
 const User = require('../lib/models/User');
 
-const createTweet = (handle, text = 'a tweet') => {
-  return Tweet.create({ handle, text })
-    .then(tweet => ({ ...tweet, _id: tweet._id.toString() }));
-};
 const createUser = (handle, name, email) => {
   return User.create({ handle, name, email })
     .then(user => ({ ...user, _id: user._id.toString() }));
 };
 
-describe('tweets app', () => {
 
+const createTweet = (handle, text = 'a tweet') => {
+  return createUser(handle, 'ryan', 'ryan@email.com')
+    .then(user => {
+      return Tweet.create({ handle: user._id, text })
+        .then(tweet => ({ ...tweet, _id: tweet._id.toString() }));
+    });
+};
+
+describe('tweets app', () => {
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
       done();
@@ -32,7 +36,7 @@ describe('tweets app', () => {
         expect(res.body.length).toEqual(3);
       });
   });
-  it.only('posts a tweet', () => {
+  it('posts a tweet', () => {
     return createUser('tyler', 'Tyler Corbett', 'tyler@gmail.com')
       .then(user => {
         return request(app)
@@ -59,15 +63,15 @@ describe('tweets app', () => {
           .get(`/tweets/${_id}`)
           .then(res => {
             expect(res.body).toEqual({
-              handle: 'tyler',
-              text: 'my first tweet',
+              handle: expect.any(Object),
+              text: 'a tweet',
               _id,
               __v: 0
             });
           });
       });
   });
-  it('updates an existing tweet by id', () => {
+  it.only('updates an existing tweet by id', () => {
     return createTweet('tyler')
       .then(createdTweet => {
         const _id = createdTweet._id;
@@ -78,7 +82,7 @@ describe('tweets app', () => {
           })
           .then(res => {
             expect(res.body).toEqual({
-              handle: 'tyler',
+              handle: expect.any(Object),
               text: 'This tweet is updated',
               _id,
               __v: 0
