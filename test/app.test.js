@@ -95,13 +95,11 @@ describe('tweets app', () => {
   it('deletes a tweet by id', () => {
     return makeTweet('oops')
       .then(oopsTweet => {
-        console.log('OOPS', oopsTweet);
         return request(app)
           .delete(`/tweets/${oopsTweet._id}`);
       })
       .then((res => {
-        console.log('test side res.body:', res.body);
-        expect(res.body).toEqual({ deleted: 1 });
+        expect(res.body).toEqual({ deleted: res.body._id });
       }));
   });
 

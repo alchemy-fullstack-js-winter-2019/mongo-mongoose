@@ -11,6 +11,7 @@
   "devDependencies": {
     "eslint": "^5.12.1",
     "jest": "^23.6.0",
+    "morgan": "^1.9.1",
     "nodemon": "^1.18.9",
     "supertest": "^3.4.2"
   },
