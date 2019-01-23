@@ -39,6 +39,14 @@ describe('tweets app', () => {
         expect(res.body).toHaveLength(2);
       });
   });
+  it('errors when a bad id is sent', () => {
+    return request(app)
+      .get('/tweets/this is a bad id')   
+      .then(res => {
+        expect(res.status).toEqual(404);
+      });
+
+  });
 });
 
 
