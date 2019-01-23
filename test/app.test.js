@@ -49,4 +49,22 @@ describe('tweets app', () => {
         });
       });
   });
+
+  // GET by id
+  it('can get a tweet by id', () => {
+    return createTweet('hayyyyyy')
+      .then(createdTweet => {
+        const _id = createdTweet._id;
+        return request(app)
+          .get(`/tweets/${_id}`)
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: 'hayyyyyy',
+              text: 'hi I a tweet',
+              _id,
+              __v: 0
+            });
+          });
+      });
+  });
 });
