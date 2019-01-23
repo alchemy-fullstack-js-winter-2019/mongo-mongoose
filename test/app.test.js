@@ -52,14 +52,14 @@ describe('tweets app', () => {
   });
 
   it('gets a tweet by id', () => {
-    return createTweet('some handle')
+    return createTweet('Connor')
       .then(createdTweet => {
         const _id = createdTweet._id;
         return request(app)
           .get(`/tweets/${_id}`)
           .then(res => {
             expect(res.body).toEqual({
-              handle: 'some handle',
+              handle: 'Connor',
               text: 'my first tweet',
               _id,
               __v: 0
@@ -94,6 +94,22 @@ describe('tweets app', () => {
             });
           });
       });
-      
+  });
+
+  it('deletes a tweet by id', () => {
+    return createTweet('Cool Dude')
+      .then(createdTweet => {
+        const _id = createdTweet._id;
+        return request(app)
+          .delete(`/tweets/${_id}`)
+          .send({
+            deleted: 1
+          })
+          .then(res => {
+            expect(res.body).toEqual({
+              deleted: 1
+            });
+          });
+      });
   });
 });
