@@ -5,13 +5,16 @@ const app = require('../lib/app');
 const mongoose = require('mongoose');
 
 const createTweet = (handle) => {
-  return request(app)
-    .post('/tweets')
-    .send({ 
-      handle: handle,
-      text: 'test tweet'
-    })
-    .then(res => res.body);
+  return createUser(handle)
+    .then(createdUser => {
+      return request(app)
+        .post('/tweets')
+        .send({ 
+          handle: createdUser._id,
+          text: 'some text'
+        })
+        .then(res => res.body);
+    });   
 };
 
 const createUser = (name) => {
@@ -38,14 +41,23 @@ describe('tweets app', () => {
   });
 
   it('creates a new tweet', () => {
-    return request(app)
-      .post('/tweets')
-      .send({
-        handle: 'ghostrider',
-        text: 'longboarding life yo'
-      })
-      .then(res => {
-        expect(res.body.handle).toEqual('ghostrider');
+    return createUser('test user')
+      .then(createdUser => {
+        return request(app)
+          .post('/tweets')
+          .send({
+            handle: createdUser._id,
+            text: 'longboarding life yo'
+          })
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: createdUser._id,
+              text: 'longboarding life yo',
+              _id: expect.any(String),
+              __v: 0
+            });
+          });
+
       });
   });
 
@@ -68,8 +80,8 @@ describe('tweets app', () => {
           .get(`/tweets/${createdTweet._id}`)
           .then(res => {
             expect(res.body).toEqual({
-              handle: 'kristin1',
-              text: 'test tweet',
+              handle: expect.any(Object),
+              text: 'some text',
               _id: expect.any(String),
               __v: 0
             });
@@ -80,13 +92,18 @@ describe('tweets app', () => {
   it('updates a tweet with :id and returns the update', () => {
     return createTweet('kristin1')
       .then(createdTweet => {
-        createdTweet.handle = 'test';
+        createdTweet.text = 'new text';
         return request(app)
           .patch(`/tweets/${createdTweet._id}`)
           .send(createdTweet);
       })
       .then(res => {
-        expect(res.text).toContain('test');
+        expect(res.body).toEqual({
+          handle: expect.any(Object),
+          text: 'new text',
+          _id: expect.any(String),
+          __v: 0
+        });
       });
   });
 
