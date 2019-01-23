@@ -62,4 +62,20 @@ describe('tweets app', () => {
         }); 
       });
     });
+    it('finds by Id and updates', () => {
+      return createTweet('mike')
+      .then(createdTweet => {
+    
+          return request(app)
+          .patch(`/tweets/${createdTweet.id}`)
+          .send({ handle: 'lancemongoose' })  
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+            handle: 'lancemongoose', 
+            text: 'this is tweet text',
+           _id: expect.any(String),
+           __v: 0});
+    });
+  });
   });
