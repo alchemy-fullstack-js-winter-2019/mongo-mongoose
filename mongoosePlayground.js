@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
+require('./lib/utils/connect')();
 
 mongoose.connect('mongodb://127.0.0.1:27017/tweets', {
   useNewUrlParser: true
