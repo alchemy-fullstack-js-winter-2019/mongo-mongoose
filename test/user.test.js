@@ -66,9 +66,10 @@ describe('users app', () => {
       });
     });
 
-  // it('finds a user by id and updates', () => {
-
-  // });
+  it('finds a user by id and updates', () => {
+    return request(app)
+      .get('/users');
+  });
 
   // it('finds a user by id and deletes', () => {
 
