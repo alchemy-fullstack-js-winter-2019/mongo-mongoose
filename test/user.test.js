@@ -48,9 +48,23 @@ describe('users app', () => {
       })
   });
 
-  // it('finds a user by id', () => {
-
-  // });
+  it('finds a user by id', () => {
+    return createUser('julia')
+      .then(createdUser => {
+        Promise.resolve(createdUser._id),
+        request(app)
+          .get(`/users/${createdUser._id}`);
+      });
+  })
+    .then(([_id, res]) => {
+      expect(res.body).toEqual({
+        handle: expect.any(Object),
+        name: 'julia',
+        email: expect.any(String),
+        _id: expect.any(String),
+        __v: 0
+      });
+    });
 
   // it('finds a user by id and updates', () => {
 
