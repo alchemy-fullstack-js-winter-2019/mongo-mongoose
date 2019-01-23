@@ -20,6 +20,7 @@ describe('tweets app', () => {
       done();
     });
   });
+  
   it('can create a tweet', () => {
     return request(app)
       .post('/tweets')
@@ -54,6 +55,19 @@ describe('tweets app', () => {
       .get('/tweets/abcd')
       .then(res => {
         expect(res.text).toEqual('abcd');
+      });
+  });
+
+  it('finds a tweet by id and updates it', () => {
+    return createTweets('Peter')
+      .then(updatedTweet => {
+        updatedTweet.handle = 'Peter2';
+        return request(app)
+          .patch(`/tweets/${updatedTweet._id}`)
+          .send(updatedTweet);
+      })
+      .then(res => {
+        expect(res.text).toContain('Peter2');
       });
   });
 
