@@ -50,25 +50,19 @@ describe('tweets app', () => {
             });
     });
     it('finds a tweet by ID and updates it', () => {
-        return createTweet('marcy1')
-            .then(personWhoWasCreated => {
-                const id = personWhoWasCreated._id;
-                const updatedObject = ({ handle: 'marcy2',
-                    text: 'cats are better'
-                });
+        return createTweet('marcy2')
+            .then(tweetWhoWasCreated => {
+                const id = tweetWhoWasCreated._id;
+                const updatedObject = ({ handle: 'marcy3', text: 'dogs are the best' });
                 return request(app) 
                     .patch(`/tweets/${id}`)
                     .send(updatedObject)
-                /* eslint-disable-next-line*/
-              .then(res => {
-                        expect(res.body).toEqual({
-                            handle: 'marcy2',
-                            text: 'cats are better',
-                            _id: expect.any(String),
-                            __v: 0
-                        });
+                    .then(res => {
+                        expect(res.body).toEqual({ handle: 'marcy3', text: 'dogs are the best', _id: expect.any(String), __v: 0 });
                     });
+        
             });
+
     });
     it('gets tweets by ID', () => {
         return createTweet('marcy1')

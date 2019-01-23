@@ -28,17 +28,16 @@ describe('users app', () => {
                 expect(res.body).toEqual({ name: 'jeffery', description: 'tall', _id: expect.any(String), __v: 0 });
             });
     }); 
-    it('gets all the tweets', () => {
-        const namestoCreate = ['gunther', 'noodles', 'pudding', 'ludivine'];
-        return Promise.all(namestoCreate.map(createUser))
+    it('gets all the users', () => {
+        return Promise.all(['marcy2', 'marcy3'].map(createUser))
             .then(() => {
                 return request(app)
                     .get('/users');
             })
-            .then(({ body }) => {
-                expect(body).toHaveLength(4);
+            .then(res => {
+                expect(res.body).toHaveLength(2);
             });
-    }); 
+    });
     it('deletes a user', () => {
         return createUser('gunther')
             .then(personWhoWasCreated => {
