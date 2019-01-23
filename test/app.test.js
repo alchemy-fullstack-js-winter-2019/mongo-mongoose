@@ -42,7 +42,7 @@ describe('tweets app', () => {
 
   it('find a list of tweets', () => {
     return Promise.all(['ryan', 'another handle'].map(createTweet))
-      .then(createdTweets => {
+      .then(() => {
         return request(app)
           .get('/tweets');
       })
@@ -52,21 +52,19 @@ describe('tweets app', () => {
   });
 
   it('gets a tweet by id', () => {
-    return createTweet('ryan')
+    return createTweet('some handle')
       .then(createdTweet => {
-        Promise.all([
-          Promise.resolve(createdTweet._id),
-          request(app)
-            .get(`/tweets/${createdTweet._id}`)
-        ]);
-      })
-      .then(res => {
-        expect(res.body).toEqual({
-          handle: 'ryan',
-          text: 'a tweet',
-          _id: expect.any(String),
-          __v: 0
-        });
+        const _id = createdTweet._id;
+        return request(app)
+          .get(`/tweets/${_id}`)
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: 'some handle',
+              text: 'my first tweet',
+              _id,
+              __v: 0
+            });
+          });
       });
   });
 
@@ -93,9 +91,9 @@ describe('tweets app', () => {
               text: 'updated tweet',
               _id,
               __v: 0
-            })
-          })
-      })
+            });
+          });
+      });
       
   });
 });
