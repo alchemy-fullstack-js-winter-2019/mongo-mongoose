@@ -1,8 +1,8 @@
+require('dotenv').config();
+require('../lib/utils/connect')();
 const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../lib/app');
-require('dotenv').config();
-require('../lib/utils/connect')();
 
 const createTweet = (handle) => {
   return request(app)
@@ -31,6 +31,7 @@ describe('tweets app', () => {
         expect(body).toHaveLength(3);
       });
   });
+
   it('can post a tweet', () => {
     return request(app)
       .post('/tweets')
@@ -42,6 +43,22 @@ describe('tweets app', () => {
           handle: 'yogurt', 
           text: 'greek or nah?' 
         });
+      });
+  });
+
+  it('can get a tweet by its id', () => {
+    return createTweet('shezza')
+      .then(res => {
+        return request(app)
+          .get(`/tweets/${res._id}`)
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: 'shezza',
+              text: 'oink tweet moo',
+              __v: 0,
+              _id: expect.any(String)
+            });
+          });
       });
   });
 });
