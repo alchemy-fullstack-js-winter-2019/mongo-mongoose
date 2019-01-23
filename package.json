@@ -10,8 +10,8 @@
     "lint": "eslint .",
     "pretest": "npm run lint",
     "start": "nodemon server.js",
-    "test": "jest --verbose",
-    "test:watch": "npm run test -- --watch"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
