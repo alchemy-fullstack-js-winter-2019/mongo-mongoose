@@ -33,7 +33,8 @@ describe('tweets app', () => {
       expect(res.body).toEqual({
         handle: 'abel',
         text: 'my first tweet',
-        _id: expect.any(String)
+        _id: expect.any(String),
+        __v: expect.any(Number)
       });
     });
   });
