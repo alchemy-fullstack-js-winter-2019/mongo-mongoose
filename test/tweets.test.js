@@ -22,7 +22,9 @@ describe('test DB methods/routes', () => {
             done();
         });
     });
-
+    afterAll(() => {
+        mongoose.disconnect();
+    });
 
     it('can post the DB', () => {
         return request(app)
@@ -32,7 +34,6 @@ describe('test DB methods/routes', () => {
                 expect(res.text).toContain('KananiBoy');
             });
     });
-
 
     it('it can find all documents in the DB', () => {
         const tweetsToCreate = ['YOLO', 'SWAG', 'FROSTYFINGERS420'];
@@ -69,5 +70,14 @@ describe('test DB methods/routes', () => {
                 expect(res.text).toContain('NEOMOON');
             });
     });
-    //next it 
+    it('can delete a tweet by id', () => {
+        return createTweet('XBT')
+            .then(createdTweet => {
+                return request(app)
+                    .delete(`/tweets/${createdTweet._id}`);
+            })
+            .then(res => {
+                expect(res.text).toContain('Deleted');
+            });
+    });
 });
