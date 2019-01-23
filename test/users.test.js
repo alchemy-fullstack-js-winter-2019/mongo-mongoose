@@ -74,4 +74,10 @@ describe('them users', () => {
         });
       });
   });
+
+  it('deletes user by id', () => {
+    return request(app)
+      .delete(`/users/${user._id}`)
+      .then(res => expect(res.body).toEqual({ deleted: 1 }));
+  });
 });
