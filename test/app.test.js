@@ -13,12 +13,14 @@ describe('Tweets app', () => {
       .then(user => ({ ...user, _id: user._id.toString() })); //converts this id to user
   };
   
-  const createTweet = (handle, text = 'tweet') => {
-    return Tweet.create({
-      handle, 
-      text 
-    });
+  const createTweet = (handle, text = 'a tweet') => {
+    return createUser(handle, 'ron', 'ryan@yahoo.com')
+      .then(user => {
+        return Tweet.create({ handle: user._id, text })
+          .then(tweet => ({ ...tweet, _id: tweet._id.toString() }));
+      });
   };
+
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
       done();
@@ -56,16 +58,18 @@ describe('Tweets app', () => {
   it.only('finds a tweet by id', () => {
     return createTweet('ron')
     // return createTweet('tweet 1', 'It is sunny')
-      .then((createdTweet) => {
-        const id = createdTweet._id;
-        return request(app)
-          .get(`/tweets/${id}`);
+      .then(createdTweet => {
+        return Promise.all([
+          Promise.resolve(createdTweet._id),
+          request(app)
+            .get(`/tweets/${createdTweet._id}`)
+        ]);
       })
-      .then(res => {
+      .then(([_id, res]) => {
         expect(res.body).toEqual({
-          handle: 'tweet 1',
-          text: 'It is sunny',
-          _id: expect.any(String),
+          handle: expect.any(Object),
+          text: 'a tweet',
+          _id,
           __v: 0
         });
       });
