@@ -11,7 +11,9 @@ const createUser = (handle, name = 'paige', email = 'bob@ross.com') => {
 };
 
 const createTweet = (handle, text = 'oink tweet moo') => {
-  return createUser(handle)
+  const name = 'paige';
+  const email = 'bob@ross.com';
+  return createUser(handle, name, email)
     .then(createdUser => {
       return Tweet.create({ 
         handle: createdUser._id, 
@@ -26,7 +28,7 @@ describe('tweets app', () => {
       done();
     });
   });
-  it.only('can get a list of tweets from our db', () => {
+  it('can get a list of tweets from our db', () => {
     const tweetsToCreate = ['yoyo', 'jelly123', 'jessie456'];
     return Promise.all(tweetsToCreate.map(createTweet))
       .then(() => {
@@ -96,12 +98,7 @@ describe('tweets app', () => {
           .delete(`/tweets/${res._id}`);
       })
       .then(res => {
-        expect(res.body).toEqual({ 
-          handle: 'm3m3lord',
-          text: 'oink tweet moo',
-          __v: 0,
-          _id: expect.any(String)
-        });
+        expect(res.body).toEqual({ deleted: 1 });
       });
   });
 
@@ -120,7 +117,7 @@ describe('tweets app', () => {
       });
   });
 
-  it('gets a list of users', () => {
+  it.only('gets a list of users', () => {
     const usersToCreate = ['paige1', 'paige2', 'paige3'];
     return Promise.all(usersToCreate.map(createUser))
       .then(() => {
@@ -128,6 +125,7 @@ describe('tweets app', () => {
           .get('/users');
       })
       .then(res => {
+        console.log('CONSOLE', res.body);
         expect(res.body).toHaveLength(3);
       });
   });
