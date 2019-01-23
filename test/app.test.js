@@ -74,10 +74,10 @@ describe('tweets app', () => {
       });
   });
 
-  // it('can find by id and update', () => {
-  //   return request(app)
-  //     .get('/tweets');
-  // });
+  it('can find by id and update', () => {
+    return request(app)
+      .get('/tweets');
+  });
 
   // it('can find by id and delete', () => {
 
