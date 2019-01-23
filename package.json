@@ -8,8 +8,10 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test:watch": "jest --watch",
+    "test": "jest",
+    "start": "nodemon server.js",
+    "start:client": "node client.js"
   },
   "repository": {
     "type": "git",
@@ -32,5 +34,8 @@
     "shortid": "^2.2.14",
     "superagent": "^4.1.0",
     "supertest": "^3.4.2"
+  },
+  "devDependencies": {
+    "mongoose": "^5.4.6"
   }
 }
