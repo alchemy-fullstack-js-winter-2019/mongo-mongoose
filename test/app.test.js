@@ -66,13 +66,13 @@ describe('tweets app', () => {
       });
   });
 
-  // it('errors when a bad id is sent', () => {
-  //   return request(app)
-  //     .get('/tweets/badId')
-  //     .then(res => {
-  //       expect(res.status).toEqual(500);
-  //     });
-  // });
+  it('errors when a bad id is sent', () => {
+    return request(app)
+      .get('/tweets/badId')
+      .then(res => {
+        expect(res.status).toEqual(400);
+      });
+  });
 
   // it('can find by id and update', () => {
   //   return request(app)
