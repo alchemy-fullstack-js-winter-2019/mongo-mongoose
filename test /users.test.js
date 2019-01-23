@@ -6,7 +6,7 @@ const request = require('supertest');
 const User = require('../lib/models/User');
 
 describe('users app', () => {
-  const createUser = (handle, name, email) => {
+  const createUser = (handle = 'xtester', name= 'kevin', email='barrywhite@dionwarwick.com') => {
     return User.create({ handle, name, email })
   }
 
@@ -46,7 +46,7 @@ describe('users app', () => {
       });
   });
   it('gets a user by id', () => {
-    return createUser('mike')
+    return createUser('xtester')
       .then(createdUser => {
         return Promise.all([
           Promise.resolve(createdUser._id),
@@ -55,16 +55,18 @@ describe('users app', () => {
         ])
       })
       .then(([_id, res]) => {
+        // console.log('Are you receiving',res.body);
         expect(res.body).toEqual({
-          handle: 'mike',
-          name: 'michael',
+          handle: 'xtester',
+           name: 'kevin', 
+           email: 'barrywhite@dionwarwick.com',
           _id: expect.any(String),
           __v: 0
         });
       });
   });
-  it('finds by Id and updates', () => {
-    return createUser('mike')
+  it('finds user by Id and updates', () => {
+    return createUser('xtester')
       .then(createdUser => {
         return request(app)
           .patch(`/users/${createdUser.id}`)
@@ -73,13 +75,14 @@ describe('users app', () => {
       .then(res => {
         expect(res.body).toEqual({
           handle: 'lancemongoose',
-          text: 'this is user text',
+          name: 'kevin',
+          email: 'barrywhite@dionwarwick.com',
           _id: expect.any(String),
           __v: 0
         });
       });
   });
-  it('finds by Id and deletes', () => {
+  it('finds user by Id and deletes', () => {
     return createUser('mike')
       .then(createdUser => {
         expect(createdUser.handle).toEqual('mike');
