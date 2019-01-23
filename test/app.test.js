@@ -80,7 +80,7 @@ it('finds a tweet by ID and updates it', () => {
                 .patch(`/tweets/${id}`)
                 .send(updatedObject)
                 .then(res => {
-                    expect(res.body).toEqual({ handle: expect.any(Object), text: 'dogs are the best', _id: expect.any(String), __v: 0 });
+                    expect(res.body).toEqual({ handle: expect.any(Object), text: 'dogs are the best', _id: expect.any(String) });
                 });
         
         });
@@ -102,7 +102,7 @@ it('gets tweets by ID', () => {
                     .get(`/tweets/${TweetWhoWasCreated._id}`)
             ])
                 .then(([_id, res]) => {
-                    expect(res.body).toEqual({ handle: expect.any(Object), text: 'dogs are the best', _id, __v: 0 });
+                    expect(res.body).toEqual({ handle: expect.any(Object), text: 'dogs are the best', _id });
                 });
         });
 });
