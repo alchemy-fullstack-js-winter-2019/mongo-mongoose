@@ -47,7 +47,7 @@ describe('tweets app', () => {
         });
       });
   });
-  it.only('gets a list of tweets', ()=> {
+  it('gets a list of tweets', ()=> {
     //use promaise all to imply createTweet function
     return Promise.all(['tweet 1', 'tweet 2', 'tweet 3'].map(createTweet))
     //why is it okay for createdTweets to go uncalled?
