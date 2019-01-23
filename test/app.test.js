@@ -62,12 +62,12 @@ describe('tweets app', () => {
       });
   });
 
-  it.skip('can update a tweet', () => {
+  it('can update a tweet', () => {
     let newTweet = { text: 'ele-FANT-eh' };
     return createTweet('ele4ant3')
       .then(res => {
         return request(app)
-          .patch(`/tweet/${res._id}`)
+          .patch(`/tweets/${res._id}`)
           .send(newTweet);
       })
       .then(res => {
@@ -137,6 +137,25 @@ describe('tweets app', () => {
               _id: expect.any(String)
             });
           });
+      });
+  });
+
+  it.only('can get a user by id and update', () => {
+    let newUser = { handle: 'yogurt' };
+    return createUser('yoyo')
+      .then(res => {
+        return request(app)
+          .patch(`/users/${res._id}`)
+          .send(newUser);
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: 'yogurt',
+          name: 'paige',
+          email: 'bob@ross.com',
+          __v: 0,
+          _id: expect.any(String)
+        });
       });
   });
 });
