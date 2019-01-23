@@ -4,18 +4,32 @@ const app = require('../lib/app');
 const request = require('supertest');
 const mongoose = require('mongoose');
 
-const createTweet = handle => {
+const createUser = handle => {
   return request(app)
-    .post('/tweets')
+    .post('/users')
     .send({
       handle: handle,
-      text: 'my tweeter tweets'
+      name: 'teonna',
+      email: 'teonna@heintz.com'
     })
     .then(res => res.body);
 };
 
+const createTweet = handle => {
+  return createUser(handle)
+    .then(createdUser => {
+      return request(app)
+        .post('/tweets')
+        .send({
+          handle: createdUser._id,
+          text: 'my tweeter tweets'
+        })
+        .then(res => res.body);
+    });
+};
 
 describe('tweets app', () => {
+  
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
       done();
@@ -23,16 +37,21 @@ describe('tweets app', () => {
   });
 
   it('creates a tweet', () => {
-    return request(app)
-      .post('/tweets')
-      .send({ handle: 'TA', text: 'my first tweet' })
-      .then(res => {
-        expect(res.body).toEqual({ 
-          handle: 'TA',
-          text: 'my first tweet',
-          _id: expect.any(String),
-          __v: 0
-        });
+    return createUser('TT')
+      .then(createdUser => {
+        return request(app)
+          .post('/tweets')
+          .send({ handle: createdUser._id, text: 'my first tweet' })
+          .then(res => {
+            
+            expect(res.body).toEqual({ 
+              handle: createdUser._id,
+              text: 'my first tweet',
+              _id: expect.any(String),
+              __v: 0
+            });
+          });
+
       });
   });
   
@@ -112,17 +131,6 @@ describe('tweets app', () => {
 
 describe('users', () => {
 
-  const createUser = handle => {
-    return request(app)
-      .post('/users')
-      .send({
-        handle: handle,
-        name: 'teonna',
-        email: 'teonna@heintz.com'
-      })
-      .then(res => res.body);
-  };
-  
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
       done();
