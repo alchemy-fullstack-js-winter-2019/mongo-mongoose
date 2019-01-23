@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "dotenv": "^6.2.0",
+    "env": "0.0.2",
     "express": "^4.16.4",
     "mkdirp": "^0.5.1",
     "mongoose": "^5.4.6",
