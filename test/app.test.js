@@ -72,12 +72,12 @@ describe('tweets app', () => {
   // PUT method replaces entire object (overwrites)
   // PATCH method replaces single entity in object
   // PATCH ------------------------------------------
-  it.skip('can retrieve a tweet by :id and return the updated tweet', () => {
-    let newTweet = {
+  it('can retrieve a tweet by :id and return the updated tweet', () => {
+    const newTweet = {
       handle: 'pizzatown',
-      text: 'can you believe this *&#(*@???'
+      text: 'boo I a tweet'
     };
-    return createTweet('pizzatown')
+    return createTweet('flanel')
       .then(createdTweet => {
         const _id = createdTweet._id;
         return request(app)
@@ -85,7 +85,7 @@ describe('tweets app', () => {
           .send(newTweet);
       })
       .then(res => {
-        expect(res.body.text).toEqual('can you believe this *&#(*@???');
+        expect(res.body.handle).toEqual('pizzatown');
       });
   });
 
