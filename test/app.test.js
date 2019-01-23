@@ -65,7 +65,6 @@ describe('tweets app', () => {
   it('updates an existing tweet by id', () => {
     return createTweet('tyler')
       .then(createdTweet => {
-        console.log('createdTweet', createdTweet);
         const _id = createdTweet._id;
         return request(app)
           .put(`/tweets/${_id}`)
