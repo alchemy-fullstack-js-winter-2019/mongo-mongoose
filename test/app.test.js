@@ -77,11 +77,23 @@ describe('tweets app', () => {
       .then(tweetCreated => {
         const _id = tweetCreated._id;
         return request(app)
-          .put(`/tweets/${_id}`)
+          .patch(`/tweets/${_id}`)
           .send(updatedTweet);
       })
       .then(res => {
         expect(res.body.handle).toEqual('carmen1');
+      });
+  });
+
+  it('gets a tweet by :id, delete, and return the delete count', () => {
+    return createTweet('Mabuhay')
+      .then(tweetCreated => {
+        const _id = tweetCreated._id;
+        return request(app)
+          .delete(`/tweets/${_id}`)
+          .then(res => {
+            expect(res.body).toEqual({ deleted: 1 });
+          });
       });
   });
 
