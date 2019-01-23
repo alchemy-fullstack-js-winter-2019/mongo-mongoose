@@ -3,18 +3,23 @@ require('../lib/utils/connect')();
 const request = require('supertest');
 const app = require('../lib/app');
 const mongoose = require('mongoose');
+const Tweet = require('../lib/models/Tweet');
+const User = require('../lib/models/User');
 
-const createTweet = (handle) => {
-    return request(app)
-        .post('/tweets')
-        .send({
-            text: 'KAAACAHHH',
-            handle: handle
-        })
-        .then(res => {
-            return res.body;
-        });
+const createUser = (handle, email, name) => {
+    return User.create({ handle, email, name })
+        .then(user => ({ ...user, _id: user._id.toString() }));
 };
+
+const createTweet = (handle, text = 'some tweet') => {
+    return createUser(handle, 'lance', 'lance@lance.com')
+        .then(user => {
+            return Tweet.create({ handle: user._id, text })
+                .then(tweet => ({ ...tweet, _id: tweet._id.toString() }));
+        });
+
+};
+
 
 describe('test DB methods/routes', () => {
     beforeEach(done => {
@@ -25,18 +30,28 @@ describe('test DB methods/routes', () => {
     afterAll((done) => {
         mongoose.connection.close(done);
     });
+    
 
     it('can post the DB', () => {
-        return request(app)
-            .post('/tweets')
-            .send({ handle: 'KananiBoy', text: 'SUUWOOP' })
-            .then(res => {
-                expect(res.text).toContain('KananiBoy');
+        return createUser('KananiBoy', 'lance', 'lance@lance.com')
+            .then(user => {
+                return request(app)
+                    .post('/tweets')
+                    .send({ handle: user._id, text: 'SUUWOOP' })
+                    .then(res => {
+                        expect(res.body).toEqual({
+                            handle: expect.any(String),
+                            text: 'SUUWOOP',
+                            _id: expect.any(String),
+                            __v: 0
+                        });
+                    });
             });
     });
 
+
     it('it can find all documents in the DB', () => {
-        const tweetsToCreate = ['YOLO', 'SWAG', 'FROSTYFINGERS420'];
+        const tweetsToCreate = ['hello', 'hey', 'hola'];
         return Promise.all(tweetsToCreate.map(createTweet))
             .then(() => {
                 return request(app)
@@ -47,29 +62,42 @@ describe('test DB methods/routes', () => {
             });
     });
 
-    it('can find a document by id', () => {
+
+    it('gets a tweet by id', () => {
         return createTweet('XRPMOON')
             .then(createdTweet => {
-                return request(app)
-                    .get(`/tweets/${createdTweet._id}`);
+                return Promise.all([
+                    Promise.resolve(createdTweet._id),
+                    request(app)
+                        .get(`/tweets/${createdTweet._id}`)
+                ]);
             })
-            .then(res => {
-                expect(res.text).toContain('XRPMOON');
+            .then(([_id, res]) => {
+                expect(res.body).toEqual({
+                    handle: expect.any(Object),
+                    text: 'some tweet',
+                    _id,
+                    __v: 0
+                });
             });
     });
 
+
     it('can update a document by ID', () => {
-        return createTweet('BTCMOON')
+        return createTweet('XBT')
             .then(createdTweet => {
+                console.log(createdTweet);
                 return request(app)
                     .patch(`/tweets/${createdTweet._id}`)
-                    .send({ handle: 'NEOMOON' });
+                    .send({ text: 'NEOMOON'});
             })
             .then(res => {
-                expect(res.body.handle).toContain('NEOMOON');
+                expect(res.text).toContain('NEOMOON');
             });
     });
-    it.skip('can delete a tweet by id', () => {
+
+
+    it('can delete a tweet by id', () => {
         return createTweet('XBT')
             .then(createdTweet => {
                 return request(app)
@@ -79,4 +107,5 @@ describe('test DB methods/routes', () => {
                 expect(res.text).toContain('Deleted');
             });
     });
+
 });
