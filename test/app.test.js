@@ -55,7 +55,7 @@ describe('Tweets app', () => {
         expect(res.body).toHaveLength(2);
       });
   });
-  it.only('finds a tweet by id', () => {
+  it('finds a tweet by id', () => {
     return createTweet('ron')
     // return createTweet('tweet 1', 'It is sunny')
       .then(createdTweet => {
@@ -74,10 +74,10 @@ describe('Tweets app', () => {
         });
       });
   });
-  it('will find by id and update', () => {
+  it.only('will find by id and update', () => {
     const updatedTweet = {
-      handle: 'Tweet24',
-      text: 'Sunny'
+      // handle: expect.any(Object),
+      text: 'a tweet'
     };
     return createTweet('TweetTypo')
       .then(createdTweet => {
@@ -86,8 +86,13 @@ describe('Tweets app', () => {
           .patch(`/tweets/${id}`)
           .send(updatedTweet);
       })
-      .then(res => {
-        expect(res.body.handle).toEqual('Tweet24');
+      .then((res) => {
+        expect(res.body).toEqual({
+          handle: expect.any(Object),
+          text: 'a tweet',
+          _id: expect.any(String),
+          __v: 0
+        });
       });
   });
   it('will delete tweet by id and return delete count', () => {
