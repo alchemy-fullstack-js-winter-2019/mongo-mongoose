@@ -38,16 +38,16 @@ describe('users app', () => {
   });
 
   it('finds a list of users', () => {
-    return Promise.all(['juliaq', 'julia', 'juliaq@stanford.edu'].map(createUser)
+    return Promise.all(['juliaq', 'julia', 'juliaq@stanford.edu'].map(createUser))
       .then(createdUsers => {
         return request(app)
-          .get('/users')
+          .get('/users');
       })
       .then(res => {
         expect(res.body).toHaveLength(2);
-      })
+      });
   });
-
+  
   it('finds a user by id', () => {
     return createUser('julia')
       .then(createdUser => {
@@ -75,10 +75,10 @@ describe('users app', () => {
     return createUser('user to be deleted')
       .then(newUser => {
         return request(app)
-        .delete(`/users/${newUser._id}`)
-        .then(res => {
-          expect(res.body).toEqual({ deleted: 1 });
-        });
+          .delete(`/users/${newUser._id}`)
+          .then(res => {
+            expect(res.body).toEqual({ deleted: 1 });
+          });
       });
   });
 
