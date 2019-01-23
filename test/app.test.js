@@ -20,7 +20,7 @@ describe('tweets app', () => {
       done();
     });
   });
-  
+
   it('can create a tweet', () => {
     return request(app)
       .post('/tweets')
@@ -50,11 +50,22 @@ describe('tweets app', () => {
       });
   });
 
-  it('gets a tweet', () => {
-    return request(app)
-      .get('/tweets/abcd')
-      .then(res => {
-        expect(res.text).toEqual('abcd');
+  it('gets a single tweet by id', () => {
+    return createTweets('Aaron')
+      .then(createdTweet => {
+        return Promise.all([
+          Promise.resolve(createdTweet._id),
+          request(app)
+            .get(`/tweets/${createdTweet._id}`)
+        ]);
+      })
+      .then(([_id, res]) => {
+        expect(res.body).toEqual({
+          handle: 'Aaron',
+          text: 'Hello',
+          _id,
+          __v: 0
+        });
       });
   });
 
