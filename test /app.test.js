@@ -46,7 +46,6 @@ describe('tweets app', () => {
     it('gets a tweet by id', () => {
       return createTweet('renderfarmhouseales')
       .then(createdTweet => {
-
       })
     })
   });
