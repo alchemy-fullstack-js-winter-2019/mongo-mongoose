@@ -3,90 +3,92 @@ require('../lib/utils/connect')();
 const app = require('../lib/app');
 const mongoose = require('mongoose');
 const request = require('supertest');
-const Tweet = require('../lib/models/Tweet');
+const User = require('../lib/models/User');
 
-describe('tweets app', () => {
-  const createTweet = (handle, text = 'this is tweet text') => {
-    return Tweet.create({ handle, text })
+describe('users app', () => {
+  const createUser = (handle, name, email) => {
+    return User.create({ handle, name, email })
   }
 
   beforeEach(done => {
-    return mongoose.connection.dropDatabase(() => { 
-    done();
+    return mongoose.connection.dropDatabase(() => {
+      done();
     });
   });
   afterAll((done) => {
     mongoose.connection.close(done);
-});
-  
-  it('creates a new tweet', () => {
+  });
+
+  it('creates a new user', () => {
     return request(app)
-    .post('/tweets')
-    .send({ handle: 'mike', text: 'my 1st tweet' })
-    .then(res => {
-      // console.log('banana', res.body);
-      expect(res.body).toEqual({
+      .post('/users')
+      .send({ handle: 'mike', name: 'michael', email: 'mymichael@mymichael.com' })
+      .then(res => {
+        // console.log('banana', res.body);
+        expect(res.body).toEqual({
           handle: 'mike',
-          text: 'my 1st tweet',
+          name: 'michael',
+          email: 'mymichael@mymichael.com',
           _id: expect.any(String),
           __v: 0
         });
       });
-    });
-  
-    it('finds all the tweets', () => {
-      return Promise.all(['fannyserverpackets', 'another handle'].map(createTweet))
-        .then(createdTweets => {
-          return request(app)
-            .get('/tweets')
-        })
-        .then(res => {
-          expect(res.body).toHaveLength(2);
-        });
-    });
-    it('gets a tweet by id', () => {
-      return createTweet('mike')
-      .then(createdTweet => {
+  });
+
+  it('finds all the users', () => {
+    return Promise.all(['fannyserverpackets', 'another handle'].map(createUser))
+      .then(createdUsers => {
+        return request(app)
+          .get('/users')
+      })
+      .then(res => {
+        expect(res.body).toHaveLength(2);
+      });
+  });
+  it('gets a user by id', () => {
+    return createUser('mike')
+      .then(createdUser => {
         return Promise.all([
-          Promise.resolve(createdTweet._id),
+          Promise.resolve(createdUser._id),
           request(app)
-          .get(`/tweets/${createdTweet._id}`)
+            .get(`/users/${createdUser._id}`)
         ])
       })
       .then(([_id, res]) => {
         expect(res.body).toEqual({
           handle: 'mike',
-          text: 'this is tweet text',
+          name: 'michael',
           _id: expect.any(String),
           __v: 0
-        }); 
+        });
       });
-    });
-    it('finds by Id and updates', () => {
-      return createTweet('mike')
-      .then(createdTweet => {
-          return request(app)
-          .patch(`/tweets/${createdTweet.id}`)
-          .send({ handle: 'lancemongoose' })  
+  });
+  it('finds by Id and updates', () => {
+    return createUser('mike')
+      .then(createdUser => {
+        return request(app)
+          .patch(`/users/${createdUser.id}`)
+          .send({ handle: 'lancemongoose' })
       })
       .then(res => {
         expect(res.body).toEqual({
-            handle: 'lancemongoose', 
-            text: 'this is tweet text',
-           _id: expect.any(String),
-           __v: 0});
-    });
+          handle: 'lancemongoose',
+          text: 'this is user text',
+          _id: expect.any(String),
+          __v: 0
+        });
+      });
   });
-  it.only('finds by Id and deletes', () => {
-    return createTweet('mike')
-    .then(createdTweet => {
-      expect(createdTweet.handle).toEqual('mike');
-      return request(app)
-      .delete(`/tweets/${createdTweet.id}`)
-    })
-    .then(res => {
-      expect(res.body).toEqual( { deleted: 1 });
-    })
+  it('finds by Id and deletes', () => {
+    return createUser('mike')
+      .then(createdUser => {
+        expect(createdUser.handle).toEqual('mike');
+        return request(app)
+          .delete(`/users/${createdUser.id}`)
+      })
+      .then(res => {
+        expect(res.body).toEqual({ deleted: 1 });
+      })
 
   })
-  });
+});
