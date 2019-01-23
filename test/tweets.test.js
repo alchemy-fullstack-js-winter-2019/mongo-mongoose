@@ -68,7 +68,7 @@ describe('them tweets', () => {
       .then(res => expect(res.status).toEqual(500));
   });
 
-  it.only('updates through patch', () => {
+  it('updates through patch', () => {
     return request(app)
       .patch(`/tweets/${tweet._id}`)
       .send({
@@ -83,6 +83,12 @@ describe('them tweets', () => {
           __v: 0
         });
       });
+  });
+
+  it('deletes tweet by id', () => {
+    return request(app)
+      .delete(`/tweets/${tweet._id}`)
+      .then(res => expect(res.body).toEqual({ deleted: 1 }));
   });
 
   afterAll(() => mongoose.disconnect());
