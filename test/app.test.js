@@ -4,6 +4,8 @@ const request = require('supertest');
 const app = require('../lib/app');
 const mongoose = require('mongoose');
 
+jest.mock('../lib/services/ronSwansonApi.js');
+
 const createTweet = (handle) => {
   return createUser(handle)
     .then(createdUser => {
@@ -57,6 +59,30 @@ describe('tweets app', () => {
             expect(res.body).toEqual({
               handle: expect.any(String),
               text: 'longboarding life yo',
+              tag: 'code',
+              _id: expect.any(String),
+              __v: 0
+            });
+          });
+      });
+  });
+
+  it('can create a ron swanson tweet', () => {
+    return createUser('test user')
+      .then(createdUser => {
+        return request(app)
+          .post('/tweets/?random=true')
+          .send({
+            //create with reference to a user, user's id who we created above
+            //handle is reference to user
+            handle: createdUser._id,
+            text: 'some text',
+            tag: 'code'
+          })
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: expect.any(String),
+              text: 'There are only three ways to motivate people: money, fear, and hunger.',
               tag: 'code',
               _id: expect.any(String),
               __v: 0
