@@ -23,6 +23,7 @@
     "eslint": "^5.12.1"
   },
   "dependencies": {
+    "dotenv": "^6.2.0",
     "mongoose": "^5.4.6"
   }
 }
