@@ -46,24 +46,40 @@ describe('tweets app', () => {
       .then(createdTweet => {
         const _id = createdTweet._id;
         return request(app)
-          .get(`/tweets/${createdTweet._id}`)
+          .get(`/tweets/${_id}`)
           .then(res => {
             expect(res.body).toEqual({
               handle: 'dee',
               text: 'a tweet',
-              _id,
+              _id: expect.any(String),
               __v: 0
         });
       });
     });
-
-  it('errors when a bad id is sent', () => {
-    return request(app)
-    .get('/tweets/5c480950b8ca94636cb64a75')
-    .then(res => {
-      expect(res.status).toEqual(404);
-    })
+  });
+    it('updates a tweet', () => {
+      return createTweet('tweets')
+      .then(createdTweet => {
+        const id = createdTweet._id;
+        return request(app)
+        .put(`/tweets/${id}`)
+        .send({
+          handle: 'tweeter',
+          text: 'hey tweet'
+        })
+        .then(() => {
+          return request(app)
+            .get(`/tweets/${id}`)
+            .then(res => {
+            expect(res.body).toEqual({
+            handle: 'tweeter',
+            text: 'hey tweet',
+            _id: expect.any(String),
+            __v: 0
+          });
+        });
+      });
+    });
+    });
   })
-})
-});
 
