@@ -11,7 +11,8 @@ const createTweet = (handle) => {
         .post('/tweets')
         .send({ 
           handle: createdUser._id,
-          text: 'some text'
+          text: 'some text',
+          tag: 'code'
         })
         .then(res => res.body);
     });   
@@ -49,12 +50,14 @@ describe('tweets app', () => {
             //create with reference to a user, user's id who we created above
             //handle is reference to user
             handle: createdUser._id,
-            text: 'longboarding life yo'
+            text: 'longboarding life yo',
+            tag: 'code'
           })
           .then(res => {
             expect(res.body).toEqual({
               handle: expect.any(String),
               text: 'longboarding life yo',
+              tag: 'code',
               _id: expect.any(String),
               __v: 0
             });
@@ -83,6 +86,7 @@ describe('tweets app', () => {
             expect(res.body).toEqual({
               handle: expect.any(Object),
               text: 'some text',
+              tag: 'code',
               _id: expect.any(String)
             });
           });
@@ -101,6 +105,7 @@ describe('tweets app', () => {
         expect(res.body).toEqual({
           handle: expect.any(Object),
           text: 'new text',
+          tag: 'code',
           _id: expect.any(String)
         });
       });
