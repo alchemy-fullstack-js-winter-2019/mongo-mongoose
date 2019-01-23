@@ -10,13 +10,13 @@ describe('Tweets app', () => {
     return Tweet.create({
       handle, 
       text 
-    })
-  }
+    });
+  };
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
       done();
     });
-  })
+  });
   it('Create a new tweet', () => {
     return request(app) //make a request to our app
       .post('/tweets') //post to tweets
@@ -30,13 +30,13 @@ describe('Tweets app', () => {
   });
   it('finds a list of tweets', () => {
     return Promise.all(['bumblebee', 'flower'].map(createTweet)) //will wait until all mapped
-    .then(createdTweets => {
-      return request(app)
-        .get('/tweets');
-    })
-    .then(res => {
-      expect(res.body).toHaveLength(2);
-    });
+      .then(() => {
+        return request(app)
+          .get('/tweets');
+      })
+      .then(res => {
+        expect(res.body).toHaveLength(2);
+      });
   });
   it('finds a tweet by id', () => {
     return createTweet('tweet 1', 'It is sunny')
@@ -53,7 +53,7 @@ describe('Tweets app', () => {
           __v: 0
         });
       });
-  })
+  });
   it('will find by id and update', () => {
     const updatedTweet = {
       handle: 'Tweet24',
@@ -64,21 +64,21 @@ describe('Tweets app', () => {
         const id = createdTweet._id;
         return request(app)
           .patch(`/tweets/${id}`)
-          .send(updatedTweet)
+          .send(updatedTweet);
       })
-        .then(res => {
-          expect(res.body.handle).toEqual('Tweet24');
-        });
+      .then(res => {
+        expect(res.body.handle).toEqual('Tweet24');
+      });
   });
   it('will delete tweet by id and return delete count', () => {
     return createTweet('Tweet')
-    .then(tweet => {
-      return request(app)
-        .delete(`/tweets/${tweet._id}`)
-        .then(res => {
-          expect(res.body).toEqual({ deleted: 1 });
-        });
-    });
+      .then(tweet => {
+        return request(app)
+          .delete(`/tweets/${tweet._id}`)
+          .then(res => {
+            expect(res.body).toEqual({ deleted: 1 });
+          });
+      });
   });
 
 });
