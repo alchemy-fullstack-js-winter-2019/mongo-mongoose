@@ -33,6 +33,7 @@ describe('tweets app', () => {
         });
       });
     });
+  
     it('finds all the tweets', () => {
       return Promise.all(['fannyserverpackets', 'another handle'].map(createTweet))
         .then(createdTweets => {
@@ -44,8 +45,21 @@ describe('tweets app', () => {
         });
     });
     it('gets a tweet by id', () => {
-      return createTweet('renderfarmhouseales')
+      return createTweet('mike')
       .then(createdTweet => {
+        return Promise.all([
+          Promise.resolve(createdTweet._id),
+          request(app)
+          .get(`/tweets/${createdTweet._id}`)
+        ])
       })
-    })
+      .then(([_id, res]) => {
+        expect(res.body).toEqual({
+          handle: 'mike',
+          text: 'this is tweet text',
+          _id: expect.any(String),
+          __v: 0
+        }); 
+      });
+    });
   });
