@@ -66,17 +66,19 @@ describe('tweets app', () => {
     let newTweet = { text: 'ele-FANT-eh' };
     return createTweet('ele4ant3')
       .then(res => {
+        console.log('res', res);
         return request(app)
           .patch(`/tweets/${res._id}`)
-          .send(newTweet);
-      })
-      .then(res => {
-        expect(res.body).toEqual({ 
-          handle: 'ele4ant3', 
-          text: 'ele-FANT-eh', 
-          _id: expect.any(String),
-          __v: 0
-        });
+          .send(newTweet)
+          .then(res => {
+            console.log('.then', res.body);
+            expect(res.body).toEqual({ 
+              handle: 'ele4ant3', 
+              text: 'ele-FANT-eh', 
+              _id: expect.any(String),
+              __v: 0
+            });
+          });
       });
   });
 
@@ -141,7 +143,7 @@ describe('tweets app', () => {
   });
 
   it('can get a user by id and update', () => {
-    let newUser = { handle: 'yogurt' };
+    let newUser = { name: 'yogurt', email: 'yo@go.com' };
     return createUser('yoyo')
       .then(res => {
         return request(app)
@@ -150,9 +152,9 @@ describe('tweets app', () => {
       })
       .then(res => {
         expect(res.body).toEqual({
-          handle: 'yogurt',
-          name: 'paige',
-          email: 'bob@ross.com',
+          handle: 'yoyo',
+          name: 'yogurt',
+          email: 'yo@go.com',
           __v: 0,
           _id: expect.any(String)
         });
@@ -176,5 +178,4 @@ describe('tweets app', () => {
   afterAll(() => {
     mongoose.disconnect();
   }); 
-  
 });
