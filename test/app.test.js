@@ -71,7 +71,6 @@ describe('tweets app', () => {
             expect(res.body).toEqual({
               handle: expect.any(Object),
               text: 'oink tweet moo',
-              __v: 0,
               _id: expect.any(String)
             });
           });
@@ -89,8 +88,7 @@ describe('tweets app', () => {
             expect(res.body).toEqual({ 
               handle: expect.any(Object), 
               text: 'ele-FANT-eh', 
-              _id: expect.any(String),
-              __v: 0
+              _id: expect.any(String)
             });
           });
       });
@@ -123,15 +121,28 @@ describe('tweets app', () => {
   });
 
   it('gets a list of users', () => {
-    const usersToCreate = ['paige1', 'paige2', 'paige3'];
-    return Promise.all(usersToCreate.map(createUser))
+    return request(app)
+      .post('/users')
+      .send({
+        handle: 'paige1',
+        name: 'paige',
+        email: 'paige1'
+      })
+      .then(() => {
+        return request(app)
+          .post('/users')
+          .send({
+            handle: 'paige1',
+            name: 'paige',
+            email: 'paige1'
+          });
+      })
       .then(() => {
         return request(app)
           .get('/users');
       })
       .then(res => {
-        console.log('CONSOLE', res.body);
-        expect(res.body).toHaveLength(3);
+        expect(res.body).toHaveLength(2);
       });
   });
 
