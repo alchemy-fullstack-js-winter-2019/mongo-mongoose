@@ -1,4 +1,4 @@
 language: 'node_js'
 node_js: 'current'
 services: mongodb
-env: MONGODB_URI=mongodb://127.0.0.1:2000/tweets
+env: MONGODB_URI=mongodb://127.0.0.1:27017/tweets
