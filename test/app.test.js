@@ -61,10 +61,9 @@ describe('tweets app', () => {
           .get(`/tweets/${_id}`)
           .then(res => {
             expect(res.body).toEqual({
-              handle: expect.any(Object),
-              text: 'a tweet',
               _id,
-              __v: 0
+              handle: expect.any(Object),
+              text: 'a tweet'
             });
           });
       });
@@ -82,7 +81,7 @@ describe('tweets app', () => {
             expect(res.body).toEqual({
               _id,
               handle: expect.any(Object),
-              text: 'This tweet is updated',
+              text: 'This tweet is updated'
             });
           });
       });
