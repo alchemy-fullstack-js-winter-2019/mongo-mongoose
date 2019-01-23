@@ -49,4 +49,29 @@ describe('them users', () => {
       .get(`/users/${user._id}`)
       .then(res => expect(res.body).toEqual(user));
   });
+
+  it('errors when bad id is sent', () => {
+    return request(app)
+      .get('/users/5')
+      .then(res => expect(res.status).toEqual(500));
+  });
+
+  it('updates through patch', () => {
+    return request(app)
+      .patch(`/users/${user._id}`)
+      .send({
+        handle: user.handle,
+        name: 'Blah Smitherson',
+        email: 'smitherson@blah.com'
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: user._id,
+          handle: user.handle,
+          name: 'Blah Smitherson',
+          email: 'smitherson@blah.com',
+          __v: 0
+        });
+      });
+  });
 });
