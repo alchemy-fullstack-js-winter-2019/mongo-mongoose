@@ -83,7 +83,7 @@ describe('tweets app', () => {
 
   it('returns a list of tweets', () => {
     return Promise.all(['I heart Squirrels', 'Sardine Saturday is my fave!'].map(createTweet))
-      .then(createdTweets => {
+      .then(() => {
         return request(app)
           .get('/tweets');
       })
