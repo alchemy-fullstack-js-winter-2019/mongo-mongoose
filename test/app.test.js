@@ -40,14 +40,6 @@ describe('tweets app', () => {
       });
   });
 
-  it('errors when a bad id is sent', () => {
-    return request(app)
-      .get('/tweets/this is a bad id')   
-      .then(res => {
-        expect(res.status).toEqual(404);
-      });
-  });
-
   it('gets a tweet by id', () => {
     return createTweet('carmen')
       .then(createdTweet => {
@@ -57,13 +49,22 @@ describe('tweets app', () => {
             .get(`/tweets/${createdTweet._id}`)
         ]);
       })
+      // eslint-disable-next-line no-unused-vars
       .then(([_id, res]) => {
         expect(res.body).toEqual({
           handle: 'carmen',
           text: 'a tweet',
-          _id,
+          _id: expect.any(String),
           __v: 0
         });
+      });
+  });
+
+  it('errors when a bad id is sent', () => {
+    return request(app)
+      .get('/5c479e5d22e69952c13506a8')   
+      .then(res => {
+        expect(res.status).toEqual(404);
       });
   });
 });
