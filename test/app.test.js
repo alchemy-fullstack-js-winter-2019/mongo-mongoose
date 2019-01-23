@@ -87,7 +87,7 @@ describe('tweets app', () => {
   });
 
   // GET ------------------------------------------
-  it.only('can get a list of tweets from db', () => {
+  it('can get a list of tweets from db', () => {
     const tweetsToCreate = ['hey', 'hi', 'hello', 'hola'];
     return Promise.all(tweetsToCreate.map(createTweet))
       .then(() => {
@@ -98,9 +98,7 @@ describe('tweets app', () => {
         expect(body).toHaveLength(4);
       });
   });
-  it.only('can get a list of users from db', () => {
-    // const usersToCreate = ['Jim', 'Pam', 'Michael', 'Stanley'];
-    // return Promise.all(usersToCreate.map(createUser))
+  it('can get a list of users from db', () => {
     return request(app)
       .post('/users')
       .send({
