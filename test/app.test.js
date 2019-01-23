@@ -20,7 +20,7 @@ const makeTweet = (text) => {
 
 describe('tweets app', () => {
   const createTweet = (handle = 'ladybeard', text = 'I heart Squirrels') => {
-    return Tweet.create({ handle, text })
+    return Tweet.create({ handle, text });
   };
 
   beforeEach(done => {
@@ -85,7 +85,7 @@ describe('tweets app', () => {
     return Promise.all(['I heart Squirrels', 'Sardine Saturday is my fave!'].map(createTweet))
       .then(createdTweets => {
         return request(app)
-          .get('/tweets')
+          .get('/tweets');
       })
       .then(res => {
         expect(res.body).toHaveLength(2);
@@ -95,12 +95,14 @@ describe('tweets app', () => {
   it('deletes a tweet by id', () => {
     return makeTweet('oops')
       .then(oopsTweet => {
+        console.log('OOPS', oopsTweet);
         return request(app)
           .delete(`/tweets/${oopsTweet._id}`);
       })
-      .then(({ body }) => {
-        expect(body).toEqual({ deleted: 1 });
-      });
+      .then((res => {
+        console.log('test side res.body:', res.body);
+        expect(res.body).toEqual({ deleted: 1 });
+      }));
   });
 
 });
