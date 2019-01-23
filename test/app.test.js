@@ -105,7 +105,6 @@ describe('users app', () => {
 
   const createUser = (handle, name = 'carmen', email = 'carmen@email.com') => {
     const userCreated = User.create({ handle, name, email });
-    console.log('User created', userCreated);
     return userCreated;
   };
   
@@ -142,7 +141,7 @@ describe('users app', () => {
         return Promise.all([
           Promise.resolve(createdUser._id),
           request(app)
-            .get(`/tweets/${createdUser._id}`)
+            .get(`/users/${createdUser._id}`)
         ]);
       })
       // eslint-disable-next-line no-unused-vars
