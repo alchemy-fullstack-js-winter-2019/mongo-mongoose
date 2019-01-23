@@ -7,7 +7,10 @@ const Tweet = require('../lib/models/Tweet');
 
 describe('Tweets app', () => {
   const createTweet = (handle, text = 'tweet') => {
-    return Tweet.create({ handle, text })
+    return Tweet.create({
+      handle, 
+      text 
+    })
   }
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
@@ -51,10 +54,27 @@ describe('Tweets app', () => {
         });
       });
   })
+  it('will find by id and update'), () => {
+    return createTweet('TweetTypo')
+    .then((createdTweet) => {
+      return request(app)
+        .put(`/tweets/${createdTweet._id}`)
+        .send({
+          handle: 'Tweet24',
+          text: 'Sunny'
+        })
+        .then(res => {
+          expect(res.body).toEqual({
+            handle: 'Tweet24',
+            text: 'Sunny',
+            _id: expect.any(String),
+            __v: 0
+          });
+        });
+    });
+  }
 
 
-  //   return request(app)
-  //     .get('/tweets')
-  // })
+
 });
 
