@@ -4,7 +4,7 @@ require('../lib/utils/connect')();//connects to db
 const app = require('../lib/app.js');
 const mongoose = require('mongoose');
 const Tweet = require('../lib/models/Tweet');
-
+//whats the difference between res.body // res.text 
 //why did we have to use:
 //return request(app) in the express lab?
 const createTweet = (handle, text = 'this is a sample tweet') => {
@@ -60,6 +60,31 @@ describe('tweets app', () => {
         expect(res.body).toHaveLength(3);
       });
 
+  });
+  it('updates tweet by id', ()=> {
+    //because this is async...
+    return createTweet('this is a tweet')
+      .then(createdTweet => {
+        createdTweet.handle = 'something else';
+        return request(app)
+          .patch(`/tweets/${createdTweet._id}`)
+          .send(createdTweet);
+      })
+      .then(res => {
+        expect(res.text).toContain('something else');
+      });
+  });
+  it.only('finds by id and deletes', ()=> {
+    return createTweet('delete this')
+      .then(tweet2Delete => {
+        return request(app)
+          .delete(`/tweets/${tweet2Delete._id}`)
+          .send({ deleted: 1 });
+      })
+      .then(res => {
+        expect(res.body).toEqual({ deleted: 1 });
+        
+      });
   });
 
 });
