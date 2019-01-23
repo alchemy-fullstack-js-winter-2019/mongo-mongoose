@@ -6,7 +6,9 @@ const mongoose = require('mongoose');
 const Tweet = require('../lib/models/Tweet');
 
 describe('Tweets app', () => {
-  // const createTweet = (handle, text)
+  const createTweet = (handle, text = 'tweet') => {
+    return Tweet.create({ handle, text })
+  }
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
       done();
@@ -20,14 +22,20 @@ describe('Tweets app', () => {
         text: 'It is sunny'
       })
       .then(res => { //we expect the response.body
-        expect(res.body).toEqual({ handle: 'Tweeter23', text: 'It is sunny', _id: expect.any(String), _v: 0 });
+        expect(res.body).toEqual({ handle: 'Tweeter23', text: 'It is sunny', _id: expect.any(String), __v: 0 });
       });
   });
-  // it('finds a list of tweets', () => {
-  //   // Tweet.create({
-  //   //   handle
-  //   // })
-  //   // return Promise.all(['ryan', 'another handle'].map(c))
+  it('finds a list of tweets', () => {
+    return Promise.all(['bumblebee', 'flower'].map(createTweet)) //will wait until all mapped
+    .then(createdTweets => {
+      return request(app)
+        .get('/tweets');
+    })
+    .then(res => {
+      expect(res.body).toHaveLength(2);
+    });
+  });
+
 
   //   return request(app)
   //     .get('/tweets')
