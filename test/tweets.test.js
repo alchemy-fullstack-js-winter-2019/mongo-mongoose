@@ -87,7 +87,7 @@ describe('tweets app', () => {
       });
   });
 
-  it.only('updates a tweet by id', () => {
+  it('updates a tweet by id', () => {
     return createTweet('ryan')
       .then(tweet => {
         return request(app)
