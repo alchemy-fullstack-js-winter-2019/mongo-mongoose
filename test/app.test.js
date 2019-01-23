@@ -34,6 +34,18 @@ describe('tweets app', () => {
         });
       });
   });
+  it('gets a list of tweets', () => {
+    const handles = ['TA1', 'TA2', 'TA3'];
+    return Promise.all(handles.map(createTweet))
+      .then(() => {
+        return request(app)
+          .get('/tweets')
+          .then(res => {
+            expect(res.body).toHaveLength(3);
+          });
+      });
+  });
+
   it('finds by id', () => {
     return createTweet('TT')
       .then(createdTweet => {
@@ -50,7 +62,39 @@ describe('tweets app', () => {
         });
       });
   });
-
+  // it('errors when a bad id is sent', () => {
+  //   return request(app)
+  //     .get('/tweets/badId')
+  //     .then(res => {
+  //       expect(res.status).toEqual(404);
+  //     });
+  // });
+  it('updates a tweet', () => {
+    return createTweet('TeeTee')
+      .then(createdTweet => {
+        const id = createdTweet._id;
+        return request(app)
+          .put(`/tweets/${id}`)
+          .send({
+            handle: 'TeeTee',
+            text: 'updated tweet',
+            _id: id,
+            __v: 0
+          })
+          .then(() => {
+            return request(app)
+              .get(`/tweets/${id}`)
+              .then(res => {
+                expect(res.body).toEqual({
+                  handle: 'TeeTee',
+                  text: 'updated tweet',
+                  _id: id,
+                  __v: 0
+                });
+              });
+          });
+      });
+  });
 
 });
 
