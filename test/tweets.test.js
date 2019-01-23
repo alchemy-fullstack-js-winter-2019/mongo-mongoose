@@ -62,7 +62,7 @@ describe('test DB methods/routes', () => {
             .then(createdTweet => {
                 createdTweet.handle = 'NEOMOON';
                 return request(app)
-                    .put(`/tweets/${createdTweet._id}`)
+                    .patch(`/tweets/${createdTweet._id}`)
                     .send(createdTweet);
             })
             .then(res => {
