@@ -31,7 +31,7 @@ describe('tweets app', () => {
 
   it('finds a list of tweets', () => {
     return Promise.all(['carmen', 'another handle'].map(createTweet))
-      .then(createdTweets => {
+      .then(() => {
         return request(app)
           .get('/tweets');
       })

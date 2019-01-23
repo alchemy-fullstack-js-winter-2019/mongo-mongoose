@@ -7,7 +7,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/tweets', {
 
 const tweetSchema = new mongoose.Schema({
   handle: {
-    type: String,quired: true
+    type: String,
+    required: true
   },
   text: {
     type: String,
@@ -17,9 +18,9 @@ const tweetSchema = new mongoose.Schema({
 
 const Tweet = mongoose.model('Tweet', tweetSchema);
 
-Tweet.create({ handle: 'carmen', text: 1234})
+Tweet.create({ handle: 'carmen', text: 1234 })
   .then(tweet => {
-    console.log(tweet)
+    console.log(tweet);
   })
   .catch(err => console.error(err));
 
@@ -31,7 +32,7 @@ Tweet
 Tweet
   .create({ handle: 'carmen', text: 'my first tweet' }) 
   .then(createdTweet => {
-    return Tweet.findByIdAndUpdate(createdTweet._id, { text: 'hi there' })
+    return Tweet.findByIdAndUpdate(createdTweet._id, { text: 'hi there' });
   }) 
   .then(updatedTweet => console.log(updatedTweet));
     
