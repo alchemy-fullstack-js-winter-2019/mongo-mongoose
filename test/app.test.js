@@ -6,12 +6,18 @@ const app = require('../lib/app');
 const Tweet = require('../lib/models/Tweet');
 const User = require('../lib/models/User');
 
-const createTweet = (handle, text = 'oink tweet moo') => {
-  return Tweet.create({ handle, text });
-};
-
 const createUser = (handle, name = 'paige', email = 'bob@ross.com') => {
   return User.create({ handle, name, email });
+};
+
+const createTweet = (handle, text = 'oink tweet moo') => {
+  return createUser(handle)
+    .then(createdUser => {
+      return Tweet.create({ 
+        handle: createdUser._id, 
+        text 
+      });
+    });
 };
 
 describe('tweets app', () => {
@@ -33,27 +39,31 @@ describe('tweets app', () => {
   });
 
   it('can post a tweet', () => {
-    return request(app)
-      .post('/tweets')
-      .send({ handle: 'yogurt', text: 'greek or nah?' })
-      .then(res => {
-        expect(res.body).toEqual({ 
-          __v: 0, 
-          _id: expect.any(String), 
-          handle: 'yogurt', 
-          text: 'greek or nah?' 
-        });
+    return createUser('banana')
+      .then(createdUser => {
+        return request(app)
+          .post('/tweets')
+          .send({ handle: createdUser._id, text: 'greek or nah?' })
+          .then(res => {
+            expect(res.body).toEqual({ 
+              __v: 0, 
+              _id: expect.any(String), 
+              handle: createdUser._id.toString(), 
+              text: 'greek or nah?' 
+            });
+          });
       });
   });
 
-  it('can get a tweet by its id', () => {
+  it.only('can get a tweet by its id', () => {
     return createTweet('shezza')
       .then(res => {
         return request(app)
           .get(`/tweets/${res._id}`)
           .then(res => {
+            console.log(res.body);
             expect(res.body).toEqual({
-              handle: 'shezza',
+              handle: expect.any(Object),
               text: 'oink tweet moo',
               __v: 0,
               _id: expect.any(String)
