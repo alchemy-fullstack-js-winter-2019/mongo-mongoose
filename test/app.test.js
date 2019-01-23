@@ -39,25 +39,26 @@ describe('tweets app', () => {
     createTweet('General Roxy');
     done();
   });
-
+  //tweet has reference to user, so create tweet first
   it('creates a new tweet', () => {
     return createUser('test user')
       .then(createdUser => {
         return request(app)
           .post('/tweets')
           .send({
+            //create with reference to a user, user's id who we created above
+            //handle is reference to user
             handle: createdUser._id,
             text: 'longboarding life yo'
           })
           .then(res => {
             expect(res.body).toEqual({
-              handle: createdUser._id,
+              handle: expect.any(String),
               text: 'longboarding life yo',
               _id: expect.any(String),
               __v: 0
             });
           });
-
       });
   });
 
