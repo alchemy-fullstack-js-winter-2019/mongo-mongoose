@@ -1,5 +1,6 @@
 require('dotenv').config();
 require('./lib/utils/connect')();
+const app 
 const mongoose = require('mongoose');
 
 describe('tweets app', () => {
@@ -17,7 +18,8 @@ describe('tweets app', () => {
         expect(res.body).toEqual({
           handle: 'mike',
           text: 'my 1st tweet',
-          _id: expect.any(String)
+          _id: expect.any(String),
+          __v: 0
         });
       });
   });
