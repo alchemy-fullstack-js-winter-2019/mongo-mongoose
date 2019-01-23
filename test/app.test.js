@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 
 require('dotenv').config();
 require('../lib/utils/connect')();
@@ -29,7 +30,6 @@ describe('tweets app', () => {
         text: 'my first tweet'
       })
       .then(res => {
-        console.log('res here', res.body);
         expect(res.body).toEqual({
           handle: 'abel',
           text: 'my first tweet',
