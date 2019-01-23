@@ -38,9 +38,9 @@ describe('tweets app', () => {
     });
   });
   afterAll(done => {
-    // createTweet('dumb', 'dumber');
-    // createUser('basktz', 'Frank Fronk', 'i@i.io');
-    // mongoose.disconnect();
+    createTweet('dumb', 'dumber');
+    createUser('basktz', 'Frank Fronk', 'i@i.io');
+    mongoose.disconnect();
     done();
   });
 
