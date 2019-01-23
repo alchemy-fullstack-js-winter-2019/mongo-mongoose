@@ -16,6 +16,7 @@ const createTweet = (handle, text = 'hi I a tweet') => {
 
 describe('tweets app', () => {
   beforeEach(done => {
+    // createTweet();
     return mongoose.connection.dropDatabase(() => {
       done();
     });
@@ -64,6 +65,39 @@ describe('tweets app', () => {
               _id,
               __v: 0
             });
+          });
+      });
+  });
+
+  // PUT method replaces entire object (overwrites)
+  // PATCH method replaces single entity in object
+  // PATCH ------------------------------------------
+  it.skip('can retrieve a tweet by :id and return the updated tweet', () => {
+    let newTweet = {
+      handle: 'pizzatown',
+      text: 'can you believe this *&#(*@???'
+    };
+    return createTweet('pizzatown')
+      .then(createdTweet => {
+        const _id = createdTweet._id;
+        return request(app)
+          .patch(`/tweets/${_id}`)
+          .send(newTweet);
+      })
+      .then(res => {
+        expect(res.body.text).toEqual('can you believe this *&#(*@???');
+      });
+  });
+
+  // DELETE ------------------------------------------
+  it('can retrieve a tweet by :id, delete, and return the delete count', () => {
+    return createTweet('alo')
+      .then(createdTweet => {
+        const _id = createdTweet._id;
+        return request(app)
+          .delete(`/tweets/${_id}`)
+          .then(res => {
+            expect(res.body).toEqual({ deleted: 1 });
           });
       });
   });
