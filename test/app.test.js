@@ -40,7 +40,7 @@ describe('tweets app', () => {
                     .post('/tweets')
                     .send({ handle: createdUser._id, text: 'first tweet' })
                     .then(res => {
-                        expect(res.body).toEqual({ handle: 'test user', text: 'first tweet', _id: expect.any(Object), __v: 0 });
+                        expect(res.body).toEqual({ handle: createdUser._id, text: 'first tweet', _id: expect.any(String), __v: 0 });
                     });
             });
     });
@@ -69,12 +69,12 @@ describe('tweets app', () => {
         return createTweet('marcy2')
             .then(tweetWhoWasCreated => {
                 const id = tweetWhoWasCreated._id;
-                const updatedObject = ({ handle: 'marcy3', text: 'dogs are the best' });
+                const updatedObject = ({ handle: createUser._id, text: 'dogs are the best' });
                 return request(app) 
                     .patch(`/tweets/${id}`)
                     .send(updatedObject)
                     .then(res => {
-                        expect(res.body).toEqual({ handle: 'marcy3', text: 'dogs are the best', _id: expect.any(String), __v: 0 });
+                        expect(res.body).toEqual({ handle: expect.any(Object), text: 'dogs are the best', _id: expect.any(String), __v: 0 });
                     });
         
             });
@@ -87,7 +87,7 @@ describe('tweets app', () => {
                 return request(app)
                     .get(`/tweets/${id}`)
                     .then(res => {
-                        expect(res.body).toEqual({ handle: 'marcy1', text: 'dogs are the best', _id: expect.any(String), __v: 0 });
+                        expect(res.body).toEqual({ handle: expect.any(Object), text: 'dogs are the best', _id: expect.any(String), __v: 0 });
                     });
             });
     });
