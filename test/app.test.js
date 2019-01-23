@@ -39,13 +39,32 @@ describe('tweets app', () => {
         expect(res.body).toHaveLength(2);
       });
   });
+
   it('errors when a bad id is sent', () => {
     return request(app)
       .get('/tweets/this is a bad id')   
       .then(res => {
         expect(res.status).toEqual(404);
       });
+  });
 
+  it('gets a tweet by id', () => {
+    return createTweet('carmen')
+      .then(createdTweet => {
+        return Promise.all([
+          Promise.resolve(createdTweet._id),
+          request(app)
+            .get(`/tweets/${createdTweet._id}`)
+        ]);
+      })
+      .then(([_id, res]) => {
+        expect(res.body).toEqual({
+          handle: 'carmen',
+          text: 'a tweet',
+          _id,
+          __v: 0
+        });
+      });
   });
 });
 
