@@ -4,17 +4,19 @@ const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../lib/app');
 const Tweet = require('../lib/models/Tweet');
+const User = require('../lib/models/User');
+
+beforeEach(done => {
+  return mongoose.connection.dropDatabase(() => {
+    done();
+  });
+});
+
 
 describe('tweets app', () => {
   const createTweet = (handle, text = 'a tweet') => {
     return Tweet.create({ handle, text });
   };
-
-  beforeEach(done => {
-    return mongoose.connection.dropDatabase(() => {
-      done();
-    });
-  });
 
   it('creates a tweet', () => {
     return request(app)
@@ -99,4 +101,21 @@ describe('tweets app', () => {
 
 });
 
+describe('users app', () => {
+  
+  it('creates a user', () => {
+    return request(app)
+      .post('/users')
+      .send({ handle: 'fruitlady', name: 'carmen', email: 'carmen@email.com' })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: 'fruitlady', 
+          name: 'carmen', 
+          email: 'carmen@email.com', 
+          _id: expect.any(String), 
+          __v: 0 
+        });
+      }); 
+  });
 
+});
