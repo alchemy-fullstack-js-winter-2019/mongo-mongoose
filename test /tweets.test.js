@@ -82,7 +82,7 @@ describe('tweets app', () => {
         });
       });
   });
-  it.only('finds by Id and updates', () => {
+  it('finds by Id and updates', () => {
     return createTweet('mike')
       .then(createdTweet => {
         return request(app)
@@ -100,16 +100,22 @@ describe('tweets app', () => {
       });
   });
   
-  it('finds by Id and deletes', () => {
-    return createTweet('mike')
+  it('deletes a tweet by id', () => {
+    return createTweet('ryan')
       .then(createdTweet => {
-        expect(createdTweet.handle).toEqual('mike');
+        return Promise.all([
+          Promise.resolve(createdTweet._id),
+          request(app)
+            .delete(`/tweets/${createdTweet._id}`)
+        ]);
+      })
+      .then(([_id, res]) => {
+        expect(res.body).toEqual({ deleted: 1 });
         return request(app)
-          .delete(`/tweets/${createdTweet.id}`);
+          .get(`/tweets/${_id}`);
       })
       .then(res => {
-        expect(res.body).toEqual({ deleted: 1 });
+        expect(res.status).toEqual(404);
       });
-
   });
 });
