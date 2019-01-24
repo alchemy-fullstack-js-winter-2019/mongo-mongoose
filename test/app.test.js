@@ -2,6 +2,7 @@ require('dotenv').config();
 require('../lib/utils/connect')();
 const app = require('../lib/app');
 const request = require('supertest');
+// jest.mock('../lib/mock.js');
 
 const mongoose = require('mongoose');
 const createTweet = (handle) => {
@@ -106,3 +107,5 @@ it('gets tweets by ID', () => {
                 });
         });
 });
+
+
