@@ -39,11 +39,8 @@ describe('tweets app', () => {
     });
   });
   afterAll(done => {
-    createTweet('seedDataHandleA', 'seedDataTextA');
-    createUser('seedDataHandleB', 'seedDataNameB', 'seedDataEmailB');
-    return mongoose.connection.dropDatabase(() =>{
-      done();
-    });
+    mongoose.connection.close();
+    done();
   });
 
   // POST ------------------------------------------
