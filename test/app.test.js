@@ -19,17 +19,16 @@ const createUser = (handle, name, email) => {
     .then(res => res.body);
 };
 const createTweet = (handle, text = 'hi I a tweet') => {
-  const name = 'defaultName';
-  const email = 'defaultEmail';
-  return createUser(handle, name, email)
+  return createUser(handle, 'createdTweetName', 'createdTweetEmail')
     .then(createdUser => {
-      return request(app)
-        .post('/tweets')
-        .send({
-          handle: createdUser._id,
-          text
-        })
-        .then(res => res.body);
+      return Tweet.create({
+        handle: createdUser._id,
+        text
+      })
+        .then(tweet => ({
+          ...tweet,
+          _id: tweet._id.toString()
+        }));
     });
 };
 
@@ -47,10 +46,8 @@ describe('tweets app', () => {
   });
 
   // POST ------------------------------------------
-  it.only('can create a new tweet', () => {
-    return createUser(
-      '2cool4skool', 'Michael MacDonald', 'smoothjams@hotmail.com'
-    )
+  it('can create a new tweet', () => {
+    return createUser('2cool', 'Bubs', 'email@e.com')
       .then(createdUser => {
         return request(app)
           .post('/tweets')
@@ -60,7 +57,7 @@ describe('tweets app', () => {
           })
           .then(res => {
             expect(res.body).toEqual({
-              handle: expect.any(String),
+              handle: createdUser._id,
               text: 'hiya tweety',
               _id: expect.any(String),
               __v: 0
@@ -69,7 +66,6 @@ describe('tweets app', () => {
       });
   });
   it('can create a tweet with a random quote', () => {
-    
   });
   it('can create a new user', () => {
     return request(app)
