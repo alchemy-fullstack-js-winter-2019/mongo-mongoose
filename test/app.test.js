@@ -176,19 +176,14 @@ describe('tweets app', () => {
             });
         });
     });
-    it('deletes a user by id', () => {
-      return createUser('user100')
+    it.only('deletes a user by id', () => {
+      return createUser('dee')
         .then(createdUser => {
-          const id = createdUser._id;
           return request(app)
-            .delete(`/users/${id}`)
+            .delete(`/users/${createdUser._id}`)
             .then(res => {
               expect(res.body).toEqual({
-                handle: 'user100',
-                name: 'dee',
-                email: 'meme@gmail.com',
-                _id: expect.any(String),
-                __v: 0
+                deleted: 1
               });
             });
         });
