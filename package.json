@@ -4,6 +4,8 @@
   "description": "",
   "main": "mongoosePlayground.js",
   "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
     "test": "jest",
     "test:watch": "jest --watch",
     "start": "nodemon server.js"
@@ -33,7 +35,6 @@
   "devDependencies": {
     "eslint": "^5.12.1",
     "jest": "^23.6.0",
-    "mkdirp": "^0.5.1",
     "nodemon": "^1.18.9",
     "supertest": "^3.4.2"
   }
