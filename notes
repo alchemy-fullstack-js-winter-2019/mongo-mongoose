@@ -58,3 +58,27 @@ function log(even, dbUri){
 
       })
   })
+
+  //
+ODM-object Document Mapping---> mongoose
+  -tells us how docs
+POPULATE
+1.create user 
+2.create tweet with user id. 
+
+
+
+    return createUser(handle, 'ryan', 'ryan@email.com')
+      .then(user => {
+        return Tweet.create({ handle: user._id, text })
+        //the ... operater takes teh tweet created and we can either add new properties to it or update it
+          .then(tweet => ({ ...tweet, _id: tweet._id.toString() }));
+      });
+
+
+
+
+
+//we want to change our handle so that id takes over.
+{handle: 'rayan: text: 'hi'}
+{handle: 'ryan:id', text:'hi'}
