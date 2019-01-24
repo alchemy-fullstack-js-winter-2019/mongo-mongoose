@@ -1,5 +1,5 @@
 require('dotenv').config();
-require('../lib/utils/connect')();
+const connect = require('../lib/utils/connect');
 const app = require('../lib/app');
 const request = require('supertest');
 // jest.mock('../lib/mock.js');
@@ -7,9 +7,9 @@ const request = require('supertest');
 const mongoose = require('mongoose');
 const createTweet = (handle) => {
     return createUser(handle)
-        .then(createUser => {
-            return request(app)
-                .post('/tweets')
+    .then(createUser => {
+        return request(app)
+        .post('/tweets')
                 .send({
                     handle: createUser._id,
                     text: 'dogs are the best'
@@ -23,21 +23,25 @@ const createUser = (name) => {
     return request(app)
         .post('/users')
         .send({
-            name: name,
-            description: 'dogs are the best',
-            email: 'email@email.com'
+            name,
+            description: 'dogs are the best'
         })
-        .then(res => res.body);
+        .then(res =>  res.body)
+        .catch(console.log);
 };
+
 describe('tweets app', () => {
+    beforeAll(() => {
+        return connect();
+    });
+
     beforeEach(done => {
         return mongoose.connection.dropDatabase(() => {
             done();
         });
     });
-    afterAll((done) => {
-        mongoose.connection.close(done);
-    });
+
+
     it('sends a tweet', () => {
         return createUser('test user')
             .then(createdUser => {
@@ -75,16 +79,17 @@ describe('tweets app', () => {
             });
     });
 });
-it('finds a tweet by ID and updates it', () => {
+it('finds a tweet by ID and updates it', (done) => {
     return createTweet('marcy2')
         .then(tweetWhoWasCreated => {
             const id = tweetWhoWasCreated._id;
-            const updatedObject = ({ handle: createUser._id, text: 'dogs are the best' });
+            const updatedObject = { handle: createUser._id, text: 'dogs are the best' };
             return request(app) 
                 .patch(`/tweets/${id}`)
                 .send(updatedObject)
                 .then(res => {
                     expect(res.body).toEqual({ handle: expect.any(Object), text: 'dogs are the best', _id: expect.any(String) });
+                    done();
                 });
         
         });
