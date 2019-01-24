@@ -19,7 +19,7 @@
   },
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watch --runInBand",
     "lint": "eslint .",
     "pretest": "npm run lint",
     "start": "nodemon server.js"
