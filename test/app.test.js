@@ -99,7 +99,7 @@ it('errors when a bad id is sent', () => {
     return request(app)
         .get('/tweets/5c479e5d22e69952c13506a8')
         .then(res => {
-            expect(res.status).toEqual(404);
+            expect(res.status).toEqual(500);
         });
 });
 it('gets tweets by ID', () => {
@@ -109,10 +109,10 @@ it('gets tweets by ID', () => {
                 Promise.resolve(TweetWhoWasCreated._id),
                 request(app)
                     .get(`/tweets/${TweetWhoWasCreated._id}`)
-            ])
-                .then(([_id, res]) => {
-                    expect(res.body).toEqual({ handle: expect.any(Object), text: 'dogs are the best', _id });
-                });
+            ]);
+        })
+        .then(([_id, res]) => {
+            expect(res.body).toEqual({ handle: expect.any(Object), text: 'dogs are the best', _id });
         });
 });
 
