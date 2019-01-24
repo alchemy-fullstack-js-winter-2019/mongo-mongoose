@@ -103,7 +103,7 @@ describe.skip('tweets app', () => {
 
 });
 
-describe('users app', () => {
+describe.skip('users app', () => {
 
   const createUser = (handle, name = 'carmen', email = 'carmen@email.com') => {
     const userCreated = User.create({ handle, name, email });
