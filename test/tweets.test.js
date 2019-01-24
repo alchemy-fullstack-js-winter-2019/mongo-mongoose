@@ -38,18 +38,11 @@ describe('them tweets', () => {
       });
   });
 
-  it('gets tweets', () => {
+  it('gets list of all tweets', () => {
     return request(app)
       .get('/tweets')
       .then(res => {
-        expect(res.body).toEqual([
-          {
-            handle: 'shabz',
-            text: 'I is a twit',
-            _id: expect.any(String),
-            __v: 0
-          }
-        ]);
+        expect(res.body).toHaveLength(1);
       });
   });
 
