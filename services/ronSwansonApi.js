@@ -1,8 +1,8 @@
 const request = require('superagent');
 
-const getQuotes = n => {
+const getQuotes = numberOfQuotes => {
   return request
-    .get(`https://ron-swanson-quotes.herokuapp.com/v2/quotes/${n}`)
+    .get(`https://ron-swanson-quotes.herokuapp.com/v2/quotes/${numberOfQuotes}`)
     .then(res => res.body);
 };
 
