@@ -35,7 +35,7 @@ describe('them tweets', () => {
 
   afterAll(() => mongoose.disconnect());
 
-  it.only('posts a tweet', () => {
+  it('posts a tweet', () => {
     return request(app)
       .post('/tweets')
       .send({
@@ -52,7 +52,7 @@ describe('them tweets', () => {
       });
   });
 
-  it('gets list of all tweets', () => {
+  it.only('gets list of all tweets', () => {
     return request(app)
       .get('/tweets')
       .then(res => {
