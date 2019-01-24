@@ -179,3 +179,4 @@ POPULATE
     message : 'cpu is on fire!',
     host: ObjectID('AAAB')       // Reference to the Host document
 }
+

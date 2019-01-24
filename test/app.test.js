@@ -83,10 +83,10 @@ describe('tweets app', () => {
       })
       .then(([_id, res]) => {
         expect(res.body).toEqual({
+          //expect any object bc handle contains several properties. 
           handle: expect.any(Object),
           text: 'a tweet',
-          _id,
-          __v: 0
+          _id: expect.any(String)
         });
       });
   });
@@ -106,7 +106,7 @@ describe('tweets app', () => {
       });
   });
 
-  it.only('finds by id and deletes', ()=> {
+  it('finds by id and deletes', ()=> {
     return createTweet('delete this')
       .then(tweet2Delete => {
         return request(app)
