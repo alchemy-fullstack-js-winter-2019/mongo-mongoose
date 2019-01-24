@@ -41,7 +41,7 @@ describe('tweets app', () => {
   afterAll(done => {
     createTweet('seedDataHandleA', 'seedDataTextA');
     createUser('seedDataHandleB', 'seedDataNameB', 'seedDataEmailB');
-    mongoose.disconnect();
+    // mongoose.disconnect();
     done();
   });
 
@@ -66,6 +66,22 @@ describe('tweets app', () => {
       });
   });
   it('can create a tweet with a random quote', () => {
+    return createUser('evenCooler', 'Bertha', 'bye@e.com')
+      .then(createdUser => {
+        return request(app)
+          .post('/tweets?random=true')
+          .send({
+            handle: createdUser._id
+          })
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: createdUser._id,
+              text: 'I wanna punch you in the face so bad right now.',
+              _id: expect.any(String),
+              __v: 0
+            });
+          });
+      });
   });
   it('can create a new user', () => {
     return request(app)
