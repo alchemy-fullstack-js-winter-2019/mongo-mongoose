@@ -7,9 +7,9 @@ const request = require('supertest');
 const mongoose = require('mongoose');
 const createTweet = (handle) => {
     return createUser(handle)
-    .then(createUser => {
-        return request(app)
-        .post('/tweets')
+        .then(createUser => {
+            return request(app)
+                .post('/tweets')
                 .send({
                     handle: createUser._id,
                     text: 'dogs are the best'
@@ -26,8 +26,7 @@ const createUser = (name) => {
             name,
             description: 'dogs are the best'
         })
-        .then(res =>  res.body)
-        .catch(console.log);
+        .then(res =>  res.body);
 };
 
 describe('tweets app', () => {
@@ -40,8 +39,9 @@ describe('tweets app', () => {
             done();
         });
     });
-
-
+    afterAll((done) => {
+        mongoose.connection.close(done);
+    });
     it('sends a tweet', () => {
         return createUser('test user')
             .then(createdUser => {
@@ -86,15 +86,15 @@ it('finds a tweet by ID and updates it', (done) => {
             const updatedObject = { handle: createUser._id, text: 'dogs are the best' };
             return request(app) 
                 .patch(`/tweets/${id}`)
-                .send(updatedObject)
-                .then(res => {
-                    expect(res.body).toEqual({ handle: expect.any(Object), text: 'dogs are the best', _id: expect.any(String) });
-                    done();
-                });
-        
+                .send(updatedObject);
+        })
+        .then(res => {
+            expect(res.body).toEqual({ handle: expect.any(Object), text: 'dogs are the best', _id: expect.any(String) });
+            done();
         });
-
+        
 });
+
 it('errors when a bad id is sent', () => {
     return request(app)
         .get('/tweets/5c479e5d22e69952c13506a8')
