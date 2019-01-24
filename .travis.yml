@@ -3,4 +3,4 @@ node_js: "node"
 services:
   - mongodb
 env:
-  - MONGODB_URI=mongodb://localhost:27017/tweets
+  - MONGODB_URI=mongodb://127.0.0.1:27017/tweets
