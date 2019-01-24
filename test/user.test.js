@@ -64,7 +64,7 @@ describe('users app', () => {
         
             });
 
-    });
+    }); 
     it('gets person by ID', () => {
         return createUser('gunther')
             .then(personWhoWasCreated => {
