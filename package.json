@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --verbose",
+    "test": "jest --verbose --runInBand",
     "start": "nodemon server.js",
     "test:watch": "jest --watch --verbose --runInBand",
     "lint": "eslint .",

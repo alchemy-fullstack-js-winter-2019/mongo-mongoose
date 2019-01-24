@@ -28,6 +28,8 @@ const createUsers = (handle, name = 'Aaron', email = 'AMDennis1987@gmail.com') =
     .then(res => res.body);
 };
 
+jest.mock('../lib/services/ronSwansonApi');
+
 describe('tweets app', () => {
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
@@ -48,6 +50,27 @@ describe('tweets app', () => {
             expect(res.body).toEqual({
               handle: expect.any(String),
               text: 'Hello World',
+              _id: expect.any(String),
+              __v: 0
+            });
+          });
+
+      });
+  });
+
+  it('can create a tweet with random quote', () => {
+    return createUsers('test user')
+      .then(createdUser => {
+        return request(app)
+          .post('/tweets?random=true')
+          .send({
+            handle: createdUser._id,
+            text: 'Hello World'
+          })
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: expect.any(String),
+              text: '"Crying: acceptable at funerals and the Grand Canyon."',
               _id: expect.any(String),
               __v: 0
             });
