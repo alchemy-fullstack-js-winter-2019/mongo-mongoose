@@ -44,7 +44,7 @@ describe('tweets app', () => {
       });
   });
 
-  it('can post a tweet', () => {
+  it.skip('can post a tweet', () => {
     return createUser('banana')
       .then(createdUser => {
         return request(app)
