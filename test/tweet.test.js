@@ -58,12 +58,22 @@ describe('tweets app', () => {
         return request(app)
           .get(`/tweets/${createdTweet._id}`)
           .then(res => {
-            console.log('RES', res.body);
             expect(res.body).toEqual({
               handle: expect.any(Object),
               text: 'I heart Squirrels',
               _id: expect.any(String)
             });
+          });
+      });
+  });
+
+  it('throws an error if no id found', () => {
+    return createTweet('kaiya')
+      .then(() => {
+        return request(app)
+          .get('/tweets/5c4927d922befdf50cdba9bd')
+          .then(res => {
+            expect(res.statusCode).toBe(404);
           });
       });
   });
