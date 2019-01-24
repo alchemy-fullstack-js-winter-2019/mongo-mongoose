@@ -37,6 +37,10 @@ describe('tweets app', () => {
     });
   });
 
+  afterAll(done => {
+    mongoose.connection.close(done);
+  });
+
   it('can create a tweet', () => {
     return createUsers('test user')
       .then(createdUser => {

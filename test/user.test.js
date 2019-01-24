@@ -22,6 +22,10 @@ describe('users app', () => {
     });
   });
 
+  afterAll(done => {
+    mongoose.connection.close(done);
+  });
+
   it('can create a user', () => {
     return request(app)
       .post('/users')
