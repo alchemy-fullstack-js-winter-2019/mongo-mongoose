@@ -15,7 +15,7 @@ describe('tweets app', () => {
   };
 
   const createTweet = (handle, text = 'a tweet') => {
-    return createUser(handle, 'ryan', 'ryan@email.com')
+    return createUser(handle, 'connor', 'connor@email.com')
       .then(user => {
         return Tweet.create({ handle: user._id, text })
           .then(tweet => ({ ...tweet, _id: tweet._id.toString() }));
@@ -29,7 +29,7 @@ describe('tweets app', () => {
   });
 
   it('can create a new tweet', () => {
-    return createUser('ryan', 'ryan', 'ryan@ryan.com')
+    return createUser('connor', 'connor', 'connor@connor.com')
       .then(user => {
         return request(app)
           .post('/tweets')
@@ -50,7 +50,7 @@ describe('tweets app', () => {
   });
 
   it('finds a list of tweets', () => {
-    return Promise.all(['ryan', 'another handle'].map(createTweet))
+    return Promise.all(['connor', 'another handle'].map(createTweet))
       .then(() => {
         return request(app)
           .get('/tweets');
@@ -74,22 +74,8 @@ describe('tweets app', () => {
           handle: expect.any(Object),
           text: 'a tweet',
           _id,
-          __v: 0
         });
       });
-
-    //   const _id = createdTweet._id;
-    //   return request(app)
-    //     .get(`/tweets/${_id}`)
-    //     .then(res => {
-    //       expect(res.body).toEqual({
-    //         handle: 'Connor',
-    //         text: 'my first tweet',
-    //         _id,
-    //         __v: 0
-    //       });
-    //     });
-    // });
   });
 
   it('errors when a bad id is sent', () => {
@@ -114,45 +100,25 @@ describe('tweets app', () => {
               handle: expect.any(Object),
               text: 'updated tweet',
               _id,
-              __v: 0
             });
           });
       });
   });
 
   it('deletes a tweet by id', () => {
-    return createTweet('Cool Dude')
+    return createTweet('connor')
       .then(createdTweet => {
-        return Promise.all([
-          Promise.resolve(createdTweet._id),
-          request(app)
-            .delete(`/tweets/${createdTweet._id}`)
-        ]);
-      })
-      .then(([_id, res]) => {
-        expect(res.body).toEqual({
-          handle: expect.any(String),
-          text: 'a tweet',
-          _id,
-          __v: 0
-        });
+        const _id = createdTweet._id;
         return request(app)
-          .get(`/tweets/${_id}`);
-      })
-      .then(res => {
-        expect(res.status).toEqual(404);
+          .delete(`/tweets/${_id}`)
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: expect.any(Object),
+              text: 'a tweet',
+              _id,
+            });
+          });
       });
-
-    // const _id = createdTweet._id;
-    // return request(app)
-    //   .delete(`/tweets/${_id}`)
-    //   .then(res => {
-    //     expect(res.body).toEqual({
-    //       handle: 'Cool Dude',
-    //       text: 'my first tweet',
-    //       _id,
-    //       __v: 0
-    //     });
-    //   });
   });
+
 });
