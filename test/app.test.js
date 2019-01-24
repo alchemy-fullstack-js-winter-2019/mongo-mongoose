@@ -116,7 +116,32 @@ describe('tweets app', () => {
         .then(({ body }) => {
           expect(body).toHaveLength(4);
         });
+      // return createUser('elton4life', 'Elton John', 'elton@tinydancer.com')
+      //   .then(createdUser => {
+      //     return request(app)
+      //       .post('/tweets')
+      //       .send({
+      //         handle: createdUser._id,
+      //         text: 'tweet-textA'
+      //       })
+      //       .then(() => {
+      //         return request(app)
+      //           .post('/tweets')
+      //           .send({
+      //             handle: createdUser._id,
+      //             text: 'tweet-textB'
+      //           });
+      //       })
+      //       .then(() => {
+      //         return request(app)
+      //           .get('/tweets');
+      //       })
+      //       .then(({ body }) => {
+      //         expect(body).toHaveLength(2);
+      //       });
+      //   });
     });
+
     it('can get a list of users from db', () => {
       return request(app)
         .post('/users')
