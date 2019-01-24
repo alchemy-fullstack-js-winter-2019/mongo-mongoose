@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('../dotenv').config();
 require('../connect')();
 const app = require('../lib/app');
 const mongoose = require('mongoose');
