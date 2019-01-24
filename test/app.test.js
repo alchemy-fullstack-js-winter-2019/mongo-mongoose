@@ -229,3 +229,7 @@ describe('users app', () => {
       });
   });
 });
+
+afterAll((done) => {
+  mongoose.connection.close(done);
+});
