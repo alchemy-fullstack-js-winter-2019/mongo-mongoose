@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const request = require('supertest');
 const User = require('../lib/models/User');
 
-describe.skip('users app', () => {
+describe('users app', () => {
   const createUser = (handle = 'xtester', name = 'kevin', email = 'barrywhite@dionwarwick.com') => {
     return User.create({ handle, name, email });
   };
