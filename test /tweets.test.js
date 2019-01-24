@@ -82,15 +82,15 @@ describe('tweets app', () => {
         });
       });
   });
-  it('finds by Id and updates', () => {
+  it.only('finds by Id and updates', () => {
     return createTweet('mike')
       .then(createdTweet => {
-        
         return request(app)
-          .patch(`/tweets/${createdTweet.id}`)
+          .patch(`/tweets/${createdTweet._id}`)
           .send({ text: 'lancemongoose' });
       })
       .then(res => {
+      // console.log('banana', res.body);
         expect(res.body).toEqual({
           handle: expect.any(Object),
           text: expect.any(String),
