@@ -46,7 +46,18 @@ describe('tweets app', () => {
       });
   });
 
-  it('can get by id', () => {
+  it('finds a list of tweets', () => {
+    return Promise.all(['jei', 'jz'].map(createTweet))
+      .then(() => {
+        return request(app)
+          .get('/tweets');
+      })
+      .then(res => {
+        expect(res.body).toHaveLength(2);
+      });
+  });
+
+  it('can get tweet by id', () => {
     return createTweet('hey')
       .then(createdTweet => {
         return Promise.all([
@@ -64,19 +75,25 @@ describe('tweets app', () => {
         });
       });
   });
-
-  it('finds a list of tweets', () => {
-    return Promise.all(['jei', 'jz'].map(createTweet))
-      .then(() => {
+  
+  it('updates a tweet by id', () => {
+    return createTweet('jei')
+      .then(tweet => {
         return request(app)
-          .get('/tweets');
+          .patch(`/tweets/${tweet._id}`)
+          .send({ text: 'hello dolly' });
       })
       .then(res => {
-        expect(res.body).toHaveLength(2);
+        expect(res.body).toEqual({
+          handle: 'jei',
+          text: 'updated tweets',
+          _id: expect.any(String),
+          __v: 0
+        });
       });
   });
 
-  it('finds by id and deletes', () => {
+  it('deletes tweet by id', () => {
     return createTweet('jei')
       .then(tweet => {
         return Promise.all([
@@ -93,5 +110,6 @@ describe('tweets app', () => {
       .then(res => {
         expect(res.status).toEqual(404);
       });
+  
   });
 });
