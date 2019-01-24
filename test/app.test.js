@@ -6,6 +6,8 @@ const app = require('../lib/app');
 const Tweet = require('../lib/models/Tweet');
 const User = require('../lib/models/User');
 
+jest.mock('../lib/services/ronSwansonApi.js');
+
 const createUser = (handle, name, email) => {
   return request(app)
     .post('/users')
@@ -45,7 +47,7 @@ describe('tweets app', () => {
   });
 
   // POST ------------------------------------------
-  it('can create a new tweet', () => {
+  it.only('can create a new tweet', () => {
     return createUser(
       '2cool4skool', 'Michael MacDonald', 'smoothjams@hotmail.com'
     )
@@ -65,6 +67,9 @@ describe('tweets app', () => {
             });
           });
       });
+  });
+  it('can create a tweet with a random quote', () => {
+    
   });
   it('can create a new user', () => {
     return request(app)
