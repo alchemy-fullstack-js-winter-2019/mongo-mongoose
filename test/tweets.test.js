@@ -114,7 +114,7 @@ describe('test DB methods/routes', () => {
     });
 
 
-    it('can delete a tweet by id', () => {
+    it.skip('can delete a tweet by id', () => {
         return createTweet('XBT')
             .then(createdTweet => {
                 return request(app)
