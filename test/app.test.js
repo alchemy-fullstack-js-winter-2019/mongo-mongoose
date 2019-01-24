@@ -92,8 +92,21 @@ describe('tweets app', () => {
   });
 
   it('can find by id and update', () => {
-    return request(app)
-      .get('/tweets');
+    return createTweet('abel')
+      .then(tweet => {
+        return request(app)
+          .patch(`/tweets/${tweet._id}`)
+          .send({ text: 'I am updated tweet' });
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: expect.objectContaining({
+            handle: 'abelq16'
+          }),
+          text: 'I am updated tweet',
+          _id: expect.any(String),
+        });
+      });
   });
 
   it('can find by id and delete', () => {
