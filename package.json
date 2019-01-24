@@ -8,10 +8,11 @@
     "test": "test"
   },
   "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
     "test:watch": "jest --watch",
     "test": "jest",
-    "start": "nodemon server.js",
-    "start:client": "node client.js"
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
