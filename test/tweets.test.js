@@ -3,37 +3,51 @@ const request = require('supertest');
 const app = require('../lib/app');
 const mongoose = require('mongoose');
 const Tweet = require('../lib/models/Tweet');
+const User = require('../lib/models/User');
 
 let tweet = null;
+let user = null;
 describe('them tweets', () => {
-  const createTweet = (handle, text = 'I is a twit') => Tweet.create({ handle, text });
+  const createUser = (handle, name, email) => {
+    return User.create({ handle, name, email })
+      .then(user => ({ ...user, _id: user._id.toString() }));
+  };
+
+  const createTweet = (handle, text = 'I is a twit') => {
+    return createUser(handle, 'shabz', 'shabz@shabz.com')
+      .then(userRes => {
+        user = userRes;
+        return Tweet.create({ handle: user._id, text })
+          .then(tweetRes => ({ ...tweetRes, _id: tweetRes._id.toString() }));
+      });
+  };
 
   beforeEach(done => mongoose.connection.dropDatabase(() => done()));
 
   beforeEach(done => {
     createTweet('shabz')
       .then(res => {
-        const { _id, __v, handle, text } = res;
-        tweet = { _id: _id.toString(), __v, handle, text };
+        const { _id, handle, text } = res;
+        tweet = { _id, handle, text };
         done();
       });
   });
 
   afterAll(() => mongoose.disconnect());
 
-  it('posts a tweet', () => {
+  it.only('posts a tweet', () => {
     return request(app)
       .post('/tweets')
       .send({
-        handle: 'shabz2',
-        text: 'I am also a twit'
+        handle: user._id,
+        text: 'I am still a twit'
       })
       .then(res => {
         expect(res.body).toEqual({
-          handle: 'shabz2',
-          text: 'I am also a twit',
-          __v: 0,
-          _id: expect.any(String)
+          handle: expect.any(String),
+          text: 'I am still a twit',
+          _id: expect.any(String),
+          __v: 0
         });
       });
   });
@@ -52,8 +66,7 @@ describe('them tweets', () => {
       .then(res => expect(res.body).toEqual({
         handle: 'shabz',
         text: 'I is a twit',
-        _id: expect.any(String),
-        __v: 0
+        _id: expect.any(String)
       }));
   });
 
@@ -74,8 +87,7 @@ describe('them tweets', () => {
         expect(res.body).toEqual({
           _id: tweet._id,
           handle: 'shabz',
-          text: 'I meant tweet',
-          __v: 0
+          text: 'I meant tweet'
         });
       });
   });
