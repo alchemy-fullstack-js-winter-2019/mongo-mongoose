@@ -52,24 +52,24 @@ describe('tweets app', () => {
       });
   });
 
-  it.only('finds tweet by id', () => {
+  it('finds tweet by id', () => {
     return createTweet('kaiya')
       .then(createdTweet => {
         return request(app)
           .get(`/tweets/${createdTweet._id}`)
           .then(res => {
+            console.log('RES', res.body);
             expect(res.body).toEqual({
               handle: expect.any(Object),
               text: 'I heart Squirrels',
-              _id: expect.any(String),
-              __v: 0
+              _id: expect.any(String)
             });
           });
       });
   });
 
   it('finds by id and update', () => {
-    return createTweet()
+    return createTweet('kaiya')
       .then(createdTweet => {
         return Promise.all([
           Promise.resolve(createdTweet._id),
@@ -88,7 +88,7 @@ describe('tweets app', () => {
   });
 
   it('returns a list of tweets', () => {
-    return Promise.all(['I heart Squirrels', 'Sardine Saturday is my fave!'].map(createTweet))
+    return Promise.all(['kaiya', 'kaiya'].map(createTweet))
       .then(() => {
         return request(app)
           .get('/tweets');
@@ -99,7 +99,7 @@ describe('tweets app', () => {
   });
 
   it('deletes a tweet by id', () => {
-    return createTweet()
+    return createTweet('kaiya')
       .then(oopsTweet => {
         return request(app)
           .delete(`/tweets/${oopsTweet._id}`);
