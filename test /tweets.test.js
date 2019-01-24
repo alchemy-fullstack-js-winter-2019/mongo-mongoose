@@ -53,7 +53,7 @@ describe('tweets app', () => {
       });
   });
 
-  it('finds all the tweets', () => {
+  it.only('finds all the tweets', () => {
     return Promise.all(['mike', 'mike2'].map(createTweet))
       .then(() => {
         return request(app)
@@ -78,7 +78,6 @@ describe('tweets app', () => {
           handle: expect.any(Object),
           text: 'a tweet',
           _id,
-          __v: 0
         });
       });
   });
