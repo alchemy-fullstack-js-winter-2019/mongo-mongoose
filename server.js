@@ -1,5 +1,5 @@
 require('dotenv').config();
-require('./lib/utils/connect')();
+require('./connect')();
 
 const app = require('./lib/app');
 
