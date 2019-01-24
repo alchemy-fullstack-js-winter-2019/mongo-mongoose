@@ -68,7 +68,7 @@ describe('test user methods', () => {
                 expect(res.body.handle).toEqual('FROSTYFINGERS420');
             });
     });
-    it.skip('can deleted a user by id', () => {
+    it('can deleted a user by id', () => {
         return createUser('DANKNASTY')
             .then(createdUser => {
                 return request(app)

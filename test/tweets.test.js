@@ -20,6 +20,8 @@ const createTweet = (handle, text = 'some tweet') => {
 
 };
 
+jest.mock('../lib/services/ronSwansonApi');
+
 
 describe('test DB methods/routes', () => {
     beforeEach(done => {
@@ -42,6 +44,23 @@ describe('test DB methods/routes', () => {
                         expect(res.body).toEqual({
                             handle: expect.any(String),
                             text: 'SUUWOOP',
+                            _id: expect.any(String),
+                            __v: 0
+                        });
+                    });
+            });
+    });
+
+    it('can post a quote to the DB', () => {
+        return createUser('KananiBoy', 'lance', 'lance@lance.com')
+            .then(user => {
+                return request(app)
+                    .post('/tweets?random=true')
+                    .send({ handle: user._id, text: 'SUUWOOP' })
+                    .then(res => {
+                        expect(res.body).toEqual({
+                            handle: expect.any(String),
+                            text: 'My only official recommendations are US Army-issued mustache trimmers, Morton\'s Salt, and the C.R. Lawrence Fein two inch axe-style scraper oscillating knife blade.',
                             _id: expect.any(String),
                             __v: 0
                         });
