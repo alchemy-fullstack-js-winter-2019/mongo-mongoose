@@ -20,7 +20,6 @@ describe('Tweets app', () => {
           .then(tweet => ({ ...tweet, _id: tweet._id.toString() }));
       });
   };
-
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
       done();
@@ -32,7 +31,7 @@ describe('Tweets app', () => {
         return request(app) //make a request to our app
           .post('/tweets') //post to tweets
           .send({ //user is sending to server
-            handle: user._id, // user._id Tweeter23
+            handle: user._id, 
             text: 'It is sunny'
           })
           .then(res => { //we expect the response.body
@@ -70,7 +69,7 @@ describe('Tweets app', () => {
           handle: expect.any(Object),
           text: 'a tweet',
           _id,
-          __v: 0
+          // __v: 0
         });
       });
   });
@@ -79,7 +78,7 @@ describe('Tweets app', () => {
       // handle: expect.any(Object),
       text: 'a tweet'
     };
-    return createTweet('TweetTypo')
+    return createTweet('ron')
       .then(createdTweet => {
         const id = createdTweet._id;
         return request(app)
@@ -88,10 +87,10 @@ describe('Tweets app', () => {
       })
       .then((res) => {
         expect(res.body).toEqual({
-          handle: expect.any(Object),
+          handle: expect.objectContaining({ handle: 'ron' }),
           text: 'a tweet',
           _id: expect.any(String),
-          __v: 0
+          // __v: 0
         });
       });
   });
@@ -149,7 +148,7 @@ describe('User app', () => {
       });
   });
 
-  it('find auser by id', () => {
+  it('find user by id', () => {
     return createUser('user234', 'Don', 'don234@yahoo.com')
       .then((createdUser) => {
         const id = createdUser._id;
