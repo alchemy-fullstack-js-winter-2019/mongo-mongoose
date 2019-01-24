@@ -89,7 +89,7 @@ describe('tweets app', () => {
         });
       });
   });
-  it.only('updates tweet by id', ()=> {
+  it('updates tweet by id', ()=> {
     return createTweet('this is a tweet', 'more', 'another')
       .then(createdTweet => {
         return Promise.all([
@@ -104,20 +104,8 @@ describe('tweets app', () => {
           });
       });
   });
-  // it.only('updates tweet by id', ()=> {
-  //   //because this is async...
-  //   return createTweet('this is a tweet')
-  //     .then(createdTweet => {
-  //       createdTweet.handle = 'something else';
-  //       return request(app)
-  //         .patch(`/tweets/${createdTweet._id}`)
-  //         .send(createdTweet);
-  //     })
-  //     .then(res => {
-  //       expect(res.text).toContain('something else');
-  //     });
-  // });
-  it('finds by id and deletes', ()=> {
+
+  it.only('finds by id and deletes', ()=> {
     return createTweet('delete this')
       .then(tweet2Delete => {
         return request(app)

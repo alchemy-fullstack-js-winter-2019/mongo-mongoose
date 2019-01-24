@@ -82,3 +82,31 @@ POPULATE
 //we want to change our handle so that id takes over.
 {handle: 'rayan: text: 'hi'}
 {handle: 'ryan:id', text:'hi'}
+
+
+//OLD TESTS BEFORE THE JOIN BETWEEN USER AND Tweet  // it('finds by id and deletes', ()=> {
+  //   return createTweet('delete this')
+  //     .then(tweet2Delete => {
+  //       return request(app)
+  //         .delete(`/tweets/${tweet2Delete._id}`)
+  //         .send({ deleted: 1 });
+  //     })
+  //     .then(res => {
+  //       expect(res.body).toEqual({ deleted: 1 });
+        
+  //     });
+  // });
+
+    // it.only('updates tweet by id', ()=> {
+  //   //because this is async...
+  //   return createTweet('this is a tweet')
+  //     .then(createdTweet => {
+  //       createdTweet.handle = 'something else';
+  //       return request(app)
+  //         .patch(`/tweets/${createdTweet._id}`)
+  //         .send(createdTweet);
+  //     })
+  //     .then(res => {
+  //       expect(res.text).toContain('something else');
+  //     });
+  // });
