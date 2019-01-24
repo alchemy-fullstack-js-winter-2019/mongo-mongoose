@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const request = require('supertest');
 require('dotenv').config();//module for configuration
 require('../lib/utils/connect')();//connects to db

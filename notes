@@ -110,3 +110,64 @@ POPULATE
   //       expect(res.text).toContain('something else');
   //     });
   // });
+
+  **********MONGO DB BOOK*******
+  *TABLE BREAKDOWN
+  -COLLECTION: the table
+  -DOCUMENT: can be thought of as the row
+  -FIELD: columns
+  -INDEXES: function mostly like their RDBMS counterparts
+  -CURSER: when data is called for in Mongo it returns a cursor which we can do things to like count or skip ahead
+  
+
+
+
+  *************DATA STRUCTURES********
+  https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-1
+  https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-2
+
+  //EMBEDDED OBJECT TYPE(Denormalized)
+
+  {
+  name: 'Kate Monster',
+  ssn: '123-456-7890',
+  addresses : [
+     { street: '123 Sesame St', city: 'Anytown', cc: 'USA' },
+     { street: '123 Avenue Q', city: 'New York', cc: 'USA' }
+  ]
+}
+---another example of embedded
+
+    _id: x34kadjf,
+    username: jose,
+        contanct{
+          phone:
+          addy:
+
+        }
+        hobbies{
+          hobby1:
+          hobby2:
+        }
+
+  //NORMALIZED DATA (normalized)
+
+    -one doc is related to another doc from a different collection
+
+    **write how to link two pieces from different collections/locations
+
+
+---one to squillion method
+> db.hosts.findOne()
+{
+    _id : ObjectID('AAAB'),
+    name : 'goofy.example.com',
+    ipaddr : '127.66.66.66'
+}
+
+>db.logmsg.findOne()
+{
+    time : ISODate("2014-03-28T09:42:41.382Z"),
+    message : 'cpu is on fire!',
+    host: ObjectID('AAAB')       // Reference to the Host document
+}
