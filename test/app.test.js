@@ -118,5 +118,8 @@ describe('tweets app', () => {
         
       });
   });
+  afterAll((done) => {
+    mongoose.connection.close(done);
+  });
 
 });
