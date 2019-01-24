@@ -110,7 +110,9 @@ POPULATE
   //       expect(res.text).toContain('something else');
   //     });
   // });
-
+  ********Read ON MONGOOSEE*******
+  https://gist.github.com/jim-clark/85fb003f3063e6d152da8a1ab51a51ab
+  
   **********MONGO DB BOOK*******
   *TABLE BREAKDOWN
   -COLLECTION: the table
@@ -118,7 +120,7 @@ POPULATE
   -FIELD: columns
   -INDEXES: function mostly like their RDBMS counterparts
   -CURSER: when data is called for in Mongo it returns a cursor which we can do things to like count or skip ahead
-  
+
 
 
 

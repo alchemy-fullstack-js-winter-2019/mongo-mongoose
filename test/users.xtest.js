@@ -3,8 +3,8 @@ require('dotenv').config();//module for configuration
 require('../lib/utils/connect')();//connects to db
 const app = require('../lib/app.js');
 const mongoose = require('mongoose');
-const userApp = require('../lib/models/Users');
 
+// eslint-disable-next-line no-unused-vars
 const creatUser = (handle, name = 'johnny', email = 'email.com') => {
   return User.create({ handle, name, email });
 };
@@ -35,3 +35,4 @@ describe('creates a user', () => {
   });
 
 });
+//notes
