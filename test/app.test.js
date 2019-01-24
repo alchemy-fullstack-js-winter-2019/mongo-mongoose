@@ -14,14 +14,10 @@ const createUser = (handle, name = 'paige', email = 'bob@ross.com') => {
 jest.mock('../lib/services/ronSwansonApi.js');
 
 const createTweet = (handle, text = 'oink tweet moo') => {
-  const name = 'paige';
-  const email = 'bob@ross.com';
-  return createUser(handle, name, email)
+  return createUser(handle, 'paige', 'paige@a.com')
     .then(createdUser => {
-      return Tweet.create({ 
-        handle: createdUser._id, 
-        text 
-      });
+      return Tweet.create({ handle: createdUser._id, text })
+        .then(tweet => ({ ...tweet, _id: tweet._id.toString() }));
     });
 };
 
@@ -44,7 +40,7 @@ describe('tweets app', () => {
       });
   });
 
-  it.skip('can post a tweet', () => {
+  it('can post a tweet', () => {
     return createUser('banana')
       .then(createdUser => {
         return request(app)
@@ -200,32 +196,25 @@ describe('tweets app', () => {
       });
   });
 
-  it.skip('can get a random tweet', () => {
-    return createUser('banana')
+  it('can get a random tweet', () => {
+    return createUser('banana', 'name', 'email@email.email')
       .then(createdUser => {
         return request(app)
-          .post('/tweets')
-          .send({ 
-            handle: createdUser._id,
-            text: 'greek or nah?' 
-          })
-          .then(() => {
-            return request(app)
-              .get('/tweets')
-              .then(res => {
-                console.log('PUT A LABEL ON IT', res.body);
-                expect(res.body).toEqual({ 
-                  __v: 0, 
-                  _id: expect.any(String), 
-                  handle: expect.any(String), 
-                  text: 'greek or nah?' 
-                });
-              });
+          .post('/tweets?random=true')
+          .send({ handle: createdUser._id })
+          .then(res => { 
+            console.log('PUT A LABEL ON IT', res.body);
+            expect(res.body).toEqual({ 
+              __v: 0, 
+              _id: expect.any(String), 
+              handle: createdUser._id, 
+              text: 'People who buy things are suckers.' 
+            });
           });
       });
   });
-
-  afterAll((done) => {
-    mongoose.disconnect(done);
-  }); 
 });
+
+afterAll((done) => {
+  mongoose.disconnect(done);
+}); 
