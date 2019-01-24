@@ -4,10 +4,6 @@ require('../lib/utils/connect')();//connects to db
 const app = require('../lib/app.js');
 const mongoose = require('mongoose');
 
-// eslint-disable-next-line no-unused-vars
-const creatUser = (handle, name = 'johnny', email = 'email.com') => {
-  return User.create({ handle, name, email });
-};
 
 describe('creates a user', () => {
   beforeEach(done => {
@@ -35,4 +31,3 @@ describe('creates a user', () => {
   });
 
 });
-//notes
