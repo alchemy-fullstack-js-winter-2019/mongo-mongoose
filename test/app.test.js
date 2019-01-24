@@ -162,7 +162,7 @@ describe('tweets app', () => {
   });
 
   // PATCH ------------------------------------------
-  it.only('can retrieve a tweet by :id and update it', () => {
+  it('can retrieve a tweet by :id and update it', () => {
     const newTweet = {
       text: 'newText'
     };
