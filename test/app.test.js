@@ -24,6 +24,7 @@ describe('tweets app', () => {
       done();
     });
   });
+
   it('creates a new tweet', () => {
     return createUser('dee', 'dee', 'dee@gmail.com')
       .then(user => {
@@ -43,6 +44,7 @@ describe('tweets app', () => {
           });
       });
   });
+
   it('finds a list of tweets', () => {
     return Promise.all(['user1', 'user2'].map(createTweet))
       .then(() => {
@@ -59,18 +61,18 @@ describe('tweets app', () => {
         return Promise.all([
           Promise.resolve(createdTweet._id),
           request(app)
-            .get(`/tweets/${createdTweet._id}`)
+            .get(`/tweets/${createdTweet._id}`) 
         ]);
       })
       .then(([_id, res]) => {
         expect(res.body).toEqual({
-          handle: expect.any(String),
+          handle: expect.any(Object),
           text: 'a tweet',
           _id,
-          __v: 0
         });
       });
   });
+
   it('updates a tweet', () => {
     return createTweet('dee')
       .then(createdTweet => {
@@ -153,7 +155,6 @@ describe('tweets app', () => {
             .get(`/users/${id}`);
         })
         .then(res => {
-          console.log('here', res.body);
           expect(res.body).toEqual({
             handle: expect.any(String),
             name: 'meme',
@@ -176,7 +177,7 @@ describe('tweets app', () => {
             });
         });
     });
-    it.only('deletes a user by id', () => {
+    it('deletes a user by id', () => {
       return createUser('dee')
         .then(createdUser => {
           return request(app)
