@@ -15,7 +15,7 @@ describe('tweets app', () => {
 
   const createTweet = (handle, text = 'a tweet') => {
     // create user first
-    return createUser(handle, 'ryan', 'ryan@email.com')
+    return createUser(handle, 'mike', 'mike@mike.mike')
       .then(user => {
         return Tweet.create({ handle: user._id, text })
           .then(tweet => ({ ...tweet, _id: tweet._id.toString() }));
@@ -75,9 +75,9 @@ describe('tweets app', () => {
       })
       .then(([_id, res]) => {
         expect(res.body).toEqual({
-          handle: 'mike',
-          text: 'this is tweet text',
-          _id: expect.any(String),
+          handle: expect.any(Object),
+          text: 'a tweet',
+          _id,
           __v: 0
         });
       });
@@ -85,19 +85,21 @@ describe('tweets app', () => {
   it('finds by Id and updates', () => {
     return createTweet('mike')
       .then(createdTweet => {
+        
         return request(app)
           .patch(`/tweets/${createdTweet.id}`)
-          .send({ handle: 'lancemongoose' });
+          .send({ text: 'lancemongoose' });
       })
       .then(res => {
         expect(res.body).toEqual({
-          handle: 'lancemongoose',
-          text: 'this is tweet text',
+          handle: expect.any(Object),
+          text: expect.any(String),
           _id: expect.any(String),
           __v: 0
         });
       });
   });
+  
   it('finds by Id and deletes', () => {
     return createTweet('mike')
       .then(createdTweet => {
