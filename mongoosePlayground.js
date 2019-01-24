@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://127.0.0.1:27017/localMongo', { useNewUrlParser: true });
 
@@ -15,17 +15,17 @@ const tweetSchema = new mongoose.Schema({
 
 const Tweets = mongoose.model('Tweet', tweetSchema);
 
-Tweets.create({ handle: 'Jay Jay', text: 1234})
+Tweets.create({ handle: 'Jay Jay', text: 1234 })
   .then(tweet => {
-    console.log(tweet)
+    console.log(tweet);
   })
-  .catch(err => console.error(err))
-Tweets.create({ handle: 'hey hey', text: 'anotherone'})
+  .catch(err => console.error(err));
+Tweets.create({ handle: 'hey hey', text: 'anotherone' })
   .then(tweet => {
-    console.log(tweet)
+    console.log(tweet);
   })
-  .catch(err => console.error(err))
+  .catch(err => console.error(err));
 
 Tweets
-  .findByIdAndDelete("5c47a0359b4f8f684eb426fb")
+  .findByIdAndDelete('5c47a0359b4f8f684eb426fb')
   .then(data=> console.log(data));
