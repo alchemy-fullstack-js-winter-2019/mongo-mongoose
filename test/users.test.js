@@ -79,5 +79,16 @@ describe('users app', () => {
       });
   });
 
+  it('gets a user by :id, delete, and return the delete count', () => {
+    return createUser('Carmen')
+      .then(userCreated => {
+        const _id = userCreated._id;
+        return request(app)
+          .delete(`/users/${_id}`)
+          .then(res => {
+            expect(res.body).toEqual({ deleted: 1 });
+          });
+      });
+  });
 
 });
