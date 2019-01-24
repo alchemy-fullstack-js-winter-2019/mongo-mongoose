@@ -50,7 +50,7 @@ describe('tweets app', () => {
   });
 
   it('finds a list of tweets', () => {
-    return Promise.all(['ryan', 'another handle'].map(createTweet))
+    return Promise.all(['carmen', 'God is good all the time!'].map(createTweet))
       .then(() => {
         return request(app)
           .get('/tweets');
@@ -61,7 +61,7 @@ describe('tweets app', () => {
   });
 
   it('gets a tweet by id', () => {
-    return createTweet('ryan')
+    return createTweet('carmen')
       .then(createdTweet => {
         return Promise.all([
           Promise.resolve(createdTweet._id),
@@ -88,16 +88,16 @@ describe('tweets app', () => {
   });
 
   it('updates a tweet by id', () => {
-    return createTweet('ryan')
+    return createTweet('carmen')
       .then(tweet => {
         return request(app)
           .patch(`/tweets/${tweet._id}`)
-          .send({ text: 'Hi there! I am updated' });
+          .send({ text: 'Hi there! Tweet updated' });
       })
       .then(res => {
         expect(res.body).toEqual({
           handle: expect.any(Object),
-          text: 'Hi there! I am updated',
+          text: 'Hi there! Tweet updated',
           _id: expect.any(String),
           __v: 0
         });
@@ -105,7 +105,7 @@ describe('tweets app', () => {
   });
 
   it('deletes a tweet by id', () => {
-    return createTweet('ryan')
+    return createTweet('carmen')
       .then(tweet => {
         return Promise.all([
           Promise.resolve(tweet._id),
