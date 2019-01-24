@@ -21,6 +21,9 @@ describe('users app', () => {
             done();
         });
     });
+    afterAll((done) => {
+        mongoose.connection.close(done);
+    });
     it('sends a user', () => {
         return request(app)
             .post('/users')
