@@ -2,10 +2,20 @@ require('dotenv').config();
 require('../lib/utils/connect')();
 const request = require('supertest');
 const app = require('../lib/app');
+const mongoose = require('mongoose');
 
 jest.mock('../lib/services/ronSwansonApi.js');
 
 describe('app', () => {
+  beforeEach(done => {
+    return mongoose.connection.dropDatabase(() => {
+      done();
+    });
+  });
+  afterAll(done => {
+    mongoose.connection.close();
+    done();
+  });
 
   it('errors when tries to get bad path', () => {
     return request(app)
