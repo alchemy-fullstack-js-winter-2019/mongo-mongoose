@@ -76,22 +76,24 @@ describe('tweets app', () => {
   it('updates a tweet', () => {
     return createTweet('dee')
       .then(createdTweet => {
-        const id = createdTweet._id;
+        return Promise.all([
+          Promise.resolve(createdTweet._id),
+          request(app)
+            .patch(`/tweets/${createdTweet._id}`)
+            .send({
+              text: 'an updated tweet'
+            })
+        ]);
+      })
+      .then(([_id]) => {
         return request(app)
-          .patch(`/tweets/${id}`)
-          .send({
-            text: 'a tweet'
-          })
-          .then(res => {
-            expect(res.body).toEqual({
-              handle: expect.any(Object),
-              text: 'a tweet',
-              _id: expect.any(String),
-              __v: 0
-            });
-          });
+          .get(`/tweets/${_id}`)
+          .then((res => {
+            expect(res.body.text).toEqual('an updated tweet');
+          }));
       });
   });
+
   it('deletes a tweet', () => {
     return createTweet('dee')
       .then(createdTweet => {
