@@ -41,7 +41,7 @@ describe('tweets app', () => {
   afterAll(done => {
     createTweet('seedDataHandleA', 'seedDataTextA');
     createUser('seedDataHandleB', 'seedDataNameB', 'seedDataEmailB');
-    // mongoose.disconnect();
+    mongoose.disconnect();
     done();
   });
 
