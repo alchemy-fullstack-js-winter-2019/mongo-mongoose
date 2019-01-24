@@ -5,5 +5,5 @@ const getQuotes = () => {
 };
 
 module.exports = {
-  getQuotes;
+  getQuotes
 };
