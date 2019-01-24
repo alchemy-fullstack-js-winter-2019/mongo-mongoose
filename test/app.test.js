@@ -11,6 +11,8 @@ const createUser = (handle, name = 'paige', email = 'bob@ross.com') => {
     .then(createdUser => ({ ...createdUser, _id: createdUser._id.toString () }));
 };
 
+jest.mock('../lib/services/ronSwansonApi.js');
+
 const createTweet = (handle, text = 'oink tweet moo') => {
   const name = 'paige';
   const email = 'bob@ross.com';
@@ -195,6 +197,31 @@ describe('tweets app', () => {
           __v: 0,
           _id: expect.any(String)
         });
+      });
+  });
+
+  it.skip('can get a random tweet', () => {
+    return createUser('banana')
+      .then(createdUser => {
+        return request(app)
+          .post('/tweets')
+          .send({ 
+            handle: createdUser._id,
+            text: 'greek or nah?' 
+          })
+          .then(() => {
+            return request(app)
+              .get('/tweets')
+              .then(res => {
+                console.log('PUT A LABEL ON IT', res.body);
+                expect(res.body).toEqual({ 
+                  __v: 0, 
+                  _id: expect.any(String), 
+                  handle: expect.any(String), 
+                  text: 'greek or nah?' 
+                });
+              });
+          });
       });
   });
 
