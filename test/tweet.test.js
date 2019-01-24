@@ -8,6 +8,9 @@ const app = require('../lib/app');
 const request = require('supertest');
 const Tweet = require('../lib/models/Tweet');
 const User = require('../lib/models/User');
+const { getRandomQuote } = require('../lib/services/ronSwansonApi');
+
+jest.mock('../lib/services/ronSwansonApi');
 
 
 describe('tweets app', () => {
@@ -49,6 +52,13 @@ describe('tweets app', () => {
               __v: 0
             });
           });
+      });
+  });
+
+  it('returns a random quote', () => {
+    return getRandomQuote()
+      .then(quote => {
+        expect(quote).toEqual('I wanna punch you in the face so bad right now.');
       });
   });
 
