@@ -28,15 +28,15 @@ describe('Tweets app', () => {
   it('Create a new tweet', () => {
     return createUser('ron', 'ray23', 'ryan@yahoo.com')
       .then(user => {
-        return request(app) //make a request to our app
-          .post('/tweets') //post to tweets
-          .send({ //user is sending to server
+        return request(app) 
+          .post('/tweets') 
+          .send({ 
             handle: user._id, 
             text: 'It is sunny'
           })
-          .then(res => { //we expect the response.body
+          .then(res => { 
             expect(res.body).toEqual({ 
-              handle: expect.any(String), // expect.any(String),
+              handle: expect.any(String), 
               text: 'It is sunny', 
               _id: expect.any(String), 
               __v: 0 
@@ -56,7 +56,6 @@ describe('Tweets app', () => {
   });
   it('finds a tweet by id', () => {
     return createTweet('ron')
-    // return createTweet('tweet 1', 'It is sunny')
       .then(createdTweet => {
         return Promise.all([
           Promise.resolve(createdTweet._id),
@@ -69,13 +68,11 @@ describe('Tweets app', () => {
           handle: expect.any(Object),
           text: 'a tweet',
           _id,
-          // __v: 0
         });
       });
   });
   it('will find by id and update', () => {
     const updatedTweet = {
-      // handle: expect.any(Object),
       text: 'a tweet'
     };
     return createTweet('ron')
@@ -89,8 +86,7 @@ describe('Tweets app', () => {
         expect(res.body).toEqual({
           handle: expect.objectContaining({ handle: 'ron' }),
           text: 'a tweet',
-          _id: expect.any(String),
-          // __v: 0
+          _id: expect.any(String),       
         });
       });
   });
@@ -120,7 +116,7 @@ describe('User app', () => {
     });
   });
   it('create a user', () => {
-    return request(app) //when a person looks up site this will bring up app
+    return request(app)
       .post('/users')
       .send({
         handle: 'PDX34',

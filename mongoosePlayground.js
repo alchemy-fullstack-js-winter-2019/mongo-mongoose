@@ -29,12 +29,4 @@ Tweet
   .find({ handle: 'ryan' }) //query that finds only tweets by ryan
   .then(tweets => console.log(tweets));
 
-// Tweet
-//   .findByIdAndDelete('')
-//   .then(data => console.log(data));
-// Tweet
-//   .create({ handle: 'ryan', text: 'my first tweet' })
-//   .then(createdTweet => {
-//     return Tweet.findByIdAndUpdate(createTweet._id, { text: 'hi there' }, { new: true });
-//   }) 
-//   .then(updatedTweet => console.log(updatedTweet));
+
