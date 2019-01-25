@@ -1,6 +1,6 @@
 const request = require('supertest');
-require('dotenv').config();//module for configuration
-require('../lib/utils/connect')();//connects to db
+require('dotenv').config();
+require('../lib/utils/connect')();
 const app = require('../lib/app.js');
 const mongoose = require('mongoose');
 
