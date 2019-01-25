@@ -14,6 +14,9 @@ const User = require('../lib/models/Users');
 //we need a user to create a tweet.
 //handle is a reference to a user. 
 
+//need to delete notes
+
+
 describe('tweets app', () => {
   const createUser = (handle, name, email) => {
     return User.create({ handle, name, email })
