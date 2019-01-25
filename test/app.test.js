@@ -1,17 +1,24 @@
 require('dotenv').config();
 require('../lib/utils/connect')();
-
 const request = require('supertest');
 const app = require('../lib/app');
 const mongoose = require('mongoose');
+const Tweet = require('../lib/models/Tweet');
+const User = require('../lib/models/User');
+
 
 describe('tweets app', () => {
+  const createUser = (handle, name, email) => {
+    return User.create({ handle, name, email })
+      .then(user => ({ ...user, _id: user._id.toString() }));
+  };
 
   const createTweet = (handle, text = 'tweet!') => {
-    return request(app)
-      .post('/tweets')
-      .send({ handle, text })
-      .then(res => res.body);
+    return createUser(handle, 'ivan', 'ivan@espn.com')
+      .then(user => {
+        return Tweet.create({ handle: user._id, text })
+          .then(createdTweet => ({ ...createdTweet, _id: createdTweet._id.toString() }));
+      });
   };
 
   beforeEach(done => {
@@ -21,19 +28,22 @@ describe('tweets app', () => {
   });
 
   it('can create a new tweet', () => {
-    return request(app)
-      .post('/tweets')
-      .send({
-        handle: 'ivan',
-        text: 'Hello World',
-      })
-      .then(res => {
-        expect(res.body).toEqual({
-          handle: 'ivan',
-          text: 'Hello World',
-          _id: expect.any(String),
-          __v: 0
-        });
+    return createUser('ballislife', 'ivan', 'ivan@espn.com')
+      .then(user => {
+        return request(app)
+          .post('/tweets')
+          .send({
+            handle: user._id,
+            text: 'What up!'
+          })
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: expect.any(String),
+              text: 'What up!',
+              _id: expect.any(String),
+              __v: 0
+            });
+          });
       });
   });
 
@@ -59,8 +69,8 @@ describe('tweets app', () => {
       })
       .then(([_id, res]) => {
         expect(res.body).toEqual({
+          handle: expect.any(Object),
           text: 'tweet!',
-          handle: 'ivan',
           _id,
           __v: 0
         });
@@ -70,13 +80,17 @@ describe('tweets app', () => {
   it('can find a tweet by id and update', () => {
     return createTweet('tweety')
       .then(createdTweet => {
-        const id = createdTweet._id;
         return request(app)
-          .patch(`/tweets/${id}`)
-          .send({ ...createdTweet, text: 'tweet!' });
+          .patch(`/tweets/${createdTweet._id}`)
+          .send({ text: 'Banana!' });
       })
       .then(res => {  
-        expect(res.body.text).toEqual('tweet!');
+        expect(res.body).toEqual({
+          handle: expect.any(Object),
+          text: 'Banana!',
+          _id: expect.any(String),
+          __v: 0
+        });
       });
   });
 
@@ -90,95 +104,93 @@ describe('tweets app', () => {
         expect(res.body).toEqual({ deleted: 1 });
       });
   });
-});
 
 
-describe('users app', () => {
 
-  const createUser = (handle = 'ballislife', name = 'ivan', email = 'ivan@espn.com') => {
-    return request(app)
-      .post('/users')
-      .send({ handle, name, email })
-      .then(res => res.body);
-  };
-
-  beforeEach(done => {
-    return mongoose.connection.dropDatabase(() => {
-      done();
+  describe('users app', () => {
+    beforeEach(done => {
+      return mongoose.connection.dropDatabase(() => {
+        done();
+      });
     });
-  });
 
-  it('can create a new user', () => {
-    return request(app)
-      .post('/users')
-      .send({
-        handle: 'ballislife',
-        name: 'ivan',
-        email: 'ivan@espn.com'
-      })
-      .then(res => {
-        expect(res.body).toEqual({
+    it('can create a new user', () => {
+      return request(app)
+        .post('/users')
+        .send({
           handle: 'ballislife',
           name: 'ivan',
-          email: 'ivan@espn.com',
-          _id: expect.any(String),
-          __v: 0
+          email: 'ivan@espn.com'
+        })
+        .then(res => {
+          expect(res.body).toEqual({
+            handle: 'ballislife',
+            name: 'ivan',
+            email: 'ivan@espn.com',
+            _id: expect.any(String),
+            __v: 0
+          });
         });
-      });
-  });
+    });
 
-  it('gets a list of users', () => {
-    return Promise.all(['user', 'user2', 'user3'].map(createUser))
-      .then(() => {
-        return request(app)
-          .get('/users');
-      })
-      .then(res => {
-        expect(res.body).toHaveLength(3);
-      });
-  });
+    it('gets a list of users', () => {
+      return Promise.all(['user', 'user2', 'user3'].map(createUser))
+        .then(() => {
+          return request(app)
+            .get('/users');
+        })
+        .then(res => {
+          expect(res.body).toHaveLength(3);
+        });
+    });
 
-  it('gets a user by id', () => {
-    return createUser('ballislife')
-      .then(createdUser => {
-        return Promise.all([
-          Promise.resolve(createdUser._id),
-          request(app)
+    it('gets a user by id', () => {
+      return createUser('ballislife', 'ivan', 'ivan@espn.com')
+        .then(createdUser => {
+          return request(app)
             .get(`/users/${createdUser._id}`)
-        ]);
-      })
-      .then(([_id, res]) => {
-        expect(res.body).toEqual({
-          email: 'ivan@espn.com',
-          name: 'ivan',
-          handle: 'ballislife',
-          _id,
-          __v: 0
+            .then(res => {
+              expect(res.body).toEqual({
+                handle: 'ballislife',
+                name: 'ivan',
+                email: 'ivan@espn.com',
+                _id: expect.any(String),
+                __v: 0
+              });
+            });
         });
-      });
-  });
+    });
 
-  it('can find a tweet by id and update', () => {
-    return createUser('ivann')
-      .then(createdUser => {
-        const id = createdUser._id;
-        return request(app)
-          .patch(`/users/${id}`)
-          .send({ ...createdUser, text: 'ivan' });
-      })
-      .then(res => {  
-        expect(res.body.name).toEqual('ivan');
-      });
-  });
+    it('can find a user by id and update', () => {
+      return createUser('ballislif', 'ivann', 'iva@espn.com')
+        .then(createdUser => {
+          return Promise.all([
+            Promise.resolve(createdUser._id),
+            request(app)
+              .patch(`/users/${createdUser._id}`)
+              .send({ handle: 'ballislife', name: 'ivan', email: 'ivan@espn.com' })
+          ]);  
+        })
+        .then(([_id, res]) => {  
+          expect(res.body).toEqual({
+            handle: 'ballislife',
+            name: 'ivan',
+            email: 'ivan@espn.com',
+            _id,
+            __v: 0
+          });
+        });
+    });
 
-  it('can find by id and delete', () => {
-    return createUser('ivan')
-      .then(createdUser => {
-        return request(app)
-          .delete(`/users/${createdUser._id}`);
-      })
-      .then(res => {
-        expect(res.body).toEqual({ deleted: 1 });
-      });
-  });
+    it('can find by id and delete', () => {
+      return createUser('ballislife', 'ivan', 'ivan@espn.com')
+        .then(createdUser => {
+          return request(app)
+            .delete(`/users/${createdUser._id}`);
+        })
+        .then(res => {
+          expect(res.body).toEqual({ deleted: 1 });
+        });
+    });
+  }); 
 });
