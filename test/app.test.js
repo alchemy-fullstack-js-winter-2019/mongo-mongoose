@@ -25,6 +25,9 @@ describe('tweets app', () => {
       done();
     });
   });
+  afterAll((done) => {
+    mongoose.connection.close(done);
+  });
 
   it('can create a new tweet', () => {
     return createUser('sophie', 'sophie', 'sophie@email.com')
