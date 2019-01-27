@@ -8,6 +8,10 @@ const User = require('../lib/models/Users');
 
 describe('creates a user', () => {
 
+  // const createUser = (handle, name = 'johnny', email = 'email') => {
+  //   const userCreated = User.create({ handle, name, email });
+  //   return userCreated;
+  // };
   const createUser = (handle, name = 'johnny', email = 'email') => {
     return request(app)
       .post('/users')
@@ -41,7 +45,7 @@ describe('creates a user', () => {
         });
       });
   });
-  it.only('gets a list of users', () => {
+  it('gets a list of users', () => {
     return Promise.all(['one', 'two', 'three'].map(newUsers => {
       return createUser(newUsers);
     }))
@@ -54,5 +58,25 @@ describe('creates a user', () => {
       });
 
   });
+  it.only('gets user by Id', () => {
+    return createUser('some')
+      .then(createdUser => {
+        return Promise.all([
+          Promise.resolve(createdUser._id),
+          request(app)
+            .get(`/users/${createdUser._id}`)
+        ]);
+      })
+      .then(([_id, res]) => {
+        expect(res.body).toEqual({
+          handle: 'some',
+          name: 'johnny',
+          email: 'email',
+          _id: expect.any(String),
+          __v: 0
+        });
+      });
+  });
+
 
 });
