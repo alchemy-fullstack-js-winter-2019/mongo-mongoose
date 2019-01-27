@@ -52,7 +52,7 @@ describe('them tweets', () => {
       });
   });
 
-  it.only('gets list of all tweets', () => {
+  it('gets list of all tweets', () => {
     return request(app)
       .get('/tweets')
       .then(res => {
@@ -64,7 +64,7 @@ describe('them tweets', () => {
     return request(app)
       .get(`/tweets/${tweet._id}`)
       .then(res => expect(res.body).toEqual({
-        handle: 'shabz',
+        handle: expect.any(Object),
         text: 'I is a twit',
         _id: expect.any(String)
       }));
@@ -80,14 +80,15 @@ describe('them tweets', () => {
     return request(app)
       .patch(`/tweets/${tweet._id}`)
       .send({
-        handle: tweet.handle,
         text: 'I meant tweet'
       })
       .then(res => {
         expect(res.body).toEqual({
-          _id: tweet._id,
-          handle: 'shabz',
-          text: 'I meant tweet'
+          handle: expect.objectContaining({
+            handle: 'shabz'
+          }),
+          text: 'I meant tweet',
+          _id: expect.any(String)
         });
       });
   });
