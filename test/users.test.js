@@ -58,7 +58,8 @@ describe('creates a user', () => {
       });
 
   });
-  it.only('gets user by Id', () => {
+
+  it('gets user by Id', () => {
     return createUser('some')
       .then(createdUser => {
         return Promise.all([
@@ -78,5 +79,25 @@ describe('creates a user', () => {
       });
   });
 
+  it.only('find by ID and updates', () => {
+    return createUser('pleaseUpdate')
+      .then(createdUser => {
+        return Promise.all([
+          Promise.resolve(createdUser._id),
+          request(app)
+            .patch(`/users/${createdUser._id}`)
+            .send({ handle: 'updated' })
+        ]);
+      })
+      .then(([_id, res]) => {
+        expect(res.body).toEqual ({
+          handle: 'updated',
+          name: 'johnny',
+          email: 'email',
+          _id: expect.any(String),
+          __v: 0
+        });
+      });
+  });
 
 });
