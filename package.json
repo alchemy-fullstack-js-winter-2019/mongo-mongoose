@@ -12,6 +12,7 @@
     "express": "^4.16.4",
     "jest": "^23.6.0",
     "mongoose": "^5.4.6",
+    "superagent": "^4.1.0",
     "supertest": "^3.4.2"
   },
   "devDependencies": {},

@@ -1,10 +1,9 @@
-require('dotenv').config();
+qrequire('dotenv').config();
 require('../lib/utils/connect')();
 const request = require('supertest');
 require('../lib/utils/connect')();
 const app = require('../lib/app.js');
 const mongoose = require('mongoose');
-const User = require('../lib/models/Users');
 
 describe('creates a user', () => {
 
@@ -78,8 +77,8 @@ describe('creates a user', () => {
         });
       });
   });
-//attempt to run this code w/o a promise.all
-  it.only('find by ID and updates', () => {
+  //attempt to run this code w/o a promise.all
+  it('find by ID and updates', () => {
     return createUser('pleaseUpdate')
       .then(createdUser => {
         return Promise.all([
@@ -99,7 +98,7 @@ describe('creates a user', () => {
         });
       });
   });
-  it.only('finds by ID and deletes', () => {
+  it('finds by ID and deletes', () => {
     return createUser('Morpheous')
       .then(User2Delete => {
         return request(app)
