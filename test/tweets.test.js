@@ -52,6 +52,22 @@ describe('them tweets', () => {
       });
   });
 
+  it('posts a random tweet with ronSwanson', () => {
+    return request(app)
+      .post('/tweets?random=true')
+      .send({
+        handle: user._id,
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: expect.any(String),
+          text: expect.any(String),
+          _id: expect.any(String),
+          __v: 0
+        });
+      });
+  });
+
   it('gets list of all tweets', () => {
     return request(app)
       .get('/tweets')
