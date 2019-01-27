@@ -78,7 +78,7 @@ describe('creates a user', () => {
         });
       });
   });
-
+//attempt to run this code w/o a promise.all
   it.only('find by ID and updates', () => {
     return createUser('pleaseUpdate')
       .then(createdUser => {
@@ -98,6 +98,18 @@ describe('creates a user', () => {
           __v: 0
         });
       });
+  });
+  it.only('finds by ID and deletes', () => {
+    return createUser('Morpheous')
+      .then(User2Delete => {
+        return request(app)
+          .delete(`/tweets/${User2Delete._id}`)
+          .send({ deleted: 1 });
+      })
+      .then(res => {
+        expect(res.body).toEqual({ deleted: 1 });
+      });
+
   });
 
 });
