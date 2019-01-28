@@ -34,7 +34,7 @@ describe('tweets app', () => {
 
   // start tests
 
-  it.only('creates a new tweet', () => {
+  it('creates a new tweet', () => {
     return createUser('abelq16', 'abel', 'abel.j.quintero@gmail.com')
       
       .then(user => {
@@ -70,25 +70,25 @@ describe('tweets app', () => {
   });
 
   it('can find a tweet by id', () => {
-    // console.log('banana', createdTweet);
+    
     return createTweet('abel')
       .then(createdTweet => {
         Promise.resolve(createdTweet._id),
         request(app)
           .get(`/tweets/${createdTweet._id}`);
+      })
+      .then(([_id, res]) => {
+        expect(res.body).toEqual({
+          handle: expect.any(Object),
+          text: 'my first tweet',
+          _id: expect.any(String),
+          __v: 0
+        });
       });
-  })
-    .then(([_id, res]) => {
-      expect(res.body).toEqual({
-        handle: expect.any(Object),
-        text: 'my first tweet',
-        _id: expect.any(String),
-        __v: 0
-      });
-    });
+  });
 
 
-  it('errors when a bad id is sent', () => {
+  it.only('errors when a bad id is sent', () => {
     return request(app)
       .get('/tweets/badId')
       .then(res => {
