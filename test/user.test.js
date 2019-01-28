@@ -18,7 +18,7 @@ describe('users app', () => {
     });
   });
 
-  it('creates a new user', () => {
+  it.only('creates a new user', () => {
     return request(app)
       .post('/users')
       .send({

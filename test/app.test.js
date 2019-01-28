@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 
 require('dotenv').config();
@@ -33,7 +34,7 @@ describe('tweets app', () => {
 
   // start tests
 
-  it('creates a new tweet', () => {
+  it.only('creates a new tweet', () => {
     return createUser('abelq16', 'abel', 'abel.j.quintero@gmail.com')
       
       .then(user => {
@@ -41,16 +42,19 @@ describe('tweets app', () => {
           .post('/tweets')
           .send({
             handle: user._id,
-            text: 'my first tweet'
+            text: 'my first tweet',
+            _id: '',
+            __v: 0
+          })
+          .then(res => {
+
+            expect(res.body).toEqual({
+              handle: expect.any(String),
+              text: 'my first tweet',
+              _id: expect.any(String),
+              __v: 0
+            });
           });
-      })
-      .then(res => {
-        expect(res.body).toEqual({
-          handle: expect.any(String),
-          text: 'my first tweet',
-          _id: expect.any(String),
-          __v: 0
-        });
       });
   });
 
@@ -65,7 +69,8 @@ describe('tweets app', () => {
       });
   });
 
-  it.only('can find a tweet by id', () => {
+  it('can find a tweet by id', () => {
+    // console.log('banana', createdTweet);
     return createTweet('abel')
       .then(createdTweet => {
         Promise.resolve(createdTweet._id),
