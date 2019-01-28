@@ -1,4 +1,4 @@
-qrequire('dotenv').config();
+require('dotenv').config();
 require('../lib/utils/connect')();
 const request = require('supertest');
 require('../lib/utils/connect')();
@@ -57,8 +57,7 @@ describe('creates a user', () => {
       });
 
   });
-
-  it('gets user by Id', () => {
+  it.only('gets user by Id', () => {
     return createUser('some')
       .then(createdUser => {
         return Promise.all([
@@ -67,6 +66,7 @@ describe('creates a user', () => {
             .get(`/users/${createdUser._id}`)
         ]);
       })
+      // eslint-disable-next-line no-unused-vars
       .then(([_id, res]) => {
         expect(res.body).toEqual({
           handle: 'some',
@@ -88,6 +88,7 @@ describe('creates a user', () => {
             .send({ handle: 'updated' })
         ]);
       })
+      // eslint-disable-next-line no-unused-vars
       .then(([_id, res]) => {
         expect(res.body).toEqual ({
           handle: 'updated',
