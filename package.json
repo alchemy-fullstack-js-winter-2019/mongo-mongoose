@@ -1,0 +1,31 @@
+{
+  "name": "mongo-mongoose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "mongoosePlayground.js",
+  "scripts": {
+    "test": "jest --detectOpenHandles",
+    "test:watch": "jest --watch",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/connorfrendt/mongo-mongoose.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/connorfrendt/mongo-mongoose/issues"
+  },
+  "homepage": "https://github.com/connorfrendt/mongo-mongoose#readme",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "eslint": "^5.12.1",
+    "express": "^4.16.4",
+    "jest": "^23.6.0",
+    "mongoose": "^5.4.6",
+    "morgan": "^1.9.1",
+    "supertest": "^3.4.2"
+  }
+}
