@@ -1,0 +1,36 @@
+{
+  "name": "mongo-mongoose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "mongoosePlayground.js",
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "jest",
+    "test:watch": "npm run test -- --watch",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paigeegorry/mongo-mongoose.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/paigeegorry/mongo-mongoose/issues"
+  },
+  "homepage": "https://github.com/paigeegorry/mongo-mongoose#readme",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "mongoose": "^5.4.6",
+    "superagent": "^4.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.12.1",
+    "express": "^4.16.4",
+    "jest": "^23.6.0",
+    "nodemon": "^1.18.9",
+    "supertest": "^3.4.2"
+  }
+}
