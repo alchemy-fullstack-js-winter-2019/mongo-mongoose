@@ -76,8 +76,7 @@ describe('tweets app', () => {
         expect(res.body).toEqual({
           handle: expect.any(Object),
           text: 'tweet!',
-          _id,
-          __v: 0
+          _id
         });
       });
   });
@@ -91,10 +90,11 @@ describe('tweets app', () => {
       })
       .then(res => {  
         expect(res.body).toEqual({
-          handle: expect.any(Object),
+          handle: expect.objectContaining({
+            handle: 'tweety'
+          }),
           text: 'Banana!',
           _id: expect.any(String),
-          __v: 0
         });
       });
   });
