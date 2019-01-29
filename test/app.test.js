@@ -3,6 +3,7 @@ require('../lib/utils/connect')();
 const request = require('supertest');
 const app = require('../lib/app');
 const mongoose = require('mongoose');
+const connect = require('../lib/utils/connect');
 const Tweet = require('../lib/models/Tweet');
 const User = require('../lib/models/User');
 
@@ -21,10 +22,18 @@ describe('tweets app', () => {
       });
   };
 
+  beforeAll(() => {
+    connect();
+  });
+
   beforeEach(done => {
     return mongoose.connection.dropDatabase(() => {
       done();
     });
+  });
+
+  afterAll((done) => {
+    mongoose.connection.close(done);
   });
 
   it('can create a new tweet', () => {
@@ -162,7 +171,7 @@ describe('tweets app', () => {
     });
 
     it('can find a user by id and update', () => {
-      return createUser('ballislif', 'ivann', 'iva@espn.com')
+      return createUser('ballislife', 'ivann', 'ivan@espn.com')
         .then(createdUser => {
           return Promise.all([
             Promise.resolve(createdUser._id),
