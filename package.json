@@ -1,0 +1,37 @@
+{
+  "name": "mongo-mongoose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "mongoosePlayground.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "eslint": "^5.12.1",
+    "express": "^4.16.4",
+    "jest": "^23.6.0",
+    "mongoose": "^5.4.6",
+    "superagent": "^4.1.0",
+    "supertest": "^3.4.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest --detectOpenHandles",
+    "test:watch": "jest --watch",
+    "pretest": "npm run lint",
+    "start": "server.js",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cruzayye/mongo-mongoose.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cruzayye/mongo-mongoose/issues"
+  },
+  "homepage": "https://github.com/cruzayye/mongo-mongoose#readme"
+}

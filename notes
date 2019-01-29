@@ -1,0 +1,182 @@
+  //this goes towards the top of users.test.js
+  // const creatUser = (handle, name = 'johnny', email = 'email.com') => {
+//   return User.create({ handle, name, email });
+// };
+  
+  
+  //this goes into tweets.js
+  // .get('/:id', (req, res, next) => {
+  //   const id = req.params.id;
+  //   Tweet 
+  //     .find()
+  //     .then(foundTweet)=> {
+
+  //     }
+  // })
+
+
+
+//takes even and db uri and console logs connection event on db uri we can insert this into our connection as 
+function log(even, dbUri){
+  return function(){
+    console.log(`connection${event} on ${redact(dbUri)}`)
+  }
+}
+//////look at connect.js for final code
+// module.exports = (dbUri = rpocess.env.MONGODB_URI) => {
+//   mongoose.connect(dbUri, { useNewUrlParser: true })
+ 
+//   mongoose.connection.on('open', () => {
+//     console.log(dbUri);
+//   });
+
+//   mongoose.connection.on('error', ()=> {
+//     console.lerror(`Connection`)
+//   })
+// };
+
+
+/////FOR TESTING
+  it('finds tweet by id', ()=> {
+    retrun createTweet('second tweet')
+      .then(secondTweet => {
+        const _id = secondTweet._id
+        return request(app)
+        .get(`/tweets/${id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          handle: 'second tweet',
+          text: 'anotehr tweet',
+          _id,
+          __v: 0
+          
+        });
+      });
+  });
+  it('finds a list of tweets',()=> {
+    return Promise.all(['mike', 'jordan', 'jacobo'].map(createdTweet)=> {
+      then(createdTweets)
+    })
+    return request(app)
+      .get('/tweets')
+      .then(res => {
+
+      })
+  })
+
+  //
+ODM-object Document Mapping---> mongoose
+  -tells us how docs
+POPULATE
+1.create user 
+2.create tweet with user id. 
+
+
+
+    return createUser(handle, 'ryan', 'ryan@email.com')
+      .then(user => {
+        return Tweet.create({ handle: user._id, text })
+        //the ... operater takes teh tweet created and we can either add new properties to it or update it
+          .then(tweet => ({ ...tweet, _id: tweet._id.toString() }));
+      });
+
+
+
+
+
+//we want to change our handle so that id takes over.
+{handle: 'rayan: text: 'hi'}
+{handle: 'ryan:id', text:'hi'}
+
+
+//OLD TESTS BEFORE THE JOIN BETWEEN USER AND Tweet  // it('finds by id and deletes', ()=> {
+  //   return createTweet('delete this')
+  //     .then(tweet2Delete => {
+  //       return request(app)
+  //         .delete(`/tweets/${tweet2Delete._id}`)
+  //         .send({ deleted: 1 });
+  //     })
+  //     .then(res => {
+  //       expect(res.body).toEqual({ deleted: 1 });
+        
+  //     });
+  // });
+
+    // it.only('updates tweet by id', ()=> {
+  //   //because this is async...
+  //   return createTweet('this is a tweet')
+  //     .then(createdTweet => {
+  //       createdTweet.handle = 'something else';
+  //       return request(app)
+  //         .patch(`/tweets/${createdTweet._id}`)
+  //         .send(createdTweet);
+  //     })
+  //     .then(res => {
+  //       expect(res.text).toContain('something else');
+  //     });
+  // });
+  ********Read ON MONGOOSEE*******
+  https://gist.github.com/jim-clark/85fb003f3063e6d152da8a1ab51a51ab
+
+  **********MONGO DB BOOK*******
+  *TABLE BREAKDOWN
+  -COLLECTION: the table
+  -DOCUMENT: can be thought of as the row
+  -FIELD: columns
+  -INDEXES: function mostly like their RDBMS counterparts
+  -CURSER: when data is called for in Mongo it returns a cursor which we can do things to like count or skip ahead
+
+
+
+
+  *************DATA STRUCTURES********
+  https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-1
+  https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-2
+
+  //EMBEDDED OBJECT TYPE(Denormalized)
+
+  {
+  name: 'Kate Monster',
+  ssn: '123-456-7890',
+  addresses : [
+     { street: '123 Sesame St', city: 'Anytown', cc: 'USA' },
+     { street: '123 Avenue Q', city: 'New York', cc: 'USA' }
+  ]
+}
+---another example of embedded
+
+    _id: x34kadjf,
+    username: jose,
+        contanct{
+          phone:
+          addy:
+
+        }
+        hobbies{
+          hobby1:
+          hobby2:
+        }
+
+  //NORMALIZED DATA (normalized)
+
+    -one doc is related to another doc from a different collection
+
+    **write how to link two pieces from different collections/locations
+
+
+---one to squillion method
+> db.hosts.findOne()
+{
+    _id : ObjectID('AAAB'),
+    name : 'goofy.example.com',
+    ipaddr : '127.66.66.66'
+}
+
+>db.logmsg.findOne()
+{
+    time : ISODate("2014-03-28T09:42:41.382Z"),
+    message : 'cpu is on fire!',
+    host: ObjectID('AAAB')       // Reference to the Host document
+}
+
