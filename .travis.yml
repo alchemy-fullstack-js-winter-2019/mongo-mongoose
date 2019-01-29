@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - "8"
+services:
+  - mongodb
+env:
+  - MONGODB_URI=mongodb://127.0.0.1:27017/tweets
