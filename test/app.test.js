@@ -37,7 +37,9 @@ describe('tweets app', () => {
       done();
     });
   });
-
+  afterAll((done) => {
+    mongoose.connection.close(done);
+  });
   it('creates a tweet', () => {
     return createUser('TT')
       .then(createdUser => {
@@ -226,6 +228,7 @@ describe('users', () => {
           __v: 0
         });
       });
+      
   });
 
 });
