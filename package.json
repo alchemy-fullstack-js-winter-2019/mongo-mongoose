@@ -6,6 +6,9 @@
   "directories": {
     "lib": "lib"
   },
+  "jest": {
+    "testEnvironment": "node"
+  },
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch --runInBand",
