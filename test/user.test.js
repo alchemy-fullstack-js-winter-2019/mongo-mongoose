@@ -1,91 +1,101 @@
 /* eslint-disable no-unused-vars */
-require ('dotenv').config();
-require('../lib/utils/connect');
-const app = require('../lib/app');
-const request = require('supertest');
+require('dotenv').config();
+require('../lib/utils/connect')();
 const mongoose = require('mongoose');
+const { Types } = require('mongoose');
 const User = require('../lib/models/User');
+const { tokenize, untokenize } = require('../lib/utils/connect');
 
-describe('users app', () => {
-  const createUser = ((handle, name, email) => {
-    return User.create({ handle, name, email })
-      .then(user => ({ ...user, _id: user._id.toString() }));
-  });
-
+describe('User model', () => {
   beforeEach(done => {
-    return mongoose.connection.dropDatabase(() => {
-      done();
-    });
+    mongoose.connection.dropDatabase(done);
   });
 
-  it.only('creates a new user', () => {
-    return request(app)
-      .post('/users')
-      .send({
-        handle: 'abelq16',
-        name: 'abel',
-        email: 'abel.j.quintero@gmail.com'
+  it('validates a good model', () => {
+    const user = new User({ email: 'test@test.com' });
+    expect(user.toJSON()).toEqual({ email: 'test@test.com', _id: expect.any(Types.ObjectId) });
+  });
+
+  it('has a required email', () => {
+    const user = new User({});
+    const errors = user.validateSync().errors;
+    expect(errors.email.message).toEqual('Email required');
+  });
+
+  it('stores a _tempPassword', () => {
+    const user = new User({
+      email: 'test@test.com',
+      password: 'p455w0rd'
+    });
+    expect(user._tempPassword).toEqual('p455w0rd');
+  });
+
+  it('has a passwordHash', () => {
+    
+    return User.create({
+      email: 'test@test.com',
+      password: 'p455w0rd'
+    })
+      .then(user => {
+        expect(user.passwordHash).toEqual(expect.any(String));
+        expect(user.password).toBeUndefined();
+      });
+  });
+
+  it('can compare good passwords', () => {
+    return User.create({
+      email: 'test@test.com',
+      password: 'p455w0rd'
+    })
+      .then(user => {
+        return user.compare('p455w0rd');
       })
-      .then(res => {
-        expect(res.body).toEqual({
-          handle: 'abelq16',
-          name: 'abel',
-          email: 'abel.j.quintero@gmail.com',
-          _id: expect.any(String),
-          __v: 0
+      .then(result => {
+        expect(result).toBeTruthy();
+      });
+  });
+
+  it('can compare bad passwords', () => {
+    return User.create({
+      email: 'test@test.com',
+      password: 'p455w0rd'
+    })
+      .then(user => {
+        return user.compare('badPassword');
+      })
+      .then(result => {
+        expect(result).toBeFalsy();
+      });
+  });
+
+  it('can find a user by token', () => {
+    return User.create({
+      email: 'test@test.com',
+      password: 'p455w0rd'
+    })
+      .then(user => tokenize(user))
+      .then(token => User.findByToken(token))
+      .then(userFromToken => {
+        // -> then expect to get a user
+        expect(userFromToken).toEqual({
+          email: 'test@test.com',
+          _id: expect.any(String)
         });
       });
   });
 
-  it('finds a list of users', () => {
-    return Promise.all(['juliaq', 'julia', 'juliaq@stanford.edu'].map(createUser))
-      .then(createdUsers => {
-        return request(app)
-          .get('/users');
-      })
-      .then(res => {
-        expect(res.body).toHaveLength(2);
+  it('can create an auth token', () => {
+    return User.create({
+      email: 'test@test.com',
+      password: 'password'
+    })
+      .then(user => user.authToken())
+      .then(untokenize)
+      .then(user => {
+        expect(user).toEqual({
+          email: 'test@test.com',
+          _id: expect.any(String)
+        });
       });
-  });
-  
-  it('finds a user by id', () => {
-    return createUser('julia')
-      .then(createdUser => {
-        Promise.resolve(createdUser._id),
-        request(app)
-          .get(`/users/${createdUser._id}`);
-      });
-  })
-    .then(([_id, res]) => {
-      expect(res.body).toEqual({
-        handle: expect.any(Object),
-        name: 'julia',
-        email: expect.any(String),
-        _id: expect.any(String),
-        __v: 0
-      });
-    });
-
-  it('finds a user by id and updates', () => {
-    return request(app)
-      .get('/users');
-  });
-
-  it('finds a user by id and deletes', () => {
-    return createUser('user to be deleted')
-      .then(newUser => {
-        return request(app)
-          .delete(`/users/${newUser._id}`)
-          .then(res => {
-            expect(res.body).toEqual({ deleted: 1 });
-          });
-      });
-  });
-
-  afterAll((done) => {
-    mongoose.connection.close(done);
   });
 });
-
-
-

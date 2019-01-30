@@ -34,7 +34,7 @@ describe('tweets app', () => {
 
   // start tests
 
-  it('creates a new tweet', () => {
+  it.only('creates a new tweet', () => {
     return createUser('abelq16', 'abel', 'abel.j.quintero@gmail.com')
       
       .then(user => {
@@ -79,7 +79,7 @@ describe('tweets app', () => {
       })
       .then(([_id, res]) => {
         expect(res.body).toEqual({
-          handle: expect.any(Object),
+          handle: 'abelq16',
           text: 'my first tweet',
           _id: expect.any(String),
           __v: 0
@@ -88,7 +88,7 @@ describe('tweets app', () => {
   });
 
 
-  it.only('errors when a bad id is sent', () => {
+  it('errors when a bad id is sent', () => {
     return request(app)
       .get('/tweets/badId')
       .then(res => {
