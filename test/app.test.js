@@ -6,6 +6,7 @@ const request = require('supertest');
 const Tweet = require('../lib/models/Tweet');
 const User = require('../lib/models/User');
 
+jest.mock('../lib/services/ronSwansonApi');
 
 describe('tweets app', () => {
   
@@ -41,6 +42,27 @@ describe('tweets app', () => {
             expect(res.body).toEqual({
               handle: expect.any(String),
               text: 'hello tweets',
+              _id: expect.any(String),
+              __v: 0
+            });
+          });
+
+      });
+  });
+
+  it('can post a quote', () => {
+    return createUser('connor', 'connor', 'connor@connor.com')
+      .then(user => {
+        return request(app)
+          .post('/tweets?random=true')
+          .send({
+            handle: user._id,
+            text: 'hello tweets',
+          })
+          .then(res => {
+            expect(res.body).toEqual({
+              handle: expect.any(String),
+              text: 'My only official recommendations are US Army-issued mustache trimmers, Morton\'s Salt, and the C.R. Lawrence Fein two inch axe-style scraper oscillating knife blade.',
               _id: expect.any(String),
               __v: 0
             });
