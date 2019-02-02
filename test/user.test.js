@@ -16,7 +16,7 @@ describe('User model', () => {
     expect(user.toJSON()).toEqual({ email: 'test@test.com', _id: expect.any(Types.ObjectId) });
   });
 
-  it('has a required email', () => {
+  it.only('has a required email', () => {
     const user = new User({});
     const errors = user.validateSync().errors;
     expect(errors.email.message).toEqual('Email required');
